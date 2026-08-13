@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" data-theme="day">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MemoryAnchors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'night' || t === 'day') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+
+  <nav class="nav" aria-label="Page navigation">
+    <div class="nav__in">
+      <a class="nav__brand" href="#top">MemoryAnchors</a>
+      <span class="nav__title">A minimal, flex-π inspired template</span>
+      <div class="nav__actions">
+        <a class="navbtn" href="#">Paper<em>arXiv</em></a>
+        <a class="navbtn" href="#">Code<em>GitHub</em></a>
+        <a class="navbtn" href="#bibtex">BibTeX</a>
+      </div>
+      <button class="themebtn" type="button" id="theme-toggle" aria-label="Switch between light and dark">◐</button>
+    </div>
+  </nav>
+
+  <aside class="rail" aria-label="On this page">
+    <nav class="rail__links">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+      <a href="#bibtex">BibTeX</a>
+    </nav>
+  </aside>
+
+  <main id="top">
+    <header class="hero">
+      <div class="wrap wrap--mid">
+        <p class="eyebrow">Prototype &middot; 2026</p>
+        <h1 class="hero__title">Memory<span class="mark">Anchors</span></h1>
+        <p class="hero__tagline">A minimal static template that carries over the visual system of a flex-π project page &mdash; without the paper, the videos, or the charts.</p>
+        <div class="links">
+          <a class="btn" href="#projects">Explore projects</a>
+          <a class="btn" href="#about">About this template</a>
+        </div>
+      </div>
+    </header>
+
+    <section id="about" class="section">
+      <div class="wrap wrap--mid reveal">
+        <p class="eyebrow">01 &middot; About</p>
+        <h2 class="sec__title">About</h2>
+        <p class="sec__sub">This is a minimal starting point that borrows the layout, type, and color system of the reference site &mdash; a sticky top nav, an on-page outline rail, a centered title block, and calm prose columns &mdash; without any of its research content.</p>
+        <div class="prose">
+          <p>Swap this copy for your own project description. The page ships in the light &ldquo;day&rdquo; theme by default, with a full dark theme one click away via the toggle in the top-right corner.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <div class="wrap wrap--wide reveal">
+        <p class="eyebrow">02 &middot; Projects</p>
+        <h2 class="sec__title">Projects</h2>
+        <p class="sec__sub">A simple card grid for linking out to whatever you're building.</p>
+        <div class="grid">
+          <article class="card">
+            <h3>Project A</h3>
+            <p>Short description of project A.</p>
+          </article>
+          <article class="card">
+            <h3>Project B</h3>
+            <p>Short description of project B.</p>
+          </article>
+          <article class="card">
+            <h3>Project C</h3>
+            <p>Short description of project C.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="wrap wrap--mid reveal">
+        <p class="eyebrow">03 &middot; Contact</p>
+        <h2 class="sec__title">Contact</h2>
+        <p class="prose">Email: <a href="mailto:you@example.com">you@example.com</a></p>
+      </div>
+    </section>
+
+    <section id="bibtex" class="section">
+      <div class="wrap wrap--mid reveal">
+        <p class="eyebrow">04 &middot; BibTeX</p>
+        <h2 class="sec__title">BibTeX</h2>
+        <div class="bib">
+          <button class="bib__copy" type="button" id="bib-copy">Copy</button>
+          <pre id="bib-text">@article{placeholder2026,
+  title   = {Placeholder Title Goes Here},
+  author  = {Last, First and Last, First},
+  journal = {arXiv preprint arXiv:0000.00000},
+  year    = {2026}
+}</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap wrap--mid">
+      <p>&copy; 2026 MemoryAnchors</p>
+      <p>Visual style adapted from <a href="https://flex-pi.github.io" target="_blank" rel="noopener noreferrer">flex-pi.github.io</a>.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
