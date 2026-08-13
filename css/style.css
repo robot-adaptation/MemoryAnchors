@@ -3,7 +3,7 @@
    Dark tokens are the authored base; a full [data-theme="day"] layer
    overrides them, and the page SHIPS "day" (cream #f6f6ef paper, #0c0c0c
    ink) by default, exactly like the reference. Source Serif 4 for body and
-   headings, JetBrains Mono for metadata, claret accent, 4px radii.
+   headings, JetBrains Mono for metadata, a muted teal accent, 4px radii.
    ========================================================================== */
 
 /* ---------- base (night) tokens ---------- */
@@ -22,9 +22,19 @@
   --surface-2:     rgba(255,255,255,.06);
   --surface-3:     rgba(255,255,255,.11);
 
-  --primary:       #b8455f;
-  --primary-ink:   #de93a8;
-  --primary-soft:  rgba(184,69,95,.18);
+  --primary:       var(--palette-teal);
+  --primary-ink:   color-mix(in srgb, var(--palette-teal), white 40%);
+  --primary-soft:  color-mix(in srgb, var(--palette-teal) 18%, transparent);
+
+  /* extended palette — not all in use yet, kept for future accents */
+  --palette-sage:   #8cb369;
+  --palette-olive:  #c0cb77;
+  --palette-butter: #f4e285;
+  --palette-orange: #f4a259;
+  --palette-khaki:  #a8986b;
+  --palette-teal:   #5b8e7d;
+  --palette-mauve:  #8c6d67;
+  --palette-red:    #bc4b51;
 
   --ff-body:    "Source Serif 4", Georgia, "Times New Roman", serif;
   --ff-display: "Source Serif 4", Georgia, serif;
@@ -65,9 +75,9 @@
   --surface-2:     rgba(12,12,12,.055);
   --surface-3:     rgba(12,12,12,.10);
 
-  --primary:       #6e1f35;
-  --primary-ink:   #6e1f35;
-  --primary-soft:  rgba(110,31,53,.08);
+  --primary:       color-mix(in srgb, var(--palette-teal), black 18%);
+  --primary-ink:   color-mix(in srgb, var(--palette-teal), black 18%);
+  --primary-soft:  color-mix(in srgb, var(--palette-teal) 10%, transparent);
 }
 
 /* ---------- reset ---------- */
@@ -87,6 +97,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 h1,h2,h3,h4,h5,h6 { margin: 0; font-weight: 600; font-family: var(--ff-display); }
+sup { font-size: .68em; line-height: 0; }
 p { margin: 0 0 1.05em; }
 p:last-child { margin-bottom: 0; }
 a { color: inherit; }
@@ -227,6 +238,20 @@ section[id] { scroll-margin-top: 80px; }
   transition: background .18s var(--ease), border-color .18s var(--ease), transform .18s var(--ease);
 }
 .btn:hover { background: var(--surface-3); border-color: var(--fg-dim); transform: translateY(-1px); }
+.btn svg { width: 14px; height: 14px; flex: none; }
+
+/* authorship block */
+.authors { margin-bottom: 10px; font-size: 17px; line-height: 1.8; }
+.authors .sep { color: var(--fg-faint); }
+.authors a { color: inherit; text-decoration: none; transition: color .18s var(--ease); }
+.authors a:hover { color: var(--primary-ink); }
+.affils {
+  font-size: 14.5px; color: var(--fg-muted); line-height: 1.7;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 18px; margin-bottom: 6px;
+}
+.affils span { white-space: nowrap; }
+.affils sup, .authors sup { color: var(--primary-ink); font-weight: 600; padding-right: 1px; }
+.eqc { font-size: 13.5px; color: var(--fg-faint); margin-bottom: 0; }
 
 /* ==========================================================================
    sections and prose
