@@ -34,19 +34,27 @@
 
   <aside class="rail" aria-label="On this page">
     <nav class="rail__links">
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-      <a href="#bibtex">BibTeX</a>
+      <a data-level="1" href="#about">About</a>
+      <a data-level="1" href="#challenge">Continual Learning Challenge</a>
+      <a data-level="2" data-part="challenge" href="#challenge-setup">Sequential Task Learning</a>
+      <a data-level="2" data-part="challenge" href="#challenge-why-hard">Why it's hard</a>
+      <a data-level="1" href="#finding">Finding Memory Anchors</a>
+      <a data-level="2" data-part="finding" href="#finding-approach">Approach</a>
+      <a data-level="2" data-part="finding" href="#finding-results">Results</a>
+      <a data-level="1" href="#impact">Impact of Memory Anchors</a>
+      <a data-level="2" data-part="impact" href="#impact-downstream">Downstream effects</a>
+      <a data-level="2" data-part="impact" href="#impact-takeaways">Takeaways</a>
+      <a data-level="1" href="#contact">Contact</a>
+      <a data-level="1" href="#bibtex">BibTeX</a>
     </nav>
   </aside>
 
   <main id="top">
     <header class="hero">
       <div class="wrap wrap--mid">
-        <p class="eyebrow">Prototype &middot; 2026</p>
+        <p class="eyebrow">Preprint &middot; 2026</p>
         <h1 class="hero__title">Memory <span class="mark">Anchors</span> for Continual Robot Learning</h1>
-        <p class="hero__tagline">When learning a sequence of tasks for robots, rehearsing past tasks are important. But not all past data is created equal.</p>
+        <p class="hero__tagline">When learning a sequence of tasks for robots, rehearsing past tasks prevents forgetting. But not all past data is created equal.</p>
 
         <p class="authors">
           Maximilian Du<sup>1</sup><span class="sep">, </span>Zhanyi Sun<sup>1</sup><span class="sep">, </span>Chen Xu<sup>2</sup><span class="sep">, </span>Paarth Shah<sup>2</sup><span class="sep">, </span>Masha Itkina<sup>,2</sup><span class="sep">, </span></span>Shuran Song<sup>1</sup>
@@ -85,11 +93,11 @@
       </div>
     </section>
 
-    <section id="projects" class="section">
+    <section id="challenge" class="section">
       <div class="wrap wrap--wide reveal">
-        <p class="eyebrow">02 &middot; Projects</p>
-        <h2 class="sec__title">Projects</h2>
-        <p class="sec__sub">A simple card grid for linking out to whatever you're building.</p>
+        <p class="eyebrow">02 &middot; Continual Learning Challenge</p>
+        <h2 class="sec__title">Continual Learning Challenge</h2>
+        <!-- <p class="sec__sub">A simple card grid for linking out to whatever you're building.</p>
         <div class="grid">
           <article class="card">
             <h3>Project A</h3>
@@ -103,13 +111,82 @@
             <h3>Project C</h3>
             <p>Short description of project C.</p>
           </article>
+        </div> -->
+
+        <div class="sub" id="challenge-setup">
+          <h3 class="sub__title">Sequential Task Learning</h3>
+          <p class="sub__lede">Drag the slider to step through the success matrix as training progresses across the task sequence, from stage 0 to stage 9.</p>
+
+          <div class="stagesplit">
+            <div class="stageplayer">
+              <div class="stageplayer__frame">
+                <img id="stage-img" src="assets/sequential_learning/stage00_continual_success_matrix.svg" alt="Continual learning success matrix at training stage 0">
+              </div>
+            </div>
+
+            <div class="stagesplit__prose prose">
+              <p>Placeholder text for the right column. Describe what the success matrix and the successes plot show as training moves through the task sequence, and how to read them together.</p>
+            </div>
+          </div>
+
+          <div class="stageplayer stageplayer--full">
+            <div class="stageplayer__frame">
+              <img id="stage-img-2" src="assets/sequential_learning/stage00_figure_ready_successes_plot.svg" alt="Figure-ready successes plot at training stage 0">
+            </div>
+            <div class="stageplayer__controls">
+              <input type="range" id="stage-slider" class="stageplayer__slider" min="0" max="9" step="1" value="0" aria-label="Training stage" aria-valuetext="Stage 0">
+              <div class="stageplayer__ticks" aria-hidden="true">
+                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
+              </div>
+            </div>
+            <p class="stageplayer__label">Stage <span id="stage-label">00</span> of 09</p>
+          </div>
+        </div>
+        
+        <div class="sub" id="challenge-why-hard">
+          <h3 class="sub__title">Why it's hard</h3>
+          <p class="sub__lede">Placeholder for what makes rehearsal-based continual learning difficult.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="finding" class="section">
+      <div class="wrap wrap--wide reveal">
+        <p class="eyebrow">03 &middot; Finding Memory Anchors</p>
+        <h2 class="sec__title">Finding Memory Anchors</h2>
+        <p class="sec__sub">A simple card grid for linking out to whatever you're building.</p>
+
+        <div class="sub" id="finding-approach">
+          <h3 class="sub__title">Approach</h3>
+          <p class="sub__lede">Placeholder for how memory anchors are identified.</p>
+        </div>
+        <div class="sub" id="finding-results">
+          <h3 class="sub__title">Results</h3>
+          <p class="sub__lede">Placeholder for the results of the anchor-finding method.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="impact" class="section">
+      <div class="wrap wrap--wide reveal">
+        <p class="eyebrow">04 &middot; Impact of Memory Anchors</p>
+        <h2 class="sec__title">Impact of Memory Anchors</h2>
+        <p class="sec__sub">A simple card grid for linking out to whatever you're building.</p>
+
+        <div class="sub" id="impact-downstream">
+          <h3 class="sub__title">Downstream effects</h3>
+          <p class="sub__lede">Placeholder for how memory anchors affect downstream task performance.</p>
+        </div>
+        <div class="sub" id="impact-takeaways">
+          <h3 class="sub__title">Takeaways</h3>
+          <p class="sub__lede">Placeholder for the high-level takeaways.</p>
         </div>
       </div>
     </section>
 
     <section id="contact" class="section">
       <div class="wrap wrap--mid reveal">
-        <p class="eyebrow">03 &middot; Contact</p>
+        <p class="eyebrow">05 &middot; Contact</p>
         <h2 class="sec__title">Contact</h2>
         <p class="prose">Email: <a href="mailto:you@example.com">you@example.com</a></p>
       </div>
@@ -117,7 +194,7 @@
 
     <section id="bibtex" class="section">
       <div class="wrap wrap--mid reveal">
-        <p class="eyebrow">04 &middot; BibTeX</p>
+        <p class="eyebrow">06 &middot; BibTeX</p>
         <h2 class="sec__title">BibTeX</h2>
         <div class="bib">
           <button class="bib__copy" type="button" id="bib-copy">Copy</button>

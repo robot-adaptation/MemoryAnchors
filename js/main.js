@@ -48,7 +48,37 @@
     });
   }
 
+  function initStagePlayer() {
+    var slider = document.getElementById('stage-slider');
+    var img = document.getElementById('stage-img');
+    var img2 = document.getElementById('stage-img-2');
+    var label = document.getElementById('stage-label');
+    if (!slider || !img || !label) return;
+
+    var prefix = 'assets/sequential_learning/stage';
+    var suffix = '_continual_success_matrix.svg';
+    var suffix2 = '_figure_ready_successes_plot.svg';
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+    function render() {
+      var n = Number(slider.value);
+      var stage = pad(n);
+      img.src = prefix + stage + suffix;
+      img.alt = 'Continual learning success matrix at training stage ' + n;
+      if (img2) {
+        img2.src = prefix + stage + suffix2;
+        img2.alt = 'Figure-ready successes plot at training stage ' + n;
+      }
+      label.textContent = stage;
+      slider.setAttribute('aria-valuetext', 'Stage ' + n);
+    }
+
+    slider.addEventListener('input', render);
+    render();
+  }
+
   function initRailSpy() {
+    var railLinks = document.querySelectorAll('.rail__links a');
     var links = document.querySelectorAll('.rail__links a, .nav__actions a');
     var sections = Array.prototype.map.call(links, function (a) {
       return document.getElementById(a.getAttribute('href').slice(1));
@@ -61,11 +91,20 @@
         if (entry.isIntersecting) current = entry.target.id;
       });
       if (!current) return;
+
+      links.forEach(function (a) { a.removeAttribute('aria-current'); });
+      railLinks.forEach(function (a) { a.removeAttribute('data-in'); });
+
       links.forEach(function (a) {
-        var match = a.getAttribute('href') === '#' + current;
-        a.toggleAttribute('aria-current', match);
-        if (match) a.setAttribute('aria-current', 'true');
+        if (a.getAttribute('href') === '#' + current) a.setAttribute('aria-current', 'true');
       });
+
+      var activeSub = document.querySelector('.rail__links a[data-level="2"][href="#' + current + '"]');
+      if (activeSub) {
+        var part = activeSub.getAttribute('data-part');
+        var parent = document.querySelector('.rail__links a[data-level="1"][href="#' + part + '"]');
+        if (parent) parent.setAttribute('data-in', 'true');
+      }
     }, { rootMargin: '-40% 0px -55% 0px' });
     sections.forEach(function (s) { io.observe(s); });
   }
@@ -74,6 +113,7 @@
     initTheme();
     initReveal();
     initBibCopy();
+    initStagePlayer();
     initRailSpy();
   });
 })();
