@@ -2,7 +2,7 @@
    MemoryAnchors — visual system matched to flex-pi.github.io
    Dark tokens are the authored base; a full [data-theme="day"] layer
    overrides them, and the page SHIPS "day" (cream #f6f6ef paper, #0c0c0c
-   ink) by default, exactly like the reference. Source Serif 4 for body and
+   ink) by default, exactly like the reference. IBM Plex Sans for body and
    headings, JetBrains Mono for metadata, a muted teal accent, 4px radii.
    ========================================================================== */
 
@@ -36,8 +36,8 @@
   --palette-mauve:  #8c6d67;
   --palette-red:    #bc4b51;
 
-  --ff-body:    "Source Serif 4", Georgia, "Times New Roman", serif;
-  --ff-display: "Source Serif 4", Georgia, serif;
+  --ff-body:    "IBM Plex Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --ff-display: "IBM Plex Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
   --ff-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --fs-meta: 11px;
@@ -61,19 +61,21 @@
 
 /* ---------- day layer: the shipped theme ---------- */
 [data-theme="day"] {
-  --bg:            #f6f6ef;
+  /* ocean/tropical daylight paper: pale aqua ground, deep teal-navy ink,
+     instead of the neutral cream/black pairing */
+  --bg:            #e9f5f7;
   --bg-raise:      #ffffff;
-  --muted:         #ecece2;
-  --fg:            #0c0c0c;
-  --fg-muted:      rgba(12,12,12,.78);
-  --fg-dim:        rgba(12,12,12,.60);
-  --fg-faint:      rgba(12,12,12,.42);
-  --border:        rgba(12,12,12,.22);
-  --border-soft:   rgba(12,12,12,.13);
-  --border-faint:  rgba(12,12,12,.085);
-  --surface:       rgba(12,12,12,.028);
-  --surface-2:     rgba(12,12,12,.055);
-  --surface-3:     rgba(12,12,12,.10);
+  --muted:         #dceef1;
+  --fg:            #0b2027;
+  --fg-muted:      rgba(11,32,39,.78);
+  --fg-dim:        rgba(11,32,39,.60);
+  --fg-faint:      rgba(11,32,39,.42);
+  --border:        rgba(11,32,39,.20);
+  --border-soft:   rgba(11,32,39,.12);
+  --border-faint:  rgba(11,32,39,.08);
+  --surface:       rgba(11,32,39,.03);
+  --surface-2:     rgba(11,32,39,.055);
+  --surface-3:     rgba(11,32,39,.10);
 
   --primary:       color-mix(in srgb, var(--palette-teal), black 18%);
   --primary-ink:   color-mix(in srgb, var(--palette-teal), black 18%);
