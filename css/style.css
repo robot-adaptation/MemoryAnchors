@@ -318,7 +318,11 @@ section[id] { scroll-margin-top: 80px; }
   font-size: clamp(19px, 1.9vw, 23px);
   line-height: 1.28; margin: 0 0 .45em; letter-spacing: -.008em;
 }
-.sub__lede { font-size: 18px; line-height: 1.62; color: var(--fg-muted); margin: 0; max-width: var(--measure); }
+/* no max-width here: .sub blocks live inside wrap--wide sections that pair
+   this lede with a full-width display (stagepanel, card grid, ...) below it,
+   so the paragraph should fill the same width as that container rather than
+   wrapping at the narrower reading measure and ending short of it */
+.sub__lede { font-size: 18px; line-height: 1.62; color: var(--fg-muted); margin: 0; }
 
 /* ---------- stage player: scrub through a numbered image sequence ---------- */
 .stagesplit {
@@ -341,6 +345,32 @@ section[id] { scroll-margin-top: 80px; }
 }
 .stageplayer__credit a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); }
 .stageplayer__credit a:hover { color: var(--primary-ink); border-bottom-color: var(--primary); }
+
+/* ---------- task-ordering filmstrip: auto-scrolls slowly, pauses on hover ---------- */
+.orderings { margin-top: 20px; }
+.orderings__track {
+  display: flex; gap: clamp(14px, 2vw, 20px);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  padding-bottom: 12px;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.orderings__track:focus-visible { outline-offset: 4px; }
+.orderings__track::-webkit-scrollbar { height: 8px; }
+.orderings__track::-webkit-scrollbar-track { background: transparent; }
+.orderings__track::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.orderings__card {
+  flex: 0 0 clamp(220px, 32vw, 320px); scroll-snap-align: start; margin: 0;
+}
+.orderings__frame {
+  background: var(--muted); border: 1px solid var(--border-faint); border-radius: var(--radius);
+  padding: clamp(10px, 1.6vw, 16px);
+}
+.orderings__frame img { width: 100%; height: auto; display: block; }
+.orderings__caption {
+  margin-top: 8px; font-family: var(--ff-mono); font-size: var(--fs-meta);
+  letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg-dim); text-align: center;
+}
 .stageplayer__slider {
   width: 100%; display: block; appearance: none; -webkit-appearance: none;
   height: 4px; border-radius: var(--radius-pill);

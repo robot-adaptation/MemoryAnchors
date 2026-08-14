@@ -95,6 +95,44 @@
     render();
   }
 
+  function initAutoScroll() {
+    var strips = document.querySelectorAll('[data-autoscroll]');
+    if (!strips.length) return;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    strips.forEach(function (strip) {
+      var speed = Number(strip.getAttribute('data-autoscroll')) || 0.35;
+      var direction = 1;
+      var paused = false;
+
+      function resumeSoon() { setTimeout(function () { paused = false; }, 1200); }
+
+      strip.addEventListener('mouseenter', function () { paused = true; });
+      strip.addEventListener('mouseleave', function () { paused = false; });
+      strip.addEventListener('pointerdown', function () { paused = true; });
+      strip.addEventListener('pointerup', resumeSoon);
+      strip.addEventListener('touchstart', function () { paused = true; }, { passive: true });
+      strip.addEventListener('touchend', resumeSoon);
+      strip.addEventListener('focusin', function () { paused = true; });
+      strip.addEventListener('focusout', function () { paused = false; });
+
+      function step() {
+        if (!paused) {
+          var max = strip.scrollWidth - strip.clientWidth;
+          if (max > 0) {
+            var next = strip.scrollLeft + speed * direction;
+            if (next >= max) { next = max; direction = -1; }
+            else if (next <= 0) { next = 0; direction = 1; }
+            strip.scrollLeft = next;
+          }
+        }
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
   function initRailSpy() {
     var railLinks = document.querySelectorAll('.rail__links a');
     var links = document.querySelectorAll('.rail__links a, .nav__actions a');
@@ -132,6 +170,7 @@
     initReveal();
     initBibCopy();
     initStagePlayer();
+    initAutoScroll();
     initRailSpy();
   });
 })();

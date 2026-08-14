@@ -111,9 +111,9 @@
             <div class="stagepanel__row">
               <span class="stagepanel__key">ER buffer size</span>
               <div class="settings-toggle" role="group" aria-label="Memory budget setting">
-                <button type="button" class="settings-toggle__btn" data-folder="005" data-nbt="0.31" aria-pressed="false">0.5% budget</button>
-                <button type="button" class="settings-toggle__btn" data-folder="01" data-nbt="0.16" aria-pressed="true">1% budget</button>
-                <button type="button" class="settings-toggle__btn" data-folder="05" data-nbt="0.01" aria-pressed="false">5% budget</button>
+                <button type="button" class="settings-toggle__btn" data-folder="005" data-nbt="0.31" aria-pressed="false">0.5% (Tiny)</button>
+                <button type="button" class="settings-toggle__btn" data-folder="01" data-nbt="0.16" aria-pressed="true">1% (Small)</button>
+                <button type="button" class="settings-toggle__btn" data-folder="05" data-nbt="0.01" aria-pressed="false">5% (Medium)</button>
               </div>
             </div>
             <div class="stagepanel__row">
@@ -137,8 +137,8 @@
             </div>
 
             <div class="stagesplit__prose prose">
-              <p><b>Rehearsing Past Tasks:</b>Training a new task is nearly guarenteed to destroy past task knowledge without some regularization. In our work, we study a common regularization approach called Experience Replay (ER). The idea is simple: keep a buffer of past experiences and replay them during training.</p>
-              <p><b>Measuring Retention:</b> We measure a policy's past task retention through Negative Backward Transfer (NBT), shown as the shaded area below. Click through different ER buffer sizes to see how they affect this score.</p>
+              <p><b>Rehearsing Past Tasks:</b> Training a new task is nearly guarenteed to destroy past task knowledge without some regularization. In our work, we study a common regularization approach called Experience Replay (ER). The idea is simple: keep a buffer of past experiences and replay them during training.</p>
+              <p><b>Measuring Retention:</b> We measure a policy's past task retention through Negative Backward Transfer (NBT), visualized as the shaded area below. Click through different ER buffer sizes to see how they affect this score. Higher is worse, lower is better.</p>
               <p class="nbt-readout">Negative Backward Transfer (NBT) Score: <span class="nbt-readout__value" id="nbt-value">0.42</span></p>
             </div>
           </div>
@@ -151,8 +151,49 @@
         </div>
         
         <div class="sub" id="challenge-why-hard">
-          <h3 class="sub__title">Task-Task Interferences</h3>
-          <p class="sub__lede">Placeholder for what makes rehearsal-based continual learning difficult.</p>
+          <h3 class="sub__title">Tasks Matter</h3>
+          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <emph>how it arises.</emph> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders.</p>
+
+          <div class="orderings">
+            <div class="orderings__track" data-autoscroll="0.35" tabindex="0" aria-label="Performance on 'put the cream cheese in the bowl' across different learning-order positions, scrollable">
+              <figure class="orderings__card">
+                <div class="orderings__frame">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task0.svg" alt="Put the cream cheese in the bowl: performance when learned at position 0" loading="lazy">
+                </div>
+                <figcaption class="orderings__caption">Position 0</figcaption>
+              </figure>
+              <figure class="orderings__card">
+                <div class="orderings__frame">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task1.svg" alt="Put the cream cheese in the bowl: performance when learned at position 1" loading="lazy">
+                </div>
+                <figcaption class="orderings__caption">Position 1</figcaption>
+              </figure>
+              <figure class="orderings__card">
+                <div class="orderings__frame">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task2.svg" alt="Put the cream cheese in the bowl: performance when learned at position 2" loading="lazy">
+                </div>
+                <figcaption class="orderings__caption">Position 2</figcaption>
+              </figure>
+              <figure class="orderings__card">
+                <div class="orderings__frame">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task4.svg" alt="Put the cream cheese in the bowl: performance when learned at position 4" loading="lazy">
+                </div>
+                <figcaption class="orderings__caption">Position 4</figcaption>
+              </figure>
+              <figure class="orderings__card">
+                <div class="orderings__frame">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task5.svg" alt="Put the cream cheese in the bowl: performance when learned at position 5" loading="lazy">
+                </div>
+                <figcaption class="orderings__caption">Position 5</figcaption>
+              </figure>
+              <figure class="orderings__card">
+                <div class="orderings__frame">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task7.svg" alt="Put the cream cheese in the bowl: performance when learned at position 7" loading="lazy">
+                </div>
+                <figcaption class="orderings__caption">Position 7</figcaption>
+              </figure>
+            </div>
+          </div>
         </div>
       </div>
     </section>
