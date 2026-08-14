@@ -235,6 +235,40 @@ section[id] { scroll-margin-top: 80px; }
   max-width: 52ch; margin-inline: auto; text-wrap: balance;
 }
 
+/* control panel — groups the ER-buffer picker and the training-stage slider
+   into one surface, so it reads as a single control driving the figures
+   below rather than two disconnected widgets */
+.stagepanel {
+  border: 1px solid var(--border-soft); border-radius: var(--radius);
+  background: var(--bg-raise); padding: clamp(16px, 2.4vw, 22px);
+  margin-top: 24px; display: grid; gap: 16px;
+}
+.stagepanel__row {
+  display: grid; grid-template-columns: 128px 1fr auto; gap: 8px 18px; align-items: center;
+}
+.stagepanel__row:first-child { grid-template-columns: 128px 1fr; }
+.stagepanel__row + .stagepanel__row { padding-top: 16px; border-top: 1px solid var(--border-faint); }
+.stagepanel__key {
+  font-family: var(--ff-mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta);
+  text-transform: uppercase; color: var(--fg-faint); white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .stagepanel__row, .stagepanel__row:first-child { grid-template-columns: 1fr; }
+}
+
+/* setting switcher — picks which asset folder the stage player reads from */
+.settings-toggle { display: flex; flex-wrap: wrap; gap: 8px; }
+.settings-toggle__btn {
+  font-family: var(--ff-mono); font-size: 12px; letter-spacing: var(--ls-meta); text-transform: uppercase;
+  padding: 7px 14px; border-radius: var(--radius-pill);
+  border: 1px solid var(--border); background: var(--surface); color: var(--fg-dim);
+  cursor: pointer; transition: background .18s var(--ease), border-color .18s var(--ease), color .18s var(--ease);
+}
+.settings-toggle__btn:hover { color: var(--fg); background: var(--surface-2); }
+.settings-toggle__btn[aria-pressed="true"] {
+  color: var(--bg); background: var(--primary); border-color: var(--primary);
+}
+
 /* link buttons */
 .links { display: flex; flex-wrap: wrap; gap: 9px; margin-top: clamp(26px, 4vw, 40px); }
 .btn {
@@ -336,6 +370,13 @@ section[id] { scroll-margin-top: 80px; }
 .prose strong { color: var(--fg); font-weight: 600; }
 .prose a { color: var(--primary-ink); text-decoration: none; border-bottom: 1px solid var(--border); }
 .prose a:hover { border-bottom-color: var(--primary); }
+
+/* live readout tied to the settings-toggle above the stage player */
+.nbt-readout {
+  margin-top: 4px; padding-top: 14px; border-top: 1px solid var(--border-faint);
+  font-size: 20px; color: var(--fg);
+}
+.nbt-readout__value { font-family: var(--ff-mono); font-weight: 700; color: var(--primary-ink); }
 
 /* ---------- card grid ---------- */
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.1rem; margin-top: 1.5rem; }

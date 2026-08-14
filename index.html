@@ -93,7 +93,7 @@
         <div class="prose">
           <p>When learning a new task on a robot, it is common to rehearse past experiences to prevent catastrophic forgetting of past skills. This approach works very well across architectures, task sets, and on real robots too. But why does it work so well? Our work shows that a small set of these experiences contributes greatly in anchoring past performance. Without even a small fraction of them, catastrophic forgetting increases significantly. We call these experiences, <b>Memory Anchors</b>. </p>
           <p>Our simple insight: new tasks interact with tasks the robot already knows. If a new task shares similar states as old ones but requires different actions, the policy struggles to bridge the gap. For example, learning how to manipulate a familiar object in a new way. The policy is most sensitive to the past task data sampled from this region.</p>
-          <p>We present a simple way of querying a policy to extract Memory Anchors from past task data. Removing access to 10% of these Memory Anchors in the replay buffer leads to more than a 4.5x increase in catastrophic forgetting on the LIBERO benchmark suites. Under a limited memory budget, enriching the replay buffer with Memory Anchors can decrease worst-case forgetting in LIBERO by 63% and allow a real robot to learn a series of highly-conflicting tasks.</p>
+          <p>We present a simple way of querying a policy to extract Memory Anchors by using the policy's own latent structure and action predictions. Removing access to 10% of these Memory Anchors in the replay buffer leads to more than a 4.5x increase in catastrophic forgetting on the LIBERO benchmark suites. Under a limited memory budget, enriching the replay buffer with Memory Anchors can decrease worst-case forgetting in LIBERO by 63% and allow a real robot to learn a series of highly-conflicting tasks.</p>
         </div>
       </div>
     </section>
@@ -102,50 +102,50 @@
       <div class="wrap wrap--wide reveal">
         <p class="eyebrow">02 &middot; Continual Learning Challenge</p>
         <h2 class="sec__title">Continual Learning Challenge</h2>
-        <!-- <p class="sec__sub">A simple card grid for linking out to whatever you're building.</p>
-        <div class="grid">
-          <article class="card">
-            <h3>Project A</h3>
-            <p>Short description of project A.</p>
-          </article>
-          <article class="card">
-            <h3>Project B</h3>
-            <p>Short description of project B.</p>
-          </article>
-          <article class="card">
-            <h3>Project C</h3>
-            <p>Short description of project C.</p>
-          </article>
-        </div> -->
 
         <div class="sub" id="challenge-setup">
           <h3 class="sub__title">Sequential Task Learning</h3>
-          <p class="sub__lede">Drag the slider to step through the success matrix as training progresses across the task sequence, from stage 1 to stage 10.</p>
+          <p class="sub__lede">We explore the problem setting of imitation learning on tasks in sequence. Drag the slider to step through ten tasks. Observe how the policy learns new tasks (horizontal) and remembers old ones (vertical).</p>
 
-          <div class="stagesplit">
-            <div class="stageplayer">
+          <div class="stagepanel">
+            <div class="stagepanel__row">
+              <span class="stagepanel__key">ER buffer size</span>
+              <div class="settings-toggle" role="group" aria-label="Memory budget setting">
+                <button type="button" class="settings-toggle__btn" data-folder="005" data-nbt="0.61" aria-pressed="false">0.5% budget</button>
+                <button type="button" class="settings-toggle__btn" data-folder="01" data-nbt="0.42" aria-pressed="true">1% budget</button>
+                <button type="button" class="settings-toggle__btn" data-folder="05" data-nbt="0.18" aria-pressed="false">5% budget</button>
+              </div>
+            </div>
+            <div class="stagepanel__row">
+              <span class="stagepanel__key">Training stage</span>
               <div class="stageplayer__controls">
                 <input type="range" id="stage-slider" class="stageplayer__slider" min="1" max="10" step="1" value="1" aria-label="Training stage" aria-valuetext="Stage 1">
                 <div class="stageplayer__ticks" aria-hidden="true">
                   <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
                 </div>
               </div>
-              <p class="stageplayer__label">Stage <span id="stage-label">1</span> of 10</p>
+              <span class="stageplayer__label">Stage <span id="stage-label">1</span> of 10</span>
+            </div>
+          </div>
 
+          <div class="stagesplit">
+            <div class="stageplayer">
               <div class="stageplayer__frame">
-                <img id="stage-img" src="assets/sequential_learning/stage00_continual_success_matrix.svg" alt="Continual learning success matrix at training stage 1">
+                <img id="stage-img" src="assets/sequential_learning/01/stage00_continual_success_matrix.svg" alt="Continual learning success matrix at training stage 1">
                 <p class="stageplayer__credit">Visual inspired by <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">Huihan Liu</a></p>
               </div>
             </div>
 
             <div class="stagesplit__prose prose">
-              <p>Placeholder text for the right column. Describe what the success matrix and the successes plot show as training moves through the task sequence, and how to read them together.</p>
+              <p><b>Rehearsing Past Tasks:</b>Training a new task is nearly guarenteed to destroy past task knowledge without some regularization. In our work, we study a common regularization approach called Experience Replay (ER). The idea is simple: keep a buffer of past experiences and replay them during training.</p>
+              <p><b>Measuring Retention:</b> We measure a policy's past task retention through Negative Backward Transfer (NBT), shown as the shaded area below. Click through different ER buffer sizes to see how they affect this score.</p>
+              <p class="nbt-readout">Negative Backward Transfer (NBT) Score: <span class="nbt-readout__value" id="nbt-value">0.42</span></p>
             </div>
           </div>
 
           <div class="stageplayer stageplayer--full">
             <div class="stageplayer__frame">
-              <img id="stage-img-2" src="assets/sequential_learning/stage00_figure_ready_successes_plot.svg" alt="Figure-ready successes plot at training stage 1">
+              <img id="stage-img-2" src="assets/sequential_learning/01/stage00_figure_ready_successes_plot.svg" alt="Figure-ready successes plot at training stage 1">
             </div>
           </div>
         </div>

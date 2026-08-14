@@ -53,20 +53,26 @@
     var img = document.getElementById('stage-img');
     var img2 = document.getElementById('stage-img-2');
     var label = document.getElementById('stage-label');
+    var nbtValue = document.getElementById('nbt-value');
+    var folderBtns = document.querySelectorAll('.settings-toggle__btn');
     if (!slider || !img || !label) return;
 
-    var prefix = 'assets/sequential_learning/stage';
+    var root = 'assets/sequential_learning/';
     var suffix = '_continual_success_matrix.svg';
     var suffix2 = '_figure_ready_successes_plot.svg';
     function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
+    var activeBtn = document.querySelector('.settings-toggle__btn[aria-pressed="true"]');
+    var folder = activeBtn ? activeBtn.getAttribute('data-folder') : '01';
+    if (activeBtn && nbtValue) nbtValue.textContent = activeBtn.getAttribute('data-nbt');
+
     function render() {
       var n = Number(slider.value);
-      var file = pad(n - 1);
-      img.src = prefix + file + suffix;
+      var prefix = root + folder + '/stage' + pad(n - 1);
+      img.src = prefix + suffix;
       img.alt = 'Continual learning success matrix at training stage ' + n;
       if (img2) {
-        img2.src = prefix + file + suffix2;
+        img2.src = prefix + suffix2;
         img2.alt = 'Figure-ready successes plot at training stage ' + n;
       }
       label.textContent = n;
@@ -74,6 +80,18 @@
     }
 
     slider.addEventListener('input', render);
+
+    folderBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (btn.getAttribute('aria-pressed') === 'true') return;
+        folderBtns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        btn.setAttribute('aria-pressed', 'true');
+        folder = btn.getAttribute('data-folder');
+        if (nbtValue) nbtValue.textContent = btn.getAttribute('data-nbt');
+        render();
+      });
+    });
+
     render();
   }
 
