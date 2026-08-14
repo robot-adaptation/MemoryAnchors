@@ -21,7 +21,10 @@
 
   <nav class="nav" aria-label="Page navigation">
     <div class="nav__in">
-      <a class="nav__brand" href="#top">Memory Anchors</a>
+      <a class="nav__brand" href="#top">
+        <svg class="nav__brand-icon" viewBox="0 0 6.16 7.1" aria-hidden="true"><path d="M3.45,2.14c.32,0,.64,0,.96,0,.2,0,.21.02.21.22,0,.1,0,.2,0,.31,0,.13-.05.19-.18.18-.29,0-.57,0-.86,0-.05,0-.09,0-.14,0v3.03c.65-.04,1.45-.62,1.6-1.38-.06,0-.11,0-.16,0-.12,0-.17-.1-.1-.19.19-.24.39-.47.59-.7.06-.07.13-.07.19,0,.19.23.39.46.58.69.08.09.02.19-.1.2-.23.02-.23.02-.3.25-.3.98-.99,1.54-1.95,1.8-.11.03-.22.04-.34.07.05.22-.13.32-.26.44-.03.03-.13.05-.16.02-.14-.12-.33-.21-.29-.45-.21-.05-.42-.09-.61-.16-.89-.33-1.5-.93-1.71-1.88-.02-.08-.05-.09-.12-.1-.09,0-.22-.01-.26-.07-.07-.1.06-.18.11-.25.14-.18.29-.35.43-.52.11-.13.16-.13.28,0,.17.2.34.4.5.61.03.04.07.13.05.17-.02.04-.1.05-.16.07-.03,0-.07,0-.11,0,.12.68.86,1.31,1.59,1.38v-3.05c-.06,0-.11,0-.16,0-.28,0-.57,0-.85,0-.13,0-.18-.05-.17-.18,0-.11,0-.22,0-.33,0-.17.03-.2.19-.2.28,0,.57,0,.85,0,.05,0,.09,0,.15,0,0-.06,0-.11,0-.16.01-.1-.02-.15-.12-.2-.38-.21-.56-.66-.45-1.07C2.29.28,2.67,0,3.11,0c.4,0,.77.29.88.68.12.39-.03.84-.38,1.04-.18.1-.2.22-.16.41ZM3.43.95c0-.2-.15-.36-.35-.36-.19,0-.35.15-.36.35,0,.2.16.37.35.37.19,0,.35-.16.35-.36Z"/></svg>
+        Memory Anchors
+      </a>
       <!-- <span class="nav__title">A minimal, flex-π inspired template</span> -->
       <div class="nav__actions">
         <a class="navbtn" href="#">Paper<em>arXiv</em></a>
@@ -86,9 +89,11 @@
       <div class="wrap wrap--mid reveal">
         <p class="eyebrow">01 &middot; About</p>
         <h2 class="sec__title">About</h2>
-        <p class="sec__sub">This is a minimal starting point that borrows the layout, type, and color system of the reference site &mdash; a sticky top nav, an on-page outline rail, a centered title block, and calm prose columns &mdash; without any of its research content.</p>
+        <!-- <p class="sec__sub">This is a minimal starting point that borrows the layout, type, and color system of the reference site &mdash; a sticky top nav, an on-page outline rail, a centered title block, and calm prose columns &mdash; without any of its research content.</p> -->
         <div class="prose">
-          <p>Swap this copy for your own project description. The page ships in the light &ldquo;day&rdquo; theme by default, with a full dark theme one click away via the toggle in the top-right corner.</p>
+          <p>When learning a new task on a robot, it is common to rehearse past experiences to prevent catastrophic forgetting of past skills. This approach works very well across architectures, task sets, and on real robots too. But why does it work so well? Our work shows that a small set of these experiences contributes greatly in anchoring past performance. Without even a small fraction of them, catastrophic forgetting increases significantly. We call these experiences, <b>Memory Anchors</b>. </p>
+          <p>Our simple insight: new tasks interact with tasks the robot already knows. If a new task shares similar states as old ones but requires different actions, the policy struggles to bridge the gap. For example, learning how to manipulate a familiar object in a new way. The policy is most sensitive to the past task data sampled from this region.</p>
+          <p>We present a simple way of querying a policy to extract Memory Anchors from past task data. Removing access to 10% of these Memory Anchors in the replay buffer leads to more than a 4.5x increase in catastrophic forgetting on the LIBERO benchmark suites. Under a limited memory budget, enriching the replay buffer with Memory Anchors can decrease worst-case forgetting in LIBERO by 63% and allow a real robot to learn a series of highly-conflicting tasks.</p>
         </div>
       </div>
     </section>
@@ -115,12 +120,21 @@
 
         <div class="sub" id="challenge-setup">
           <h3 class="sub__title">Sequential Task Learning</h3>
-          <p class="sub__lede">Drag the slider to step through the success matrix as training progresses across the task sequence, from stage 0 to stage 9.</p>
+          <p class="sub__lede">Drag the slider to step through the success matrix as training progresses across the task sequence, from stage 1 to stage 10.</p>
 
           <div class="stagesplit">
             <div class="stageplayer">
+              <div class="stageplayer__controls">
+                <input type="range" id="stage-slider" class="stageplayer__slider" min="1" max="10" step="1" value="1" aria-label="Training stage" aria-valuetext="Stage 1">
+                <div class="stageplayer__ticks" aria-hidden="true">
+                  <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                </div>
+              </div>
+              <p class="stageplayer__label">Stage <span id="stage-label">1</span> of 10</p>
+
               <div class="stageplayer__frame">
-                <img id="stage-img" src="assets/sequential_learning/stage00_continual_success_matrix.svg" alt="Continual learning success matrix at training stage 0">
+                <img id="stage-img" src="assets/sequential_learning/stage00_continual_success_matrix.svg" alt="Continual learning success matrix at training stage 1">
+                <p class="stageplayer__credit">Visual inspired by <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">Huihan Liu</a></p>
               </div>
             </div>
 
@@ -131,20 +145,13 @@
 
           <div class="stageplayer stageplayer--full">
             <div class="stageplayer__frame">
-              <img id="stage-img-2" src="assets/sequential_learning/stage00_figure_ready_successes_plot.svg" alt="Figure-ready successes plot at training stage 0">
+              <img id="stage-img-2" src="assets/sequential_learning/stage00_figure_ready_successes_plot.svg" alt="Figure-ready successes plot at training stage 1">
             </div>
-            <div class="stageplayer__controls">
-              <input type="range" id="stage-slider" class="stageplayer__slider" min="0" max="9" step="1" value="0" aria-label="Training stage" aria-valuetext="Stage 0">
-              <div class="stageplayer__ticks" aria-hidden="true">
-                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
-              </div>
-            </div>
-            <p class="stageplayer__label">Stage <span id="stage-label">00</span> of 09</p>
           </div>
         </div>
         
         <div class="sub" id="challenge-why-hard">
-          <h3 class="sub__title">Why it's hard</h3>
+          <h3 class="sub__title">Experience Replay</h3>
           <p class="sub__lede">Placeholder for what makes rehearsal-based continual learning difficult.</p>
         </div>
       </div>

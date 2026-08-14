@@ -62,14 +62,14 @@
 
     function render() {
       var n = Number(slider.value);
-      var stage = pad(n);
-      img.src = prefix + stage + suffix;
+      var file = pad(n - 1);
+      img.src = prefix + file + suffix;
       img.alt = 'Continual learning success matrix at training stage ' + n;
       if (img2) {
-        img2.src = prefix + stage + suffix2;
+        img2.src = prefix + file + suffix2;
         img2.alt = 'Figure-ready successes plot at training stage ' + n;
       }
-      label.textContent = stage;
+      label.textContent = n;
       slider.setAttribute('aria-valuetext', 'Stage ' + n);
     }
 
