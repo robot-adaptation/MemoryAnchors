@@ -95,41 +95,136 @@
     render();
   }
 
-  function initAutoScroll() {
-    var strips = document.querySelectorAll('[data-autoscroll]');
-    if (!strips.length) return;
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) return;
+  /* reusable "Show Experiment Details" link -> <dialog>. Pair a
+     .details-link[data-dialog-target] with a <dialog class="details-dialog">
+     sharing that id and it wires up automatically; add as many as you like. */
+  function initDetailsDialogs() {
+    var links = document.querySelectorAll('.details-link[data-dialog-target]');
+    links.forEach(function (link) {
+      var dialog = document.getElementById(link.getAttribute('data-dialog-target'));
+      if (!dialog || typeof dialog.showModal !== 'function') return;
 
-    strips.forEach(function (strip) {
-      var speed = Number(strip.getAttribute('data-autoscroll')) || 0.35;
-      var direction = 1;
-      var paused = false;
+      link.addEventListener('click', function () { dialog.showModal(); });
 
-      function resumeSoon() { setTimeout(function () { paused = false; }, 1200); }
+      dialog.addEventListener('click', function (e) {
+        var r = dialog.getBoundingClientRect();
+        var inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+        if (!inside) dialog.close();
+      });
 
-      strip.addEventListener('mouseenter', function () { paused = true; });
-      strip.addEventListener('mouseleave', function () { paused = false; });
-      strip.addEventListener('pointerdown', function () { paused = true; });
-      strip.addEventListener('pointerup', resumeSoon);
-      strip.addEventListener('touchstart', function () { paused = true; }, { passive: true });
-      strip.addEventListener('touchend', resumeSoon);
-      strip.addEventListener('focusin', function () { paused = true; });
-      strip.addEventListener('focusout', function () { paused = false; });
+      var closeBtn = dialog.querySelector('.details-dialog__close');
+      if (closeBtn) closeBtn.addEventListener('click', function () { dialog.close(); });
+    });
+  }
 
-      function step() {
-        if (!paused) {
-          var max = strip.scrollWidth - strip.clientWidth;
-          if (max > 0) {
-            var next = strip.scrollLeft + speed * direction;
-            if (next >= max) { next = max; direction = -1; }
-            else if (next <= 0) { next = 0; direction = 1; }
-            strip.scrollLeft = next;
-          }
-        }
-        requestAnimationFrame(step);
+  /* keeps a group of [data-video-sync] videos playing side by side in lockstep:
+     starts them together once all are loaded, restarts the whole group the
+     moment any one clip ends (so mismatched lengths don't drift apart), and
+     nudges laggards back in line during playback. If the group has a
+     [data-scrubbar], that bar tracks playback and lets the user drag to
+     seek both videos at once; otherwise it just loops untouched. */
+  function initVideoSync() {
+    var groups = document.querySelectorAll('[data-video-sync]');
+    groups.forEach(function (group) {
+      var videos = Array.prototype.slice.call(group.querySelectorAll('video'));
+      if (videos.length < 2) return;
+      videos.forEach(function (v) { v.loop = false; });
+
+      var bar = group.querySelector('[data-scrubbar]');
+      var played = bar ? bar.querySelector('.scrubbar__played') : null;
+      var handle = bar ? bar.querySelector('.scrubbar__handle') : null;
+      var duration = 0;
+      var scrubbing = false;
+      var wasPlaying = false;
+
+      if (bar) {
+        var split = Number(bar.getAttribute('data-split')) || 0.5;
+        bar.style.setProperty('--split', (split * 100) + '%');
       }
-      requestAnimationFrame(step);
+
+      function updateBar(time) {
+        if (!bar || !duration) return;
+        var pct = Math.max(0, Math.min(1, time / duration));
+        if (played) played.style.width = (pct * 100) + '%';
+        if (handle) handle.style.left = (pct * 100) + '%';
+        bar.setAttribute('aria-valuenow', String(Math.round(pct * 100)));
+      }
+
+      function seekTo(time) {
+        videos.forEach(function (v) { v.currentTime = Math.min(time, v.duration || time); });
+        updateBar(time);
+      }
+
+      function restart() {
+        videos.forEach(function (v) { v.currentTime = 0; });
+        videos.forEach(function (v) { v.play().catch(function () {}); });
+        updateBar(0);
+      }
+
+      var loadedCount = 0;
+      videos.forEach(function (v) {
+        v.addEventListener('loadedmetadata', function () {
+          loadedCount++;
+          if (loadedCount === videos.length) {
+            duration = Math.min.apply(null, videos.map(function (vv) { return vv.duration; }));
+            restart();
+          }
+        }, { once: true });
+        v.addEventListener('ended', restart);
+      });
+
+      videos[0].addEventListener('timeupdate', function () {
+        videos.slice(1).forEach(function (v) {
+          if (!v.paused && Math.abs(v.currentTime - videos[0].currentTime) > 0.2) {
+            v.currentTime = videos[0].currentTime;
+          }
+        });
+      });
+
+      if (!bar) return;
+
+      // native `timeupdate` only fires a handful of times per second, which
+      // reads as a jumpy bar — polling currentTime every animation frame
+      // instead gives a smooth 60fps sweep during normal playback.
+      (function tick() {
+        if (!scrubbing) updateBar(videos[0].currentTime);
+        requestAnimationFrame(tick);
+      })();
+
+      function fractionFromEvent(e) {
+        var r = bar.getBoundingClientRect();
+        var x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+        return Math.max(0, Math.min(1, x / r.width));
+      }
+
+      function moveScrub(e) {
+        if (!scrubbing || !duration) return;
+        seekTo(fractionFromEvent(e) * duration);
+      }
+
+      function endScrub() {
+        if (!scrubbing) return;
+        scrubbing = false;
+        if (wasPlaying) videos.forEach(function (v) { v.play().catch(function () {}); });
+      }
+
+      bar.addEventListener('pointerdown', function (e) {
+        scrubbing = true;
+        wasPlaying = !videos[0].paused;
+        videos.forEach(function (v) { v.pause(); });
+        if (bar.setPointerCapture && e.pointerId != null) bar.setPointerCapture(e.pointerId);
+        moveScrub(e);
+      });
+      bar.addEventListener('pointermove', moveScrub);
+      bar.addEventListener('pointerup', endScrub);
+      bar.addEventListener('pointercancel', endScrub);
+
+      bar.addEventListener('keydown', function (e) {
+        if (!duration) return;
+        var step = duration * 0.02;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { seekTo(Math.min(duration, videos[0].currentTime + step)); e.preventDefault(); }
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { seekTo(Math.max(0, videos[0].currentTime - step)); e.preventDefault(); }
+      });
     });
   }
 
@@ -170,7 +265,8 @@
     initReveal();
     initBibCopy();
     initStagePlayer();
-    initAutoScroll();
+    initDetailsDialogs();
+    initVideoSync();
     initRailSpy();
   });
 })();

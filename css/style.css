@@ -371,6 +371,89 @@ section[id] { scroll-margin-top: 80px; }
   margin-top: 8px; font-family: var(--ff-mono); font-size: var(--fs-meta);
   letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg-dim); text-align: center;
 }
+
+/* ---------- "Show Experiment Details" link + dialog, reusable per section ---------- */
+.details-link {
+  display: inline-flex; align-items: center; gap: 6px; margin: 18px 0;
+  font-family: var(--ff-mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta);
+  text-transform: uppercase; color: var(--fg-dim);
+  background: none; border: 0; border-bottom: 1px solid var(--border);
+  padding: 0 0 2px; cursor: pointer;
+  transition: color .18s var(--ease), border-color .18s var(--ease);
+}
+.details-link:hover { color: var(--fg); border-bottom-color: var(--primary); }
+
+.details-dialog {
+  max-width: 480px; width: calc(100% - 48px);
+  border: 1px solid var(--border-soft); border-radius: var(--radius);
+  background: var(--bg-raise); color: var(--fg); padding: 0;
+  box-shadow: 0 24px 60px rgba(4,10,12,.25);
+}
+.details-dialog::backdrop { background: rgba(4,10,12,.45); }
+.details-dialog__body { padding: clamp(20px, 3vw, 28px); }
+.details-dialog__title {
+  font-size: 20px; letter-spacing: -.008em; margin-bottom: .5em;
+}
+.details-dialog__body p { font-size: 16px; line-height: 1.6; color: var(--fg-muted); }
+.details-dialog__body p:last-of-type { margin-bottom: 0; }
+.details-dialog__close {
+  margin-top: 18px; font-family: var(--ff-mono); font-size: 12px; letter-spacing: var(--ls-meta);
+  text-transform: uppercase; padding: 7px 14px; border-radius: var(--radius-pill);
+  border: 1px solid var(--border); background: var(--surface); color: var(--fg-dim); cursor: pointer;
+  transition: background .18s var(--ease), color .18s var(--ease);
+}
+.details-dialog__close:hover { color: var(--fg); background: var(--surface-2); }
+
+/* ---------- side-by-side synced video comparison, sized as a figure, not a full column ---------- */
+.videocompare { max-width: 640px; margin: 20px auto 0; }
+.videocompare__media { display: flex; gap: 14px; }
+.videocompare__item { flex: 1 1 0; min-width: 0; }
+.videocompare__video {
+  width: 100%; height: auto; display: block;
+  background: var(--muted); border: 1px solid var(--border-faint); border-radius: var(--radius);
+}
+.videocompare__caption {
+  margin-top: 8px; font-family: var(--ff-mono); font-size: var(--fs-meta);
+  letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg-dim); text-align: center;
+}
+@media (max-width: 480px) { .videocompare__media { flex-direction: column; } }
+
+/* shared scrub bar: two coloured segments (state similarity), a dimming
+   overlay marks what's already played, a handle marks the exact position.
+   Native-range semantics (role="slider") but custom-built so the two
+   segment colors can live side by side, which input[type=range] can't do. */
+.scrubbar {
+  position: relative; display: flex; align-items: center;
+  margin-top: 16px; height: 22px; cursor: pointer; touch-action: none;
+  outline-offset: 4px;
+}
+.scrubbar__track {
+  position: relative; width: 100%; height: 8px;
+  border-radius: var(--radius-pill); overflow: hidden;
+}
+.scrubbar__segment { position: absolute; top: 0; bottom: 0; }
+.scrubbar__segment--a { left: 0; width: var(--split, 50%); background: color-mix(in srgb, var(--palette-teal) 55%, var(--muted)); }
+.scrubbar__segment--b { left: var(--split, 50%); right: 0; background: color-mix(in srgb, var(--palette-orange) 55%, var(--muted)); }
+.scrubbar__played {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 0;
+  background: rgba(0,0,0,.18); pointer-events: none;
+}
+[data-theme="day"] .scrubbar__played { background: rgba(255,255,255,.32); }
+.scrubbar__handle {
+  position: absolute; top: 50%; left: 0; width: 14px; height: 14px; margin-left: -7px;
+  transform: translateY(-50%); border-radius: 50%;
+  background: var(--bg-raise); border: 2px solid var(--fg);
+  box-shadow: 0 1px 4px rgba(0,0,0,.3); pointer-events: none;
+}
+.scrubbar__legend { display: flex; gap: 18px; margin-top: 10px; }
+.scrubbar__legend-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--ff-mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta);
+  text-transform: uppercase; color: var(--fg-dim);
+}
+.scrubbar__swatch { width: 9px; height: 9px; border-radius: 2px; }
+.scrubbar__swatch--a { background: color-mix(in srgb, var(--palette-teal) 55%, var(--muted)); }
+.scrubbar__swatch--b { background: color-mix(in srgb, var(--palette-orange) 55%, var(--muted)); }
 .stageplayer__slider {
   width: 100%; display: block; appearance: none; -webkit-appearance: none;
   height: 4px; border-radius: var(--radius-pill);

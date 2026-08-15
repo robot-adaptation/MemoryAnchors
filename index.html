@@ -148,50 +148,96 @@
               <img id="stage-img-2" src="assets/sequential_learning/01/stage00_figure_ready_successes_plot.svg" alt="Figure-ready successes plot at training stage 1">
             </div>
           </div>
+
+          <button type="button" class="details-link" data-dialog-target="dialog-challenge-setup">Show Experiment Details</button>
+          <dialog class="details-dialog" id="dialog-challenge-setup">
+            <div class="details-dialog__body">
+              <h4 class="details-dialog__title">Experiment Details</h4>
+              <p>Diffusion U-Net policy with Resnet-18 encoder. Results shown on the canonical LIBERO-Goal ordering on the 50 supplied test-time reset states. Buffer percentage represents percentage of the past task data used in the ER buffer, sampled randomly at the start of every task.</p>
+              <button type="button" class="details-dialog__close">Close</button>
+            </div>
+          </dialog>
         </div>
-        
+
         <div class="sub" id="challenge-why-hard">
           <h3 class="sub__title">Tasks Matter</h3>
-          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <emph>how it arises.</emph> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders.</p>
+          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <emph>how it arises.</emph> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders. Look at how this task's performance (task 6) changes as the model learns task 8. Notice the steep drop in performance in many cases.</p>
 
           <div class="orderings">
-            <div class="orderings__track" data-autoscroll="0.35" tabindex="0" aria-label="Performance on 'put the cream cheese in the bowl' across different learning-order positions, scrollable">
+            <div class="orderings__track" tabindex="0" aria-label="Performance on 'put the cream cheese in the bowl' across different learning-order positions, scrollable">
               <figure class="orderings__card">
                 <div class="orderings__frame">
                   <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task0.svg" alt="Put the cream cheese in the bowl: performance when learned at position 0" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Position 0</figcaption>
+                <figcaption class="orderings__caption">Order 0</figcaption>
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
-                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task1.svg" alt="Put the cream cheese in the bowl: performance when learned at position 1" loading="lazy">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task5.svg" alt="Put the cream cheese in the bowl: performance when learned at position 1" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Position 1</figcaption>
+                <figcaption class="orderings__caption">Order 1</figcaption>
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
                   <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task2.svg" alt="Put the cream cheese in the bowl: performance when learned at position 2" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Position 2</figcaption>
+                <figcaption class="orderings__caption">Order 2</figcaption>
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
-                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task4.svg" alt="Put the cream cheese in the bowl: performance when learned at position 4" loading="lazy">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task4.svg" alt="Put the cream cheese in the bowl: performance when learned at position 3" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Position 4</figcaption>
+                <figcaption class="orderings__caption">Order 3</figcaption>
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
-                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task5.svg" alt="Put the cream cheese in the bowl: performance when learned at position 5" loading="lazy">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task1.svg" alt="Put the cream cheese in the bowl: performance when learned at position 4" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Position 5</figcaption>
+                <figcaption class="orderings__caption">Order 4</figcaption>
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
-                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task7.svg" alt="Put the cream cheese in the bowl: performance when learned at position 7" loading="lazy">
+                  <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task7.svg" alt="Put the cream cheese in the bowl: performance when learned at position 5" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Position 7</figcaption>
+                <figcaption class="orderings__caption">Order 5</figcaption>
               </figure>
+            </div>
+          </div>
+          <button type="button" class="details-link" data-dialog-target="dialog-challenge-why-hard">Show Experiment Details</button>
+          <dialog class="details-dialog" id="dialog-challenge-why-hard">
+            <div class="details-dialog__body">
+              <h4 class="details-dialog__title">Experiment Details</h4>
+              <p>Diffusion U-Net policy trained on the first few supplied LIBERO task training orderings where task 8 comes after task 6. Using a 1% buffer size.</p>
+              <button type="button" class="details-dialog__close">Close</button>
+            </div>
+          </dialog>
+          <p class="sub__lede">The forgetting is not gradual. Past task performance drops steeply when the model learns some new tasks but not others. To understand this more, let's look at what Tasks 6 and 8 are.</p>
+
+          <div class="videocompare" data-video-sync>
+            <div class="videocompare__media">
+              <div class="videocompare__item">
+                <video class="videocompare__video" src="assets/task_comparisons/bowl_on_plate.mp4" muted playsinline preload="auto"></video>
+                <p class="videocompare__caption">Task 6 &middot; Bowl on Plate</p>
+              </div>
+              <div class="videocompare__item">
+                <video class="videocompare__video" src="assets/task_comparisons/cream_cheese_in_bowl.mp4" muted playsinline preload="auto"></video>
+                <p class="videocompare__caption">Task 8 &middot; Cream Cheese in Bowl</p>
+              </div>
+            </div>
+
+            <div class="scrubbar" data-scrubbar data-split="0.3" role="slider" tabindex="0"
+                 aria-label="Playback position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="scrubbar__track">
+                <div class="scrubbar__segment scrubbar__segment--a"></div>
+                <div class="scrubbar__segment scrubbar__segment--b"></div>
+                <div class="scrubbar__played"></div>
+              </div>
+              <div class="scrubbar__handle"></div>
+            </div>
+
+            <div class="scrubbar__legend">
+              <span class="scrubbar__legend-item"><span class="scrubbar__swatch scrubbar__swatch--a"></span>Similar states</span>
+              <span class="scrubbar__legend-item"><span class="scrubbar__swatch scrubbar__swatch--b"></span>Different states</span>
             </div>
           </div>
         </div>
