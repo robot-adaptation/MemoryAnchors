@@ -3,7 +3,7 @@
    Dark tokens are the authored base; a full [data-theme="day"] layer
    overrides them, and the page SHIPS "day" (cream #f6f6ef paper, #0c0c0c
    ink) by default, exactly like the reference. IBM Plex Sans for body and
-   headings, JetBrains Mono for metadata, a muted teal accent, 4px radii.
+   headings, IBM Plex Serif for metadata/small text, a muted teal accent, 4px radii.
    ========================================================================== */
 
 /* ---------- base (night) tokens ---------- */
@@ -38,7 +38,7 @@
 
   --ff-body:    "IBM Plex Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
   --ff-display: "IBM Plex Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-  --ff-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ff-mono:    "IBM Plex Serif", Georgia, "Times New Roman", serif;
 
   --fs-meta: 11px;
   --ls-meta: .08em;
@@ -100,6 +100,15 @@ body {
 }
 h1,h2,h3,h4,h5,h6 { margin: 0; font-weight: 600; font-family: var(--ff-display); }
 sup { font-size: .68em; line-height: 0; }
+/* no rule here previously, so inline code fell back to the browser's default
+   UA monospace — jarring next to the body's serif/sans prose. Keep the body
+   face, just dial size/weight/background down so it reads as a quiet inline
+   tag rather than a code snippet. */
+code {
+  font-family: var(--ff-body); font-size: .88em; font-weight: 500;
+  background: var(--surface-2); padding: .05em .4em; border-radius: 4px;
+  color: var(--fg);
+}
 p { margin: 0 0 1.05em; }
 p:last-child { margin-bottom: 0; }
 a { color: inherit; }
@@ -330,6 +339,7 @@ section[id] { scroll-margin-top: 80px; }
   gap: clamp(20px, 3vw, 44px); align-items: start; margin-top: 22px;
 }
 @media (max-width: 760px) { .stagesplit { grid-template-columns: 1fr; } }
+.stagesplit--gap { margin-top: clamp(32px, 5vw, 48px); }
 .stagesplit__prose { padding-top: clamp(2px, .6vw, 10px); }
 
 .stageplayer { max-width: var(--col-wide); }
@@ -343,6 +353,7 @@ section[id] { scroll-margin-top: 80px; }
 .stageplayer__credit {
   margin: 8px 0 0; font-size: var(--fs-fine); color: var(--fg-faint); text-align: right;
 }
+.stageplayer__credit--center { text-align: center; }
 .stageplayer__credit a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); }
 .stageplayer__credit a:hover { color: var(--primary-ink); border-bottom-color: var(--primary); }
 
@@ -413,8 +424,8 @@ section[id] { scroll-margin-top: 80px; }
   background: var(--muted); border: 1px solid var(--border-faint); border-radius: var(--radius);
 }
 .videocompare__caption {
-  margin-top: 8px; font-family: var(--ff-mono); font-size: var(--fs-meta);
-  letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg-dim); text-align: center;
+  margin-top: 10px; font-family: var(--ff-mono); font-size: 15px; font-weight: 600;
+  letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg); text-align: center;
 }
 @media (max-width: 480px) { .videocompare__media { flex-direction: column; } }
 

@@ -6,7 +6,7 @@
   <title>MemoryAnchors</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script>
     (function () {
@@ -137,7 +137,7 @@
             </div>
 
             <div class="stagesplit__prose prose">
-              <p><b>Rehearsing Past Tasks:</b> Training a new task is nearly guarenteed to destroy past task knowledge without some regularization. In our work, we study a common regularization approach called Experience Replay (ER). The idea is simple: keep a buffer of past experiences and replay them during training.</p>
+              <p><b>Rehearsing Past Tasks:</b> Training a new task is nearly guaranteed to destroy past task knowledge without some regularization. In our work, we study a common regularization approach called Experience Replay (ER). The idea is simple: keep a buffer of past experiences and replay them during training.</p>
               <p><b>Measuring Retention:</b> We measure a policy's past task retention through Negative Backward Transfer (NBT), visualized as the shaded area below. Click through different ER buffer sizes to see how they affect this score. Higher is worse, lower is better.</p>
               <p class="nbt-readout">Negative Backward Transfer (NBT) Score: <span class="nbt-readout__value" id="nbt-value">0.42</span></p>
             </div>
@@ -159,9 +159,9 @@
           </dialog>
         </div>
 
-        <div class="sub" id="challenge-why-hard">
-          <h3 class="sub__title">Tasks Matter</h3>
-          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <emph>how it arises.</emph> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders. Look at how this task's performance (task 6) changes as the model learns task 8. Notice the steep drop in performance in many cases.</p>
+          <div class="sub" id="challenge-why-hard">
+          <h3 class="sub__title">New Task Interactions with Existing Tasks</h3>
+          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <em>how it arises.</em> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders. Look at how this task's performance (task 6) changes as the model learns task 8. Notice the steep drop in performance in many cases.</p>
 
           <div class="orderings">
             <div class="orderings__track" tabindex="0" aria-label="Performance on 'put the cream cheese in the bowl' across different learning-order positions, scrollable">
@@ -238,6 +238,20 @@
             <div class="scrubbar__legend">
               <span class="scrubbar__legend-item"><span class="scrubbar__swatch scrubbar__swatch--a"></span>Similar states</span>
               <span class="scrubbar__legend-item"><span class="scrubbar__swatch scrubbar__swatch--b"></span>Different states</span>
+            </div>
+          </div>
+
+          <div class="stagesplit stagesplit--gap">
+            <div class="stagesplit__prose prose">
+              <p>Notice the target objects in the tasks are next to each other, giving the two task trajectories highsimilarity at the start. If a policy has only seen <code>Cream Cheese to Bowl</code>, it tends to collapse <code>Bowl to Stove</code> states into the same latent space.</p>
+              <p>This is not just limited to our two task case study: when a new task is first introduced to a policy, it may not be able to provide sufficient separation from the states of existing tasks. Because the policy has never needed to distinguish between them (unlike a policy trained on all the tasks at once), the representation space may collapse some of the distinguishing features.</p>
+            </div>
+
+            <div class="stageplayer">
+              <div class="stageplayer__frame">
+                <img src="assets/task_comparisons/pca.png" alt="PCA visualization of policy latent states for Cream Cheese to Bowl and Bowl to Stove">
+                <p class="stageplayer__credit stageplayer__credit--center">A sequentially trained policy collapses <code>Bowl to Stove</code> (new task) into the same latent space as <code>Cream Cheese to Bowl</code> (old task)</p>
+              </div>
             </div>
           </div>
         </div>
