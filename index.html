@@ -101,7 +101,7 @@
     <section id="challenge" class="section">
       <div class="wrap wrap--wide reveal">
         <p class="eyebrow">02 &middot; Continual Learning Challenge</p>
-        <h2 class="sec__title">Continual Learning Challenge</h2>
+        <h2 class="sec__title">Mechanics of Continual Imitation Learning</h2>
 
         <div class="sub" id="challenge-setup">
           <h3 class="sub__title">Sequential Task Learning</h3>
@@ -119,19 +119,19 @@
             <div class="stagepanel__row">
               <span class="stagepanel__key">Training stage</span>
               <div class="stageplayer__controls">
-                <input type="range" id="stage-slider" class="stageplayer__slider" min="1" max="10" step="1" value="1" aria-label="Training stage" aria-valuetext="Stage 1">
+                <input type="range" id="stage-slider" class="stageplayer__slider" min="1" max="10" step="1" value="5" aria-label="Training stage" aria-valuetext="Stage 5">
                 <div class="stageplayer__ticks" aria-hidden="true">
                   <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
                 </div>
               </div>
-              <span class="stageplayer__label">Stage <span id="stage-label">1</span> of 10</span>
+              <span class="stageplayer__label">Stage <span id="stage-label">5</span> of 10</span>
             </div>
           </div>
 
           <div class="stagesplit">
             <div class="stageplayer">
               <div class="stageplayer__frame">
-                <img id="stage-img" src="assets/sequential_learning/01/stage00_continual_success_matrix.svg" alt="Continual learning success matrix at training stage 1">
+                <img id="stage-img" src="assets/sequential_learning/01/stage04_continual_success_matrix.svg" alt="Continual learning success matrix at training stage 5">
                 <p class="stageplayer__credit">Visual inspired by <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">Huihan Liu</a></p>
               </div>
             </div>
@@ -145,7 +145,7 @@
 
           <div class="stageplayer stageplayer--full">
             <div class="stageplayer__frame">
-              <img id="stage-img-2" src="assets/sequential_learning/01/stage00_figure_ready_successes_plot.svg" alt="Figure-ready successes plot at training stage 1">
+              <img id="stage-img-2" src="assets/sequential_learning/01/stage04_figure_ready_successes_plot.svg" alt="Figure-ready successes plot at training stage 5">
             </div>
           </div>
 
@@ -161,7 +161,7 @@
 
           <div class="sub" id="challenge-why-hard">
           <h3 class="sub__title">New Task Interactions with Existing Tasks</h3>
-          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <em>how it arises.</em> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders. Look at how this task's performance (task 6) changes as the model learns task 8. Notice the steep drop in performance in many cases.</p>
+          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <em>how it arises.</em> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders. Look at how this task's performance (task 6) changes as the model learns task 8. Notice the steep drop in performance shared across different learning orders.</p>
 
           <div class="orderings">
             <div class="orderings__track" tabindex="0" aria-label="Performance on 'put the cream cheese in the bowl' across different learning-order positions, scrollable">
@@ -169,37 +169,37 @@
                 <div class="orderings__frame">
                   <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task0.svg" alt="Put the cream cheese in the bowl: performance when learned at position 0" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Order 0</figcaption>
+                <!-- <figcaption class="orderings__caption">Order 0</figcaption> -->
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
                   <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task5.svg" alt="Put the cream cheese in the bowl: performance when learned at position 1" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Order 1</figcaption>
+                <!-- <figcaption class="orderings__caption">Order 1</figcaption> -->
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
                   <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task2.svg" alt="Put the cream cheese in the bowl: performance when learned at position 2" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Order 2</figcaption>
+                <!-- <figcaption class="orderings__caption">Order 2</figcaption> -->
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
                   <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task4.svg" alt="Put the cream cheese in the bowl: performance when learned at position 3" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Order 3</figcaption>
+                <!-- <figcaption class="orderings__caption">Order 3</figcaption> -->
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
                   <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task1.svg" alt="Put the cream cheese in the bowl: performance when learned at position 4" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Order 4</figcaption>
+                <!-- <figcaption class="orderings__caption">Order 4</figcaption> -->
               </figure>
               <figure class="orderings__card">
                 <div class="orderings__frame">
                   <img src="assets/task_orderings/put_the_cream_cheese_in_the_bowl_series_task7.svg" alt="Put the cream cheese in the bowl: performance when learned at position 5" loading="lazy">
                 </div>
-                <figcaption class="orderings__caption">Order 5</figcaption>
+                <!-- <figcaption class="orderings__caption">Order 5</figcaption> -->
               </figure>
             </div>
           </div>
@@ -211,17 +211,17 @@
               <button type="button" class="details-dialog__close">Close</button>
             </div>
           </dialog>
-          <p class="sub__lede">The forgetting is not gradual. Past task performance drops steeply when the model learns some new tasks but not others. To understand this more, let's look at what Tasks 6 and 8 are.</p>
+          <p class="sub__lede">The forgetting is not gradual. Past task performance drops steeply when the model learns some new tasks but not others. To understand why this happens, let's look at what Tasks 6 and 8 are.</p>
 
           <div class="videocompare" data-video-sync>
             <div class="videocompare__media">
               <div class="videocompare__item">
                 <video class="videocompare__video" src="assets/task_comparisons/bowl_on_plate.mp4" muted playsinline preload="auto"></video>
-                <p class="videocompare__caption">Task 6 &middot; Bowl on Plate</p>
+                <p class="videocompare__caption">Task 6 (Old) &middot; Bowl on Plate</p>
               </div>
               <div class="videocompare__item">
                 <video class="videocompare__video" src="assets/task_comparisons/cream_cheese_in_bowl.mp4" muted playsinline preload="auto"></video>
-                <p class="videocompare__caption">Task 8 &middot; Cream Cheese in Bowl</p>
+                <p class="videocompare__caption">Task 8 (New) &middot; Cream Cheese in Bowl</p>
               </div>
             </div>
 
@@ -243,19 +243,19 @@
 
           <div class="stagesplit stagesplit--gap">
             <div class="stagesplit__prose prose">
-              <p>Notice the target objects in the tasks are next to each other, giving the two task trajectories high similarity at the start. If a policy has only seen <code>Cream Cheese to Bowl</code>, it tends to collapse <code>Bowl to Stove</code> states into the same latent space.</p>
-              <p>This is not just limited to our two task case study: when a new task is first introduced to a policy, it may not be able to provide sufficient separation from the states of existing tasks. Because the policy has never needed to distinguish between them (unlike a policy trained on all the tasks at once), the representation space may collapse some of the distinguishing features.</p>
+              <p>Notice the target objects in the tasks are next to each other, giving the two task trajectories high similarity at the start. If a policy has only seen <code>Cream Cheese to Bowl</code>, it collapses <code>Bowl to Stove</code> states into the same latent space. A latent projection of these states shows the extent of this collapse.</p>
+              <p>We claim that this is a general phenomenon: a policy may sufficient separation from the states of existing tasks. Because the policy has never needed to distinguish between them (unlike a policy trained on all the tasks at once), the representation space may collapse some of the distinguishing features between old and new tasks.</p>
             </div>
 
             <div class="stageplayer">
               <div class="stageplayer__frame">
                 <img src="assets/task_comparisons/pca.png" alt="PCA visualization of policy latent states for Cream Cheese to Bowl and Bowl to Stove">
-                <p class="stageplayer__credit stageplayer__credit--center">A sequentially trained policy collapses <code>Bowl to Stove</code> (new task) into the same latent space as <code>Cream Cheese to Bowl</code> (old task)</p>
+                <p class="stageplayer__credit stageplayer__credit--center">Initially, the current policy's observation encoder collapses <code>Bowl to Stove</code> (new task) into the same latent space as <code>Cream Cheese to Bowl</code> (existing task)</p>
               </div>
             </div>
           </div>
           <h3 class="sub__title">Similar State Representations, Different Actions</h3>
-          <p class="sub__lede">In some cases, putting new task states in the same representation space is beneficial for shared resources. But what if the new task requires different actions in the collapsed space? Below, we feed a trajectory of the new <code>Bowl to Stove</code> task into an existing policy and plot both state similarity (left) and action disagreement (right). Notice how some states are very similar to past tasks but differ significantly in their actions. This is especially visible between steps 40-60, near the target object interaction.</p>
+          <p class="sub__lede">Collapsing new tasks into existing representation spaces can be helpful if there's shared subtrajectories, but it can also create significant conflict. To understand this, consider the same example as above: a policy that knows <code>Cream Cheese to Bowl</code>. We feed in the new <code>Bowl to Stove</code> task and plot both state similarity to past tasks (left) and action disagreement (right). We compute action disagreement by comparing the predicted actions of the policy with the ground truth actions for each state. Look carefully between steps 40-60: as state similarity increases, action disagreement also increases.</p>
 
           <div class="videocompare videocompare--wide" data-video-sync>
             <div class="videocompare__media">

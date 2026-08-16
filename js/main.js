@@ -93,6 +93,27 @@
     });
 
     render();
+
+    /* The stage/plot images are only ever fetched the first time the slider
+       or a budget button asks for them, so the very first drag on a fresh
+       page load pays a network round-trip before it can paint. Warm the
+       browser's HTTP cache for every stage x budget combo in the background
+       once the page is idle, so by the time someone actually touches the
+       slider the images are already local. Folder list is read off the
+       buttons themselves so this stays in sync if more are ever added. */
+    function prefetchStageAssets() {
+      var folders = Array.prototype.map.call(folderBtns, function (b) { return b.getAttribute('data-folder'); });
+      if (!folders.length) folders = [folder];
+      folders.forEach(function (f) {
+        for (var i = 0; i < 10; i++) {
+          var prefix = root + f + '/stage' + pad(i);
+          new Image().src = prefix + suffix;
+          new Image().src = prefix + suffix2;
+        }
+      });
+    }
+    if ('requestIdleCallback' in window) requestIdleCallback(prefetchStageAssets, { timeout: 2000 });
+    else setTimeout(prefetchStageAssets, 1000);
   }
 
   /* reusable "Show Experiment Details" link -> <dialog>. Pair a
