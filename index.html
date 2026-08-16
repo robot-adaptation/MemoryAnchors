@@ -243,7 +243,7 @@
 
           <div class="stagesplit stagesplit--gap">
             <div class="stagesplit__prose prose">
-              <p>Notice the target objects in the tasks are next to each other, giving the two task trajectories highsimilarity at the start. If a policy has only seen <code>Cream Cheese to Bowl</code>, it tends to collapse <code>Bowl to Stove</code> states into the same latent space.</p>
+              <p>Notice the target objects in the tasks are next to each other, giving the two task trajectories high similarity at the start. If a policy has only seen <code>Cream Cheese to Bowl</code>, it tends to collapse <code>Bowl to Stove</code> states into the same latent space.</p>
               <p>This is not just limited to our two task case study: when a new task is first introduced to a policy, it may not be able to provide sufficient separation from the states of existing tasks. Because the policy has never needed to distinguish between them (unlike a policy trained on all the tasks at once), the representation space may collapse some of the distinguishing features.</p>
             </div>
 
@@ -254,6 +254,37 @@
               </div>
             </div>
           </div>
+          <h3 class="sub__title">Similar State Representations, Different Actions</h3>
+          <p class="sub__lede">In some cases, putting new task states in the same representation space is beneficial for shared resources. But what if the new task requires different actions in the collapsed space? Below, we feed a trajectory of the new <code>Bowl to Stove</code> task into an existing policy and plot both state similarity (left) and action disagreement (right). Notice how some states are very similar to past tasks but differ significantly in their actions. This is especially visible between steps 40-60, near the target object interaction.</p>
+
+          <div class="videocompare videocompare--wide" data-video-sync>
+            <div class="videocompare__media">
+              <div class="videocompare__item">
+                <video class="videocompare__video" src="assets/task_comparisons/bowl_on_plate_action_dis.mp4" muted playsinline preload="auto"></video>
+                <p class="stageplayer__credit stageplayer__credit--center">New trajectory: Bowl to Plate</p>
+              </div>
+              <div class="videocompare__item">
+                <video class="videocompare__video" src="assets/task_comparisons/state_similarity.mp4" muted playsinline preload="auto"></video>
+                <p class="stageplayer__credit stageplayer__credit--center">State similarity between the new and old task trajectories.</p>
+              </div>
+              <div class="videocompare__item">
+                <video class="videocompare__video" src="assets/task_comparisons/action_dis.mp4" muted playsinline preload="auto"></video>
+                <p class="stageplayer__credit stageplayer__credit--center">Action prediction error of existing policy on unseen new task data.</p>
+              </div>
+            </div>
+
+            <div class="scrubbar scrubbar--plain" data-scrubbar role="slider" tabindex="0"
+                 aria-label="Playback position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="scrubbar__track">
+                <div class="scrubbar__segment scrubbar__segment--a"></div>
+                <div class="scrubbar__segment scrubbar__segment--b"></div>
+                <div class="scrubbar__played"></div>
+              </div>
+              <div class="scrubbar__handle"></div>
+            </div>
+          </div>
+            <p class="sub__lede">In these high state similarity, high action disagreement areas of the new task, the policy is presented with similar inputs and different required outputs to its existing task set. We propose these conflict regions as a mechanism for catastrophic forgetting in robot policies. Therefore, the old task data most similar to these conflict regions should be especially important for rehearsal in an ER buffer. We call this subset of old task data, <b>Memory Anchors.</b></p>
+
         </div>
       </div>
     </section>

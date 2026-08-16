@@ -332,6 +332,7 @@ section[id] { scroll-margin-top: 80px; }
    so the paragraph should fill the same width as that container rather than
    wrapping at the narrower reading measure and ending short of it */
 .sub__lede { font-size: 18px; line-height: 1.62; color: var(--fg-muted); margin: 0; }
+.sub__lede--gap { margin-top: 22px; }
 
 /* ---------- stage player: scrub through a numbered image sequence ---------- */
 .stagesplit {
@@ -417,6 +418,10 @@ section[id] { scroll-margin-top: 80px; }
 
 /* ---------- side-by-side synced video comparison, sized as a figure, not a full column ---------- */
 .videocompare { max-width: 640px; margin: 20px auto 0; }
+/* trio needs more room per video, but the scrub bar should stay the same
+   width as the other one on this page rather than stretching to match */
+.videocompare--wide { max-width: 900px; }
+.videocompare--wide .scrubbar { max-width: 640px; margin-inline: auto; }
 .videocompare__media { display: flex; gap: 14px; }
 .videocompare__item { flex: 1 1 0; min-width: 0; }
 .videocompare__video {
@@ -445,6 +450,9 @@ section[id] { scroll-margin-top: 80px; }
 .scrubbar__segment { position: absolute; top: 0; bottom: 0; }
 .scrubbar__segment--a { left: 0; width: var(--split, 50%); background: color-mix(in srgb, var(--palette-teal) 55%, var(--muted)); }
 .scrubbar__segment--b { left: var(--split, 50%); right: 0; background: color-mix(in srgb, var(--palette-orange) 55%, var(--muted)); }
+/* plain variant: no similar/different segments to call out, just one neutral track */
+.scrubbar--plain .scrubbar__segment--a,
+.scrubbar--plain .scrubbar__segment--b { background: var(--border-soft); }
 .scrubbar__played {
   position: absolute; top: 0; bottom: 0; left: 0; width: 0;
   background: rgba(0,0,0,.18); pointer-events: none;
