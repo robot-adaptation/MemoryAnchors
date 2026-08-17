@@ -38,17 +38,22 @@
   <aside class="rail" aria-label="On this page">
     <nav class="rail__links">
       <a data-level="1" href="#about">About</a>
-      <a data-level="1" href="#challenge">Continual Learning Challenge</a>
+      <a data-level="1" href="#challenge">Mechanics of Continual Imitation Learning</a>
       <a data-level="2" data-part="challenge" href="#challenge-setup">Sequential Task Learning</a>
-      <a data-level="2" data-part="challenge" href="#challenge-why-hard">Why it's hard</a>
+      <a data-level="2" data-part="challenge" href="#challenge-why-hard">New Task Interactions with Existing Tasks</a>
+      <a data-level="2" data-part="challenge" href="#challenge-representation-overlap">Initial Representation Overlap</a>
+      <a data-level="2" data-part="challenge" href="#challenge-conflicting-actions">Conflicting Actions</a>
       <a data-level="1" href="#finding">Finding Memory Anchors</a>
+      <a data-level="2" data-part="finding" href="#finding-three-step-approach">The Three Step Approach</a>
       <a data-level="2" data-part="finding" href="#finding-state-overlap">State Overlap</a>
       <a data-level="2" data-part="finding" href="#finding-action-disagreement">Action Disagreement</a>
       <a data-level="2" data-part="finding" href="#finding-anchor-selection">Anchor Selection</a>
       <a data-level="1" href="#impact">Impact of Memory Anchors</a>
-      <a data-level="2" data-part="impact" href="#impact-downstream">Downstream effects</a>
-      <a data-level="2" data-part="impact" href="#impact-takeaways">Takeaways</a>
-      <a data-level="1" href="#contact">Contact</a>
+      <a data-level="2" data-part="impact" href="#impact-taking-away">Taking Memory Anchors Away</a>
+      <a data-level="2" data-part="impact" href="#impact-adding-more">Adding More Memory Anchors</a>
+      <a data-level="2" data-part="impact" href="#impact-vla">On VLA models</a>
+      <a data-level="2" data-part="impact" href="#impact-jar-opening">Real World: Jar Opening Task</a>
+      <a data-level="2" data-part="impact" href="#impact-sweater-folding">Real World: Sweater Folding Task</a>
       <a data-level="1" href="#bibtex">BibTeX</a>
     </nav>
   </aside>
@@ -67,6 +72,7 @@
           <span><sup>1</sup>Stanford University</span>
           <span><sup>2</sup>Toyota Research Institute</span>
         </div>
+        <p class="eqc">Corresponding contact: <a href="mailto:maxjdu@stanford.edu">maxjdu@stanford.edu</a></p>
         <!-- <p class="eqc"><sup>*</sup>Equal contribution. &nbsp; <sup>&dagger;</sup>Equal advising.</p> -->
 
         <div class="links">
@@ -238,6 +244,9 @@
             </div>
           </div>
 
+          </div>
+
+          <div class="sub" id="challenge-representation-overlap">
           <h3 class="sub__title">Initial Representation Overlap</h3>
 
           <div class="stagesplit stagesplit">
@@ -253,6 +262,9 @@
               </div>
             </div>
           </div>
+          </div>
+
+          <div class="sub" id="challenge-conflicting-actions">
           <h3 class="sub__title">Conflicting Actions</h3>
           <p class="sub__lede">Collapsing new tasks into existing representation spaces can be helpful if there's shared subtrajectories, but it can also create significant conflict. To understand this, consider the same example as above: a policy that knows <code>Cream Cheese to Bowl</code>. We feed in the new <code>Bowl to Plate</code> task and plot both state similarity to past tasks (left) and action disagreement (right). We compute action disagreement by comparing the predicted actions of the policy with the ground truth actions for each state. Look carefully between steps 40-60: as state similarity increases, action disagreement also increases.</p>
 
@@ -298,22 +310,25 @@
       <div class="wrap wrap--wide reveal">
         <p class="eyebrow">03 &middot; Finding Memory Anchors</p>
         <h2 class="sec__title">Finding Memory Anchors</h2>
-        <p class="sec__sub sec__sub--full">To test our claims, we propose a three-step approach for identifying Memory Anchors using the current policy, old task data, and the new task data.</p>
-        <ol class="sec__sub sec__sub--list sec__sub--full">
-          <li><b>State Overlap.</b> Using the observation latent space of the current policy, find the transitions in the new data that overlap with the old task data.</li>
-          <li><b>Action Disagreement.</b> Within this state intersection, identify transitions from new task data where the policy's predicted actions differ significantly from the ground truth actions.</li>
-          <li><b>Anchor Selection.</b> Using the new task data from the identified conflict region, select the nearest old task data points using the observation latent space again.</li>
-        </ol>
-        <p class="sec__sub sec__sub--full">The following sections detail each step of our approach and provide accompanying visualizations from the LIBERO benchmark.</p>
+        <div class="sub" id="finding-three-step-approach">
+          <h3 class="sub__title">The Three Step Approach</h3>
+          <p class="sub__lede">To test our claims, we propose a three-step approach for identifying Memory Anchors using the current policy, old task data, and the new task data.</p>
+          <ol class="sub__lede sub__lede--gap sec__sub--list">
+            <li><b>State Overlap.</b> Using the observation latent space of the current policy, find the transitions in the new data that overlap with the old task data.</li>
+            <li><b>Action Disagreement.</b> Within this state intersection, identify transitions from new task data where the policy's predicted actions differ significantly from the ground truth actions.</li>
+            <li><b>Anchor Selection.</b> Using the new task data from the identified conflict region, select the nearest old task data points using the observation latent space again.</li>
+          </ol>
+          <p class="sub__lede sub__lede--gap">The following sections detail each step of our approach and provide accompanying visualizations from the LIBERO benchmark.</p>
+        </div>
 
         <div class="sub" id="finding-state-overlap">
           <h3 class="sub__title">State Overlap</h3>
-          <p class="sub__lede">Old and new task data are both placed into the policy's representation space. Their distances naturally segment the new task data into two groups: inside the state overlap, and outside the state overlap. We care about isolating new data that exists inside the state overlap.</p>
+          <p class="sub__lede">Old and new task data are both placed into the policy's representation space. Their distances naturally segment the new task data into two groups: inside the state overlap, and outside the state overlap. We care about isolating new data that exists inside the state overlap. Look at how this approach segments the <code>Bowl to Plate</code> task.</p>
 
           <details class="disclosure">
             <summary class="disclosure__summary">FAQ &middot; What representations do you use?</summary>
             <div class="disclosure__body">
-              <p>You could use any representation that the current policy uses, but we found the most success using the observation embeddings, a combination of visual embeddings and language embeddings. A TSNE projection can tell you if the embedding has enough structure for this clustering to work.</p>
+              <p>You could use any representation that the current policy uses, but we found the most success using the observation embeddings, a combination of visual embeddings and language embeddings. You can compute the stats (mean, median, nth quartiles) of the pairwise distances between new and old embeddings, and use these features in a K-means clustering algorithm.</p>
             </div>
           </details>
           <details class="disclosure">
@@ -361,28 +376,32 @@
         <h2 class="sec__title">Impact of Memory Anchors</h2>
         <p class="sec__sub">A simple card grid for linking out to whatever you're building.</p>
 
-        <div class="sub" id="impact-downstream">
-          <h3 class="sub__title">Downstream effects</h3>
-          <p class="sub__lede">Placeholder for how memory anchors affect downstream task performance.</p>
+        <div class="sub" id="impact-taking-away">
+          <h3 class="sub__title">Taking Memory Anchors Away</h3>
+          <p class="sub__lede">Placeholder for the effect of removing Memory Anchors from the ER buffer.</p>
         </div>
-        <div class="sub" id="impact-takeaways">
-          <h3 class="sub__title">Takeaways</h3>
-          <p class="sub__lede">Placeholder for the high-level takeaways.</p>
+        <div class="sub" id="impact-adding-more">
+          <h3 class="sub__title">Adding More Memory Anchors</h3>
+          <p class="sub__lede">Placeholder for the effect of enriching the ER buffer with more Memory Anchors.</p>
         </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section">
-      <div class="wrap wrap--mid reveal">
-        <p class="eyebrow">05 &middot; Contact</p>
-        <h2 class="sec__title">Contact</h2>
-        <p class="prose">Email: <a href="mailto:you@example.com">you@example.com</a></p>
+        <div class="sub" id="impact-vla">
+          <h3 class="sub__title">On VLA models</h3>
+          <p class="sub__lede">Placeholder for how Memory Anchors generalize to vision-language-action models.</p>
+        </div>
+        <div class="sub" id="impact-jar-opening">
+          <h3 class="sub__title">Real World: Jar Opening Task</h3>
+          <p class="sub__lede">Placeholder for the real-robot jar opening task results.</p>
+        </div>
+        <div class="sub" id="impact-sweater-folding">
+          <h3 class="sub__title">Real World: Sweater Folding Task</h3>
+          <p class="sub__lede">Placeholder for the real-robot sweater folding task results.</p>
+        </div>
       </div>
     </section>
 
     <section id="bibtex" class="section">
       <div class="wrap wrap--mid reveal">
-        <p class="eyebrow">06 &middot; BibTeX</p>
+        <p class="eyebrow">05 &middot; BibTeX</p>
         <h2 class="sec__title">BibTeX</h2>
         <div class="bib">
           <button class="bib__copy" type="button" id="bib-copy">Copy</button>
