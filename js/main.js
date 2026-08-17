@@ -116,28 +116,6 @@
     else setTimeout(prefetchStageAssets, 1000);
   }
 
-  /* reusable "Show Experiment Details" link -> <dialog>. Pair a
-     .details-link[data-dialog-target] with a <dialog class="details-dialog">
-     sharing that id and it wires up automatically; add as many as you like. */
-  function initDetailsDialogs() {
-    var links = document.querySelectorAll('.details-link[data-dialog-target]');
-    links.forEach(function (link) {
-      var dialog = document.getElementById(link.getAttribute('data-dialog-target'));
-      if (!dialog || typeof dialog.showModal !== 'function') return;
-
-      link.addEventListener('click', function () { dialog.showModal(); });
-
-      dialog.addEventListener('click', function (e) {
-        var r = dialog.getBoundingClientRect();
-        var inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
-        if (!inside) dialog.close();
-      });
-
-      var closeBtn = dialog.querySelector('.details-dialog__close');
-      if (closeBtn) closeBtn.addEventListener('click', function () { dialog.close(); });
-    });
-  }
-
   /* keeps a group of [data-video-sync] videos playing side by side in lockstep:
      starts them together once all are loaded, restarts the whole group the
      moment any one clip ends (so mismatched lengths don't drift apart), and
@@ -249,11 +227,27 @@
     });
   }
 
-  /* mocked example sampler for the "State Overlap" demo. In the real version
-     each [data-overlap-demo] will fetch its own bank of 10-15 labeled
-     examples (image + label + explanation) for its task; for now every demo
-     gets a placeholder bank so the resample interaction can be built and
-     tuned before real data exists. */
+  /* Example banks for the overlap-style demos: one entry per sampled image,
+     each with its own image path, headline label, and explanation text.
+     Add a new key here (matching a [data-overlap-demo] element's id in the
+     HTML) for every new demo — e.g. the future Action Disagreement /
+     Anchor Selection sections can each get their own list. Edit freely;
+     the array can hold as many examples as you like (10-15 is plenty). */
+  var OVERLAP_EXAMPLE_SETS = {
+    'overlap-demo-state-overlap': [
+      { image: 'assets/method/id_1.png', label: 'Inside Overlap', text: 'Reaching down is shared by many existing tasks, including Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
+      { image: 'assets/method/id_2.png', label: 'Inside Overlap', text: 'Grabbing the bowl is shared by existing tasks Bowl to Drawer, Bowl to Stove.' },
+      { image: 'assets/method/id_3.png', label: 'Inside Overlap', text: 'Reaching down is shared by many existing tasks, including Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
+      { image: 'assets/method/id_4.png', label: 'Inside Overlap', text: 'The initial robot pose is shared by all existing tasks.' },
+      { image: 'assets/method/id_5.png', label: 'Inside Overlap', text: 'Grabbing the bowl is shared by existing tasks Bowl to Drawer, Bowl to Stove.' },
+      { image: 'assets/method/od_1.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+      { image: 'assets/method/od_2.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+      { image: 'assets/method/od_3.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+      { image: 'assets/method/od_4.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+      { image: 'assets/method/od_5.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+    ]
+  };
+
   function initOverlapDemo() {
     var demos = document.querySelectorAll('[data-overlap-demo]');
     demos.forEach(function (demo) {
@@ -265,15 +259,11 @@
       var btn = demo.querySelector('[data-overlap-resample]');
       if (!img || !btn) return;
 
-      var placeholderImg = img.getAttribute('src');
-      var examples = [];
-      for (var i = 0; i < 12; i++) {
-        examples.push({
-          image: placeholderImg,
-          label: 'Inside Overlap',
-          text: 'Placeholder explanation for sampled example ' + (i + 1) + ' of why this transition falls inside the state-overlap region.'
-        });
-      }
+      var examples = OVERLAP_EXAMPLE_SETS[demo.id] || [{
+        image: img.getAttribute('src'),
+        label: label ? label.textContent : '',
+        text: text ? text.textContent : ''
+      }];
       if (totalEl) totalEl.textContent = examples.length;
 
       var current = 0;
@@ -333,7 +323,6 @@
     initReveal();
     initBibCopy();
     initStagePlayer();
-    initDetailsDialogs();
     initVideoSync();
     initOverlapDemo();
     initRailSpy();

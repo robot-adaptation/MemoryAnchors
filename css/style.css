@@ -367,16 +367,17 @@ section[id] { scroll-margin-top: 80px; }
 .stageplayer__credit a:hover { color: var(--primary-ink); border-bottom-color: var(--primary); }
 
 /* ---------- overlap demo: mocked sampler for a labeled example transition ---------- */
-/* an identical, invisible copy of the tag sits above the reference figure so
-   both figures start at the same height even though only the demo side has
-   a real label above it */
-.overlapdemo__tag--ghost { visibility: hidden; }
+/* the tag lives as a translucent banner over the image itself (rather than
+   as its own line above the figure), so it adds no extra height and both
+   figures in the pair start at the same vertical position */
+.overlapdemo__imgwrap { position: relative; }
 .overlapdemo__tag {
-  display: inline-block;
-  font-family: var(--ff-mono); font-size: clamp(17px, 1.7vw, 19px); font-weight: 500;
-  color: var(--fg); text-decoration: underline; text-decoration-color: var(--primary);
-  text-decoration-thickness: 2px; text-underline-offset: 6px;
-  margin-bottom: 14px;
+  position: absolute; top: 0; left: 0; right: 0; margin: 0;
+  padding: 10px 14px;
+  font-family: var(--ff-mono); font-size: clamp(14px, 1.4vw, 16px); font-weight: 500;
+  letter-spacing: var(--ls-meta); color: #fff; text-align: center;
+  background: rgba(8, 18, 22, .55);
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
 }
 .overlapdemo__frame { margin-bottom: 14px; }
 .overlapdemo__img { width: 100%; height: auto; display: block; margin-inline: auto; }
@@ -386,7 +387,14 @@ section[id] { scroll-margin-top: 80px; }
 .overlapdemo__count {
   font-family: var(--ff-mono); font-size: var(--fs-fine); color: var(--fg-faint); margin-bottom: 0;
 }
-.overlapdemo__btn { display: block; margin: 16px auto 0; }
+.overlapdemo__btn {
+  display: block; margin: 16px auto 0;
+  font-family: var(--ff-mono); font-size: 12px; letter-spacing: var(--ls-meta); text-transform: uppercase;
+  padding: 7px 14px; border-radius: var(--radius-pill);
+  border: 1px solid var(--primary); background: var(--primary); color: var(--bg);
+  cursor: pointer; transition: background .18s var(--ease), border-color .18s var(--ease), transform .18s var(--ease);
+}
+.overlapdemo__btn:hover { background: var(--primary-ink); border-color: var(--primary-ink); transform: translateY(-1px); }
 
 /* ---------- task-ordering filmstrip: auto-scrolls slowly, pauses on hover ---------- */
 .orderings { margin-top: 20px; }
@@ -414,37 +422,30 @@ section[id] { scroll-margin-top: 80px; }
   letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg-dim); text-align: center;
 }
 
-/* ---------- "Show Experiment Details" link + dialog, reusable per section ---------- */
-.details-link {
-  display: inline-flex; align-items: center; gap: 6px; margin: 18px 0;
+/* ---------- inline dropdown disclosure, reusable per section ("Show
+   Experiment Details", FAQ entries, ...) — native <details>/<summary>,
+   no JS required */
+.disclosure { margin: 18px 0; }
+.disclosure__summary {
+  display: inline-flex; align-items: center; gap: 7px; width: fit-content;
   font-family: var(--ff-mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta);
   text-transform: uppercase; color: var(--fg-dim);
-  background: none; border: 0; border-bottom: 1px solid var(--border);
-  padding: 0 0 2px; cursor: pointer;
-  transition: color .18s var(--ease), border-color .18s var(--ease);
+  border-bottom: 1px solid var(--border); padding-bottom: 2px; cursor: pointer;
+  list-style: none; transition: color .18s var(--ease), border-color .18s var(--ease);
 }
-.details-link:hover { color: var(--fg); border-bottom-color: var(--primary); }
-
-.details-dialog {
-  max-width: 480px; width: calc(100% - 48px);
-  border: 1px solid var(--border-soft); border-radius: var(--radius);
-  background: var(--bg-raise); color: var(--fg); padding: 0;
-  box-shadow: 0 24px 60px rgba(4,10,12,.25);
+.disclosure__summary::-webkit-details-marker { display: none; }
+.disclosure__summary::after {
+  content: '+'; font-family: var(--ff-body); font-size: 14px; line-height: 1; flex: none;
+  transition: transform .18s var(--ease);
 }
-.details-dialog::backdrop { background: rgba(4,10,12,.45); }
-.details-dialog__body { padding: clamp(20px, 3vw, 28px); }
-.details-dialog__title {
-  font-size: 20px; letter-spacing: -.008em; margin-bottom: .5em;
+.disclosure[open] > .disclosure__summary::after { transform: rotate(45deg); }
+.disclosure__summary:hover { color: var(--fg); border-bottom-color: var(--primary); }
+.disclosure__body {
+  margin-top: 10px; padding: clamp(14px, 2vw, 18px) clamp(16px, 2vw, 20px);
+  border: 1px solid var(--border-soft); border-radius: var(--radius); background: var(--bg-raise);
 }
-.details-dialog__body p { font-size: 16px; line-height: 1.6; color: var(--fg-muted); }
-.details-dialog__body p:last-of-type { margin-bottom: 0; }
-.details-dialog__close {
-  margin-top: 18px; font-family: var(--ff-mono); font-size: 12px; letter-spacing: var(--ls-meta);
-  text-transform: uppercase; padding: 7px 14px; border-radius: var(--radius-pill);
-  border: 1px solid var(--border); background: var(--surface); color: var(--fg-dim); cursor: pointer;
-  transition: background .18s var(--ease), color .18s var(--ease);
-}
-.details-dialog__close:hover { color: var(--fg); background: var(--surface-2); }
+.disclosure__body p { font-size: 15px; line-height: 1.6; color: var(--fg-muted); margin: 0; }
+.disclosure__body p + p { margin-top: .8em; }
 
 /* ---------- side-by-side synced video comparison, sized as a figure, not a full column ---------- */
 .videocompare { max-width: 640px; margin: 20px auto 0; }

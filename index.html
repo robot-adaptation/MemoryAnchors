@@ -103,7 +103,7 @@
       <div class="wrap wrap--wide reveal">
         <p class="eyebrow">02 &middot; Continual Learning Challenge</p>
         <h2 class="sec__title">Mechanics of Continual Imitation Learning</h2>
-
+        <p class="sec__sub">To understand Memory Anchors, we first need to take a closer look at why robot policies forget old tasks when learning new ones.</p>
         <div class="sub" id="challenge-setup">
           <h3 class="sub__title">Sequential Task Learning</h3>
           <p class="sub__lede">We explore the problem setting of imitation learning on tasks in sequence. Drag the slider to step through ten tasks. Observe how the policy learns new tasks (horizontal) and remembers old ones (vertical).</p>
@@ -150,14 +150,12 @@
             </div>
           </div>
 
-          <button type="button" class="details-link" data-dialog-target="dialog-challenge-setup">Show Experiment Details</button>
-          <dialog class="details-dialog" id="dialog-challenge-setup">
-            <div class="details-dialog__body">
-              <h4 class="details-dialog__title">Experiment Details</h4>
+          <details class="disclosure">
+            <summary class="disclosure__summary">Show Experiment Details</summary>
+            <div class="disclosure__body">
               <p>Diffusion U-Net policy with Resnet-18 encoder. Results shown on the canonical LIBERO-Goal ordering on the 50 supplied test-time reset states. Buffer percentage represents percentage of the past task data used in the ER buffer, sampled randomly at the start of every task.</p>
-              <button type="button" class="details-dialog__close">Close</button>
             </div>
-          </dialog>
+          </details>
         </div>
 
           <div class="sub" id="challenge-why-hard">
@@ -204,14 +202,12 @@
               </figure>
             </div>
           </div>
-          <button type="button" class="details-link" data-dialog-target="dialog-challenge-why-hard">Show Experiment Details</button>
-          <dialog class="details-dialog" id="dialog-challenge-why-hard">
-            <div class="details-dialog__body">
-              <h4 class="details-dialog__title">Experiment Details</h4>
+          <details class="disclosure">
+            <summary class="disclosure__summary">Show Experiment Details</summary>
+            <div class="disclosure__body">
               <p>Diffusion U-Net policy trained on the first few supplied LIBERO task training orderings where task 8 comes after task 6. Using a 1% buffer size.</p>
-              <button type="button" class="details-dialog__close">Close</button>
             </div>
-          </dialog>
+          </details>
           <p class="sub__lede">The forgetting is not gradual. Past task performance drops steeply when the model learns some new tasks but not others. To understand why this happens, let's look at what Tasks 6 and 8 are. Notice the target objects in the tasks are next to each other, giving the two task trajectories high similarity at the start.</p>
 
           <div class="videocompare" data-video-sync>
@@ -242,12 +238,12 @@
             </div>
           </div>
 
-          <h3 class="sub__title">Representation Collapse: New onto Old</h3>
+          <h3 class="sub__title">Initial Representation Overlap</h3>
 
           <div class="stagesplit stagesplit">
             <div class="stagesplit__prose prose">
               <p>If a policy has only seen <code>Cream Cheese to Bowl</code>, it collapses <code>Bowl to Plate</code> states into the same latent space. A latent projection of these states shows the extent of this collapse.</p>
-              <p>We claim that this is a general phenomenon: a policy may sufficient separation from the states of existing tasks. Because the policy has never needed to distinguish between them (unlike a policy trained on all the tasks at once), the representation space may collapse some of the distinguishing features between old and new tasks.</p>
+              <p>We claim that this is a general phenomenon: because the policy has never needed to distinguish between them (unlike a policy trained on all the tasks at once), the representation space may collapse some of the distinguishing features between old and new tasks.</p>
             </div>
 
             <div class="stageplayer">
@@ -257,7 +253,7 @@
               </div>
             </div>
           </div>
-          <h3 class="sub__title">Similar State Representations, Different Actions</h3>
+          <h3 class="sub__title">Conflicting Actions</h3>
           <p class="sub__lede">Collapsing new tasks into existing representation spaces can be helpful if there's shared subtrajectories, but it can also create significant conflict. To understand this, consider the same example as above: a policy that knows <code>Cream Cheese to Bowl</code>. We feed in the new <code>Bowl to Plate</code> task and plot both state similarity to past tasks (left) and action disagreement (right). We compute action disagreement by comparing the predicted actions of the policy with the ground truth actions for each state. Look carefully between steps 40-60: as state similarity increases, action disagreement also increases.</p>
 
           <div class="videocompare videocompare--wide" data-video-sync>
@@ -287,6 +283,12 @@
             </div>
           </div>
             <p class="sub__lede">In these high state similarity, high action disagreement areas of the new task, the policy is presented with similar inputs and different required outputs to its existing task set. We propose these conflict regions as a mechanism for catastrophic forgetting in robot policies. Therefore, the old task data most similar to these conflict regions should be especially important for rehearsal in an ER buffer. We call this subset of old task data, <b>Memory Anchors.</b></p>
+            <details class="disclosure">
+            <summary class="disclosure__summary">Show Experiment Details</summary>
+            <div class="disclosure__body">
+              <p>Nearest neighbor plot: computed nearest neighbor from the old task data to the current observation using the policy's own observation latent space. Action disagreement plot: added noise to the action label, denoised it using the diffusion policy, and compared the denoised output to the action label.</p>
+            </div>
+          </details>
 
         </div>
       </div>
@@ -306,27 +308,36 @@
 
         <div class="sub" id="finding-state-overlap">
           <h3 class="sub__title">State Overlap</h3>
-          <p class="sub__lede">Placeholder for how memory anchors are identified.</p>
+          <p class="sub__lede">Old and new task data are both placed into the policy's representation space. Their distances naturally segment the new task data into two groups: inside the state overlap, and outside the state overlap. We care about isolating new data that exists inside the state overlap.</p>
+
+          <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; What representations do you use?</summary>
+            <div class="disclosure__body">
+              <p>You could use any representation that the current policy uses, but we found the most success using the observation embeddings, a combination of visual embeddings and language embeddings. A TSNE projection can tell you if the embedding has enough structure for this clustering to work.</p>
+            </div>
+          </details>
 
           <div class="stagesplit stagesplit--gap">
-            <div class="overlapdemo__figurecol">
-              <p class="overlapdemo__tag overlapdemo__tag--ghost" aria-hidden="true">New Task: Bowl to Plate</p>
-              <figure class="stageplayer__frame">
-                <img src="assets/method/step1.png" alt="Diagram of the state-overlap step.">
-              </figure>
-            </div>
+            <figure class="stageplayer__frame">
+              <div class="overlapdemo__imgwrap">
+                <p class="overlapdemo__tag">Existing Tasks</p>
+                <img src="assets/method/existing_tasks.png" alt="Diagram of the state-overlap step.">
+              </div>
+            </figure>
 
-            <div class="overlapdemo" data-overlap-demo>
-              <p class="overlapdemo__tag">New Task: Bowl to Plate</p>
+            <div class="overlapdemo" id="overlap-demo-state-overlap" data-overlap-demo>
               <figure class="stageplayer__frame overlapdemo__frame">
-                <img class="overlapdemo__img" data-overlap-img src="assets/method/step1.png" alt="Sampled transition from the new task.">
+                <div class="overlapdemo__imgwrap">
+                  <p class="overlapdemo__tag">New Task: Bowl to Plate</p>
+                  <img class="overlapdemo__img" data-overlap-img src="assets/method/step1.png" alt="Sampled transition from the new task.">
+                </div>
               </figure>
               <div class="overlapdemo__info">
                 <p class="overlapdemo__label" data-overlap-label>Inside Overlap</p>
                 <p class="overlapdemo__text" data-overlap-text>Placeholder explanation of why this transition falls inside the state-overlap region.</p>
                 <p class="overlapdemo__count">Example <span data-overlap-index>1</span>/<span data-overlap-total>12</span></p>
               </div>
-              <button type="button" class="settings-toggle__btn overlapdemo__btn" data-overlap-resample>Resample</button>
+              <button type="button" class="overlapdemo__btn" data-overlap-resample>Resample</button>
             </div>
           </div>
         </div>
