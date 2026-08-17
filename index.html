@@ -316,22 +316,25 @@
               <p>You could use any representation that the current policy uses, but we found the most success using the observation embeddings, a combination of visual embeddings and language embeddings. A TSNE projection can tell you if the embedding has enough structure for this clustering to work.</p>
             </div>
           </details>
+          <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; Why not segment by timestep?</summary>
+            <div class="disclosure__body">
+              <p>While it is true that LIBERO typically starts in state overlap and then diverges, it requires tuning the timestep threshold. This heuristic is also not generally true. In our real robot experiment, state overlap is interleaved throughout a new task trajectory.</p>
+            </div>
+          </details>
 
-          <div class="stagesplit stagesplit--gap">
-            <figure class="stageplayer__frame">
+          <div class="stagepanel overlappanel" id="overlap-demo-state-overlap" data-overlap-demo>
+            <div class="overlappanel__media">
               <div class="overlapdemo__imgwrap">
                 <p class="overlapdemo__tag">Existing Tasks</p>
-                <img src="assets/method/existing_tasks.png" alt="Diagram of the state-overlap step.">
+                <img class="overlapdemo__img" src="assets/method/existing_tasks.png" alt="Diagram of the state-overlap step.">
               </div>
-            </figure>
-
-            <div class="overlapdemo" id="overlap-demo-state-overlap" data-overlap-demo>
-              <figure class="stageplayer__frame overlapdemo__frame">
-                <div class="overlapdemo__imgwrap">
-                  <p class="overlapdemo__tag">New Task: Bowl to Plate</p>
-                  <img class="overlapdemo__img" data-overlap-img src="assets/method/step1.png" alt="Sampled transition from the new task.">
-                </div>
-              </figure>
+              <div class="overlapdemo__imgwrap">
+                <p class="overlapdemo__tag">New Task: Bowl to Plate</p>
+                <img class="overlapdemo__img" data-overlap-img src="assets/method/step1.png" alt="Sampled transition from the new task.">
+              </div>
+            </div>
+            <div class="overlappanel__interaction">
               <div class="overlapdemo__info">
                 <p class="overlapdemo__label" data-overlap-label>Inside Overlap</p>
                 <p class="overlapdemo__text" data-overlap-text>Placeholder explanation of why this transition falls inside the state-overlap region.</p>

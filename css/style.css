@@ -366,11 +366,25 @@ section[id] { scroll-margin-top: 80px; }
 .stageplayer__credit a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); }
 .stageplayer__credit a:hover { color: var(--primary-ink); border-bottom-color: var(--primary); }
 
-/* ---------- overlap demo: mocked sampler for a labeled example transition ---------- */
-/* the tag lives as a translucent banner over the image itself (rather than
-   as its own line above the figure), so it adds no extra height and both
-   figures in the pair start at the same vertical position */
-.overlapdemo__imgwrap { position: relative; }
+/* ---------- overlap panel: one bordered card (same shell as .stagepanel,
+   the ER-buffer/stage-slider control up in Sequential Task Learning) holds
+   both reference images and the resample demo, so there's a single outer
+   box instead of a separate card around each image ---------- */
+.overlappanel__media {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.4vw, 24px);
+}
+@media (max-width: 640px) { .overlappanel__media { grid-template-columns: 1fr; } }
+.overlappanel__interaction {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding-top: 16px; border-top: 1px solid var(--border-faint);
+}
+@media (max-width: 560px) { .overlappanel__interaction { flex-direction: column; align-items: stretch; } }
+.overlappanel__interaction .overlapdemo__info { text-align: left; }
+.overlappanel__interaction .overlapdemo__btn { margin: 0; flex: none; align-self: flex-start; }
+
+/* the tag lives as a translucent banner over the image itself, clipped to
+   the same rounded corners rather than sitting in its own card */
+.overlapdemo__imgwrap { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--muted); }
 .overlapdemo__tag {
   position: absolute; top: 0; left: 0; right: 0; margin: 0;
   padding: 10px 14px;
@@ -379,8 +393,7 @@ section[id] { scroll-margin-top: 80px; }
   background: rgba(8, 18, 22, .55);
   -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
 }
-.overlapdemo__frame { margin-bottom: 14px; }
-.overlapdemo__img { width: 100%; height: auto; display: block; margin-inline: auto; }
+.overlapdemo__img { width: 100%; height: auto; display: block; }
 .overlapdemo__info { text-align: center; }
 .overlapdemo__label { font-size: 17px; font-weight: 600; color: var(--fg); margin-bottom: .35em; }
 .overlapdemo__text { font-size: 15px; line-height: 1.55; color: var(--fg-muted); margin-bottom: 12px; }
