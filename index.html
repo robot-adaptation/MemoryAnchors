@@ -42,8 +42,9 @@
       <a data-level="2" data-part="challenge" href="#challenge-setup">Sequential Task Learning</a>
       <a data-level="2" data-part="challenge" href="#challenge-why-hard">Why it's hard</a>
       <a data-level="1" href="#finding">Finding Memory Anchors</a>
-      <a data-level="2" data-part="finding" href="#finding-approach">Approach</a>
-      <a data-level="2" data-part="finding" href="#finding-results">Results</a>
+      <a data-level="2" data-part="finding" href="#finding-state-overlap">State Overlap</a>
+      <a data-level="2" data-part="finding" href="#finding-action-disagreement">Action Disagreement</a>
+      <a data-level="2" data-part="finding" href="#finding-anchor-selection">Anchor Selection</a>
       <a data-level="1" href="#impact">Impact of Memory Anchors</a>
       <a data-level="2" data-part="impact" href="#impact-downstream">Downstream effects</a>
       <a data-level="2" data-part="impact" href="#impact-takeaways">Takeaways</a>
@@ -211,17 +212,17 @@
               <button type="button" class="details-dialog__close">Close</button>
             </div>
           </dialog>
-          <p class="sub__lede">The forgetting is not gradual. Past task performance drops steeply when the model learns some new tasks but not others. To understand why this happens, let's look at what Tasks 6 and 8 are.</p>
+          <p class="sub__lede">The forgetting is not gradual. Past task performance drops steeply when the model learns some new tasks but not others. To understand why this happens, let's look at what Tasks 6 and 8 are. Notice the target objects in the tasks are next to each other, giving the two task trajectories high similarity at the start.</p>
 
           <div class="videocompare" data-video-sync>
             <div class="videocompare__media">
               <div class="videocompare__item">
-                <video class="videocompare__video" src="assets/task_comparisons/bowl_on_plate.mp4" muted playsinline preload="auto"></video>
-                <p class="videocompare__caption">Task 6 (Old) &middot; Bowl on Plate</p>
+                <video class="videocompare__video" src="assets/task_comparisons/cream_cheese_in_bowl.mp4" muted playsinline preload="auto"></video>
+                <p class="videocompare__caption">Task 6 (Old) &middot; Cream Cheese in Bowl</p>
               </div>
               <div class="videocompare__item">
-                <video class="videocompare__video" src="assets/task_comparisons/cream_cheese_in_bowl.mp4" muted playsinline preload="auto"></video>
-                <p class="videocompare__caption">Task 8 (New) &middot; Cream Cheese in Bowl</p>
+                <video class="videocompare__video" src="assets/task_comparisons/bowl_on_plate.mp4" muted playsinline preload="auto"></video>
+                <p class="videocompare__caption">Task 8 (New) &middot; Bowl on Plate</p>
               </div>
             </div>
 
@@ -241,21 +242,23 @@
             </div>
           </div>
 
-          <div class="stagesplit stagesplit--gap">
+          <h3 class="sub__title">Representation Collapse: New onto Old</h3>
+
+          <div class="stagesplit stagesplit">
             <div class="stagesplit__prose prose">
-              <p>Notice the target objects in the tasks are next to each other, giving the two task trajectories high similarity at the start. If a policy has only seen <code>Cream Cheese to Bowl</code>, it collapses <code>Bowl to Stove</code> states into the same latent space. A latent projection of these states shows the extent of this collapse.</p>
+              <p>If a policy has only seen <code>Cream Cheese to Bowl</code>, it collapses <code>Bowl to Plate</code> states into the same latent space. A latent projection of these states shows the extent of this collapse.</p>
               <p>We claim that this is a general phenomenon: a policy may sufficient separation from the states of existing tasks. Because the policy has never needed to distinguish between them (unlike a policy trained on all the tasks at once), the representation space may collapse some of the distinguishing features between old and new tasks.</p>
             </div>
 
             <div class="stageplayer">
               <div class="stageplayer__frame">
-                <img src="assets/task_comparisons/pca.png" alt="PCA visualization of policy latent states for Cream Cheese to Bowl and Bowl to Stove">
-                <p class="stageplayer__credit stageplayer__credit--center">Initially, the current policy's observation encoder collapses <code>Bowl to Stove</code> (new task) into the same latent space as <code>Cream Cheese to Bowl</code> (existing task)</p>
+                <img src="assets/task_comparisons/pca.png" alt="PCA visualization of policy latent states for Cream Cheese to Bowl and Bowl to Plate">
+                <p class="stageplayer__credit stageplayer__credit--center">Initially, the current policy's observation encoder collapses <code>Bowl to Plate</code> (new task) into the same latent space as <code>Cream Cheese to Bowl</code> (existing task)</p>
               </div>
             </div>
           </div>
           <h3 class="sub__title">Similar State Representations, Different Actions</h3>
-          <p class="sub__lede">Collapsing new tasks into existing representation spaces can be helpful if there's shared subtrajectories, but it can also create significant conflict. To understand this, consider the same example as above: a policy that knows <code>Cream Cheese to Bowl</code>. We feed in the new <code>Bowl to Stove</code> task and plot both state similarity to past tasks (left) and action disagreement (right). We compute action disagreement by comparing the predicted actions of the policy with the ground truth actions for each state. Look carefully between steps 40-60: as state similarity increases, action disagreement also increases.</p>
+          <p class="sub__lede">Collapsing new tasks into existing representation spaces can be helpful if there's shared subtrajectories, but it can also create significant conflict. To understand this, consider the same example as above: a policy that knows <code>Cream Cheese to Bowl</code>. We feed in the new <code>Bowl to Plate</code> task and plot both state similarity to past tasks (left) and action disagreement (right). We compute action disagreement by comparing the predicted actions of the policy with the ground truth actions for each state. Look carefully between steps 40-60: as state similarity increases, action disagreement also increases.</p>
 
           <div class="videocompare videocompare--wide" data-video-sync>
             <div class="videocompare__media">
@@ -293,15 +296,47 @@
       <div class="wrap wrap--wide reveal">
         <p class="eyebrow">03 &middot; Finding Memory Anchors</p>
         <h2 class="sec__title">Finding Memory Anchors</h2>
-        <p class="sec__sub">A simple card grid for linking out to whatever you're building.</p>
+        <p class="sec__sub sec__sub--full">To test our claims, we propose a three-step approach for identifying Memory Anchors using the current policy, old task data, and the new task data.</p>
+        <ol class="sec__sub sec__sub--list sec__sub--full">
+          <li><b>State Overlap.</b> Using the observation latent space of the current policy, find the transitions in the new data that overlap with the old task data.</li>
+          <li><b>Action Disagreement.</b> Within this state intersection, identify transitions from new task data where the policy's predicted actions differ significantly from the ground truth actions.</li>
+          <li><b>Anchor Selection.</b> Using the new task data from the identified conflict region, select the nearest old task data points using the observation latent space again.</li>
+        </ol>
+        <p class="sec__sub sec__sub--full">The following sections detail each step of our approach and provide accompanying visualizations from the LIBERO benchmark.</p>
 
-        <div class="sub" id="finding-approach">
-          <h3 class="sub__title">Approach</h3>
+        <div class="sub" id="finding-state-overlap">
+          <h3 class="sub__title">State Overlap</h3>
+          <p class="sub__lede">Placeholder for how memory anchors are identified.</p>
+
+          <div class="stagesplit stagesplit--gap">
+            <div class="overlapdemo__figurecol">
+              <p class="overlapdemo__tag overlapdemo__tag--ghost" aria-hidden="true">New Task: Bowl to Plate</p>
+              <figure class="stageplayer__frame">
+                <img src="assets/method/step1.png" alt="Diagram of the state-overlap step.">
+              </figure>
+            </div>
+
+            <div class="overlapdemo" data-overlap-demo>
+              <p class="overlapdemo__tag">New Task: Bowl to Plate</p>
+              <figure class="stageplayer__frame overlapdemo__frame">
+                <img class="overlapdemo__img" data-overlap-img src="assets/method/step1.png" alt="Sampled transition from the new task.">
+              </figure>
+              <div class="overlapdemo__info">
+                <p class="overlapdemo__label" data-overlap-label>Inside Overlap</p>
+                <p class="overlapdemo__text" data-overlap-text>Placeholder explanation of why this transition falls inside the state-overlap region.</p>
+                <p class="overlapdemo__count">Example <span data-overlap-index>1</span>/<span data-overlap-total>12</span></p>
+              </div>
+              <button type="button" class="settings-toggle__btn overlapdemo__btn" data-overlap-resample>Resample</button>
+            </div>
+          </div>
+        </div>
+        <div class="sub" id="finding-action-disagreement">
+          <h3 class="sub__title">Action Disagreement</h3>
           <p class="sub__lede">Placeholder for how memory anchors are identified.</p>
         </div>
-        <div class="sub" id="finding-results">
-          <h3 class="sub__title">Results</h3>
-          <p class="sub__lede">Placeholder for the results of the anchor-finding method.</p>
+        <div class="sub" id="finding-anchor-selection">
+          <h3 class="sub__title">Anchor Selection</h3>
+          <p class="sub__lede">Placeholder for how memory anchors are identified.</p>
         </div>
       </div>
     </section>

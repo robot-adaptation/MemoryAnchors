@@ -249,6 +249,53 @@
     });
   }
 
+  /* mocked example sampler for the "State Overlap" demo. In the real version
+     each [data-overlap-demo] will fetch its own bank of 10-15 labeled
+     examples (image + label + explanation) for its task; for now every demo
+     gets a placeholder bank so the resample interaction can be built and
+     tuned before real data exists. */
+  function initOverlapDemo() {
+    var demos = document.querySelectorAll('[data-overlap-demo]');
+    demos.forEach(function (demo) {
+      var img = demo.querySelector('[data-overlap-img]');
+      var label = demo.querySelector('[data-overlap-label]');
+      var text = demo.querySelector('[data-overlap-text]');
+      var indexEl = demo.querySelector('[data-overlap-index]');
+      var totalEl = demo.querySelector('[data-overlap-total]');
+      var btn = demo.querySelector('[data-overlap-resample]');
+      if (!img || !btn) return;
+
+      var placeholderImg = img.getAttribute('src');
+      var examples = [];
+      for (var i = 0; i < 12; i++) {
+        examples.push({
+          image: placeholderImg,
+          label: 'Inside Overlap',
+          text: 'Placeholder explanation for sampled example ' + (i + 1) + ' of why this transition falls inside the state-overlap region.'
+        });
+      }
+      if (totalEl) totalEl.textContent = examples.length;
+
+      var current = 0;
+      function show(i) {
+        var ex = examples[i];
+        img.src = ex.image;
+        if (label) label.textContent = ex.label;
+        if (text) text.textContent = ex.text;
+        if (indexEl) indexEl.textContent = i + 1;
+      }
+      show(current);
+
+      btn.addEventListener('click', function () {
+        if (examples.length < 2) return;
+        var next;
+        do { next = Math.floor(Math.random() * examples.length); } while (next === current);
+        current = next;
+        show(current);
+      });
+    });
+  }
+
   function initRailSpy() {
     var railLinks = document.querySelectorAll('.rail__links a');
     var links = document.querySelectorAll('.rail__links a, .nav__actions a');
@@ -288,6 +335,7 @@
     initStagePlayer();
     initDetailsDialogs();
     initVideoSync();
+    initOverlapDemo();
     initRailSpy();
   });
 })();

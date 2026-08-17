@@ -320,6 +320,10 @@ section[id] { scroll-margin-top: 80px; }
   color: var(--fg-muted); line-height: 1.58; max-width: var(--measure);
   margin-bottom: 1.5em;
 }
+.sec__sub--list { list-style: decimal; padding-left: 1.4em; }
+.sec__sub--list li { margin: .5em 0; }
+.sec__sub--list li b { color: var(--fg); font-weight: 600; }
+.sec__sub--full { max-width: none; }
 
 /* subsections within a section — anchor targets for the rail's data-level="2" links */
 .sub { margin-top: clamp(28px, 4vw, 44px); scroll-margin-top: 96px; }
@@ -327,6 +331,10 @@ section[id] { scroll-margin-top: 80px; }
   font-size: clamp(19px, 1.9vw, 23px);
   line-height: 1.28; margin: 0 0 .45em; letter-spacing: -.008em;
 }
+/* a .sub can stack several of these as mid-block dividers; the first one
+   gets its top space from .sub's own margin, but later ones sit flush
+   against whatever content precedes them without this */
+.sub__title:not(:first-child) { margin-top: clamp(32px, 5vw, 48px); }
 /* no max-width here: .sub blocks live inside wrap--wide sections that pair
    this lede with a full-width display (stagepanel, card grid, ...) below it,
    so the paragraph should fill the same width as that container rather than
@@ -357,6 +365,28 @@ section[id] { scroll-margin-top: 80px; }
 .stageplayer__credit--center { text-align: center; }
 .stageplayer__credit a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); }
 .stageplayer__credit a:hover { color: var(--primary-ink); border-bottom-color: var(--primary); }
+
+/* ---------- overlap demo: mocked sampler for a labeled example transition ---------- */
+/* an identical, invisible copy of the tag sits above the reference figure so
+   both figures start at the same height even though only the demo side has
+   a real label above it */
+.overlapdemo__tag--ghost { visibility: hidden; }
+.overlapdemo__tag {
+  display: inline-block;
+  font-family: var(--ff-mono); font-size: clamp(17px, 1.7vw, 19px); font-weight: 500;
+  color: var(--fg); text-decoration: underline; text-decoration-color: var(--primary);
+  text-decoration-thickness: 2px; text-underline-offset: 6px;
+  margin-bottom: 14px;
+}
+.overlapdemo__frame { margin-bottom: 14px; }
+.overlapdemo__img { width: 100%; height: auto; display: block; margin-inline: auto; }
+.overlapdemo__info { text-align: center; }
+.overlapdemo__label { font-size: 17px; font-weight: 600; color: var(--fg); margin-bottom: .35em; }
+.overlapdemo__text { font-size: 15px; line-height: 1.55; color: var(--fg-muted); margin-bottom: 12px; }
+.overlapdemo__count {
+  font-family: var(--ff-mono); font-size: var(--fs-fine); color: var(--fg-faint); margin-bottom: 0;
+}
+.overlapdemo__btn { display: block; margin: 16px auto 0; }
 
 /* ---------- task-ordering filmstrip: auto-scrolls slowly, pauses on hover ---------- */
 .orderings { margin-top: 20px; }
