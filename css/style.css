@@ -443,7 +443,7 @@ section[id] { scroll-margin-top: 80px; }
 .overlapdemo__swatch--pred { background: var(--palette-red); }
 .overlapdemo__swatch--gt { background: #000; }
 
-/* ---------- task-ordering filmstrip: auto-scrolls slowly, pauses on hover ---------- */
+/* ---------- task-ordering filmstrip: horizontally scrollable, drag or scroll ---------- */
 .orderings { margin-top: 20px; }
 .orderings__track {
   display: flex; gap: clamp(14px, 2vw, 20px);
@@ -468,6 +468,40 @@ section[id] { scroll-margin-top: 80px; }
   margin-top: 8px; font-family: var(--ff-mono); font-size: var(--fs-meta);
   letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg-dim); text-align: center;
 }
+
+/* ---------- sampled-frame carousel: auto-scrolls slowly, pauses on
+   hover/focus; each card reveals its demo/frame label on hover ---------- */
+.framestrip { margin-top: 20px; }
+.framestrip__track {
+  display: flex; gap: clamp(10px, 1.4vw, 16px);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  padding-bottom: 12px;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.framestrip__track:focus-visible { outline-offset: 4px; }
+.framestrip__track::-webkit-scrollbar { height: 8px; }
+.framestrip__track::-webkit-scrollbar-track { background: transparent; }
+.framestrip__track::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.framestrip__card {
+  position: relative; flex: 0 0 clamp(130px, 16vw, 180px); margin: 0; cursor: default;
+}
+.framestrip__frame {
+  background: var(--media-bg); border: 1px solid var(--border-faint); border-radius: var(--radius);
+  overflow: hidden;
+}
+.framestrip__frame img { width: 100%; height: auto; display: block; }
+.framestrip__tooltip {
+  position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
+  padding: 8px 9px;
+  font-family: var(--ff-mono); font-size: 10.5px; line-height: 1.4;
+  letter-spacing: var(--ls-meta); color: #fff; text-align: center;
+  background: rgba(8, 18, 22, .72);
+  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  opacity: 0; transform: translateY(4px); pointer-events: none;
+  transition: opacity .18s var(--ease), transform .18s var(--ease);
+}
+.framestrip__card:hover .framestrip__tooltip,
+.framestrip__card:focus-visible .framestrip__tooltip { opacity: 1; transform: translateY(0); }
 
 /* ---------- inline dropdown disclosure, reusable per section ("Show
    Experiment Details", FAQ entries, ...) — native <details>/<summary>,

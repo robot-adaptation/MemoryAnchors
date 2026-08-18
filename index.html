@@ -373,7 +373,7 @@
         </div>
         <div class="sub" id="finding-action-disagreement">
           <h3 class="sub__title">Action Disagreement</h3>
-          <p class="sub__lede">In the last step, we found a subset of new task data that occupies the same latent space as the old task data. In this step, we want to further subsample the new task data by isolating the points that require different actions from what the current policy expects. To measure action disagreement, we add noise to the action labels, run denoising using the diffusion policy, and compare to the original labels. We select transitions with significantly higher divergences than a baseline computed on a validation set.</p>
+          <p class="sub__lede">In the previous step, we found a subset of new task data that occupies the same latent space as the old task data. In this step, we want to further subsample the new task data by isolating the points that require different actions from what the current policy expects. To measure action disagreement, we add noise to the action labels, run denoising using the diffusion policy, and compare to the original labels. We select transitions with significantly higher divergences than a baseline computed on a validation set.</p>
 
           <details class="disclosure">
             <summary class="disclosure__summary">FAQ &middot; Why can you trust the predictions of a policy fed with new task data that it hasn't seen yet?</summary>
@@ -416,6 +416,95 @@
         <div class="sub" id="finding-anchor-selection">
           <h3 class="sub__title">Anchor Selection</h3>
           <p class="sub__lede">Placeholder for how memory anchors are identified.</p>
+
+          <div class="framestrip">
+            <div class="framestrip__track" data-autoscroll tabindex="0" aria-label="Sampled training frames across demos, scrollable">
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/003_put_the_cream_cheese_in_the_bowl_demo_demo039_frame0010.png" alt="Put the cream cheese in the bowl, frame 0010" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 10</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/032_put_the_bowl_on_the_stove_demo_demo041_frame0043.png" alt="Put the bowl on the stove, frame 0043" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 43</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/149_put_the_cream_cheese_in_the_bowl_demo_demo002_frame0014.png" alt="Put the cream cheese in the bowl, frame 0014" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 14</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/104_put_the_bowl_on_the_stove_demo_demo014_frame0059.png" alt="Put the bowl on the stove, frame 0059" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 59</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/114_put_the_bowl_on_top_of_the_cabinet_demo_demo020_frame0045.png" alt="Put the bowl on top of the cabinet, demo 020, frame 0045" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Bowl on Top of the Cabinet<br>Frame 45</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/182_put_the_cream_cheese_in_the_bowl_demo_demo045_frame0013.png" alt="Put the cream cheese in the bowl, frame 0013" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 13</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/121_put_the_bowl_on_the_stove_demo_demo014_frame0062.png" alt="Put the bowl on the stove, frame 0044" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 62</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/121_put_the_bowl_on_the_stove_demo_demo007_frame0052.png" alt="Put the bowl on the stove, frame 0052" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 52</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/007_put_the_cream_cheese_in_the_bowl_demo_demo026_frame0012.png" alt="Put the cream cheese in the bowl, frame 0012" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 12</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/132_put_the_bowl_on_the_stove_demo_demo044_frame0014.png" alt="Put the bowl on the stove, frame 0014" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 14</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/139_put_the_bowl_on_the_stove_demo_demo022_frame0004.png" alt="Put the bowl on the stove, frame 0004" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 4</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/139_put_the_cream_cheese_in_the_bowl_demo_demo047_frame0012.png" alt="Put the cream cheese in the bowl, frame 0012" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 12</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/150_push_the_plate_to_the_front_of_the_stove_demo_demo008_frame0011.png" alt="Push the plate to the front of the stove,  frame 0011" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Push the Plate to the Front of the Stove<br>Frame 11</figcaption>
+              </figure>
+              <figure class="framestrip__card" tabindex="0">
+                <div class="framestrip__frame">
+                  <img src="assets/method/170_put_the_cream_cheese_in_the_bowl_demo_demo034_frame0012.png" alt="Put the cream cheese in the bowl, frame 0012" loading="lazy">
+                </div>
+                <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 12</figcaption>
+              </figure>
+            </div>
+          </div>
         </div>
       </div>
     </section>

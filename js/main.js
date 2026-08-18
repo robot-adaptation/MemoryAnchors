@@ -258,6 +258,32 @@
     ]
   };
 
+  /* slow continuous auto-scroll for [data-autoscroll] tracks, paused while
+     the pointer or keyboard focus is inside so the tooltip/label underneath
+     doesn't slide away mid-hover; loops back to the start at the end.
+     Opt-in via the attribute so it never applies to plain scrollable
+     strips like .orderings__track. */
+  function initAutoScrollTracks() {
+    var tracks = document.querySelectorAll('[data-autoscroll]');
+    tracks.forEach(function (track) {
+      var paused = false;
+      track.addEventListener('pointerenter', function () { paused = true; });
+      track.addEventListener('pointerleave', function () { paused = false; });
+      track.addEventListener('focusin', function () { paused = true; });
+      track.addEventListener('focusout', function () { paused = false; });
+
+      (function tick() {
+        if (!paused) {
+          var max = track.scrollWidth - track.clientWidth;
+          if (max > 0) {
+            track.scrollLeft = track.scrollLeft >= max - 1 ? 0 : track.scrollLeft + 0.6;
+          }
+        }
+        requestAnimationFrame(tick);
+      })();
+    });
+  }
+
   function initOverlapDemo() {
     var demos = document.querySelectorAll('[data-overlap-demo]');
     demos.forEach(function (demo) {
@@ -342,6 +368,7 @@
     initStagePlayer();
     initVideoSync();
     initOverlapDemo();
+    initAutoScrollTracks();
     initRailSpy();
   });
 })();
