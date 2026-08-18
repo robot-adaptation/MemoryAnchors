@@ -1,0 +1,120 @@
+{
+  "metric": "bwt",
+  "suffix": "",
+  "x_labels": [
+    "Libero10",
+    "LiberoGoal",
+    "LiberoObject",
+    "LiberoSpatial",
+    "Average"
+  ],
+  "x_tick_labels": [
+    "Long",
+    "Goal",
+    "Object",
+    "Spatial",
+    "Average"
+  ],
+  "methods": [
+    {
+      "label": "ReRandStandardSuite_1000",
+      "by_suite": {
+        "Libero10": {
+          "mean": 0.1973586125808348,
+          "sem": 0.020483383760098995
+        },
+        "LiberoGoal": {
+          "mean": 0.04768753674309229,
+          "sem": 0.014484264968056663
+        },
+        "LiberoObject": {
+          "mean": -0.013083186360964151,
+          "sem": 0.008064169894651566
+        },
+        "LiberoSpatial": {
+          "mean": 0.049305114638447986,
+          "sem": 0.01790839440346102
+        },
+        "Average": {
+          "mean": 0.07031701940035273,
+          "sem": 0.0108560534727372
+        }
+      }
+    },
+    {
+      "label": "SelectiveERStandardSuite_INVERT1_1000",
+      "by_suite": {
+        "Libero10": {
+          "mean": 0.1710346854791299,
+          "sem": 0.01785337156068387
+        },
+        "LiberoGoal": {
+          "mean": 0.07438624338624339,
+          "sem": 0.013926267556464787
+        },
+        "LiberoObject": {
+          "mean": 0.00328277483833038,
+          "sem": 0.007713577910853342
+        },
+        "LiberoSpatial": {
+          "mean": 0.07283774250440916,
+          "sem": 0.022050310683982343
+        },
+        "Average": {
+          "mean": 0.08038536155202822,
+          "sem": 0.009879347653797901
+        }
+      }
+    },
+    {
+      "label": "SelectiveERStandardSuite_INVERT5_1000",
+      "by_suite": {
+        "Libero10": {
+          "mean": 0.2837395649617872,
+          "sem": 0.02693517731116303
+        },
+        "LiberoGoal": {
+          "mean": 0.19635479129923572,
+          "sem": 0.027229119106181532
+        },
+        "LiberoObject": {
+          "mean": 0.08999559082892415,
+          "sem": 0.02554958127775849
+        },
+        "LiberoSpatial": {
+          "mean": 0.1414544385655497,
+          "sem": 0.029296605032179384
+        },
+        "Average": {
+          "mean": 0.18157983539094652,
+          "sem": 0.015337640131558666
+        }
+      }
+    },
+    {
+      "label": "SelectiveERStandardSuite_INVERT10_1000",
+      "by_suite": {
+        "Libero10": {
+          "mean": 0.33862375073486184,
+          "sem": 0.036895466600881464
+        },
+        "LiberoGoal": {
+          "mean": 0.396320987654321,
+          "sem": 0.04635127121143913
+        },
+        "LiberoObject": {
+          "mean": 0.22152910052910055,
+          "sem": 0.04655152605864273
+        },
+        "LiberoSpatial": {
+          "mean": 0.3318386243386243,
+          "sem": 0.041588344812659356
+        },
+        "Average": {
+          "mean": 0.3220781158142269,
+          "sem": 0.02207444154140449
+        }
+      }
+    }
+  ]
+}
