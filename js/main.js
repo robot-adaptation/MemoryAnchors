@@ -284,6 +284,48 @@
     });
   }
 
+  /* text box under a .framestrip carousel that shows the highlighted
+     card's caption + a longer explanation (from data-explain) on
+     hover/focus; reverts to a default prompt once the pointer/focus
+     leaves the whole track rather than staying pinned to a card */
+  function initFramestripDetail() {
+    var DEFAULT_LABEL = 'Memory Anchor';
+    var DEFAULT_TEXT = 'Hover over a Memory Anchor for more details.';
+
+    document.querySelectorAll('.framestrip').forEach(function (strip) {
+      var detail = strip.querySelector('[data-framestrip-detail]');
+      var track = strip.querySelector('.framestrip__track');
+      if (!detail || !track) return;
+      var labelEl = detail.querySelector('[data-framestrip-detail-label]');
+      var textEl = detail.querySelector('[data-framestrip-detail-text]');
+      var cards = strip.querySelectorAll('.framestrip__card');
+
+      function show(card) {
+        var tooltip = card.querySelector('.framestrip__tooltip');
+        if (labelEl && tooltip) {
+          labelEl.textContent = tooltip.innerHTML.replace(/<br\s*\/?>/i, ' · ');
+        }
+        if (textEl) textEl.textContent = card.getAttribute('data-explain') || '';
+      }
+
+      function showDefault() {
+        if (labelEl) labelEl.textContent = DEFAULT_LABEL;
+        if (textEl) textEl.textContent = DEFAULT_TEXT;
+      }
+
+      cards.forEach(function (card) {
+        card.addEventListener('pointerenter', function () { show(card); });
+        card.addEventListener('focusin', function () { show(card); });
+      });
+      track.addEventListener('pointerleave', showDefault);
+      track.addEventListener('focusout', function (e) {
+        if (!track.contains(e.relatedTarget)) showDefault();
+      });
+
+      showDefault();
+    });
+  }
+
   function initOverlapDemo() {
     var demos = document.querySelectorAll('[data-overlap-demo]');
     demos.forEach(function (demo) {
@@ -369,6 +411,7 @@
     initVideoSync();
     initOverlapDemo();
     initAutoScrollTracks();
+    initFramestripDetail();
     initRailSpy();
   });
 })();
