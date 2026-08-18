@@ -400,18 +400,17 @@ section[id] { scroll-margin-top: 80px; }
 .overlappanel__interaction .overlapdemo__info { text-align: left; }
 .overlappanel__interaction .overlapdemo__btn { margin: 0; flex: none; align-self: flex-start; }
 
-/* the tag lives as a translucent banner over the image itself, clipped to
-   the same rounded corners rather than sitting in its own card */
-.overlapdemo__imgwrap { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--media-bg); }
+.overlapdemo__imgwrap { position: relative; border-radius: var(--radius); overflow: hidden; }
+/* same plain, mono-uppercase caption aesthetic as .orderings__caption /
+   .framestrip captions, just heavier — reads as a title rather than a
+   fine-print label, and sits above the image instead of over it */
 .overlapdemo__tag {
-  position: absolute; top: 0; left: 0; right: 0; margin: 0;
-  padding: 10px 14px;
-  font-family: var(--ff-mono); font-size: clamp(14px, 1.4vw, 16px); font-weight: 500;
-  letter-spacing: var(--ls-meta); color: #fff; text-align: center;
-  background: rgba(8, 18, 22, .55);
-  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+  margin: 0 0 8px; font-family: var(--ff-mono); font-size: clamp(12.5px, 1.15vw, 14px);
+  font-weight: 700; letter-spacing: calc(var(--ls-meta) * 1.6); text-transform: uppercase;
+  color: var(--fg); text-align: center;
+  background: var(--bg-raise);
 }
-.overlapdemo__img { width: 100%; height: auto; display: block; }
+.overlapdemo__img { width: 100%; height: auto; display: block; background: var(--media-bg); border-radius: var(--radius); }
 .overlapdemo__info { text-align: center; }
 .overlapdemo__label { font-size: 17px; font-weight: 600; color: var(--fg); margin-bottom: .35em; }
 .overlapdemo__text { font-size: 15px; line-height: 1.55; color: var(--fg-muted); margin-bottom: 12px; }

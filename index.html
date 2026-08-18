@@ -331,25 +331,6 @@
           <h3 class="sub__title">State Representation Overlap</h3>
           <p class="sub__lede">Old and new task data are both placed into the current policy's representation space. Latent distances between new and old data naturally segment the new task data into two groups: inside the representation overlap, and outside the overlap. Using clustering, we isolate the new task data within this overlap. Look at how this approach segments the <code>Bowl to Plate</code> task:</p>
 
-          <details class="disclosure">
-            <summary class="disclosure__summary">FAQ &middot; What representations do you use?</summary>
-            <div class="disclosure__body">
-              <p>You could use any representation that the current policy uses, but we found the most success using the observation embeddings, a combination of visual embeddings and language embeddings. You can compute the stats (mean, median, nth quartiles) of the pairwise distances between new and old embeddings, and use these features in a K-means clustering algorithm.</p>
-            </div>
-          </details>
-          <details class="disclosure">
-            <summary class="disclosure__summary">FAQ &middot; Why not segment by timestep?</summary>
-            <div class="disclosure__body">
-              <p>While it is true that LIBERO typically starts in state overlap and then diverges, it requires tuning the timestep threshold. This heuristic is also not generally true. In our real robot experiment, state overlap is interleaved throughout a new task trajectory.</p>
-            </div>
-          </details>
-            <details class="disclosure">
-            <summary class="disclosure__summary">FAQ &middot; What if the new task is very different?</summary>
-            <div class="disclosure__body">
-              <p>If the new task is in an entirely different environment (like it happens in LIBERO-Long), clustering still separates closer from further states, as an ordering still exists in latent space. We find that Memory Anchors still impacts highly heterogeneous task sequences (see results), though the selection process becomes less interpretable. </p>
-            </div>
-          </details>
-
           <div class="stagepanel overlappanel" id="overlap-demo-state-overlap" data-overlap-demo>
             <div class="overlappanel__media">
               <div class="overlapdemo__imgwrap">
@@ -370,23 +351,28 @@
               <button type="button" class="overlapdemo__btn" data-overlap-resample>Resample</button>
             </div>
           </div>
+            <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; What representations do you use?</summary>
+            <div class="disclosure__body">
+              <p>You could use any representation that the current policy uses, but we found the most success using the observation embeddings, a combination of visual embeddings and language embeddings. You can compute the stats (mean, median, nth quartiles) of the pairwise distances between new and old embeddings, and use these features in a K-means clustering algorithm.</p>
+            </div>
+          </details>
+          <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; Why not segment by timestep?</summary>
+            <div class="disclosure__body">
+              <p>While it is true that LIBERO typically starts in state overlap and then diverges, it requires tuning the timestep threshold. This heuristic is also not generally true. In our real robot experiment, state overlap is interleaved throughout a new task trajectory.</p>
+            </div>
+          </details>
+            <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; What if the new task is very different?</summary>
+            <div class="disclosure__body">
+              <p>If the new task is in an entirely different environment (like it happens in LIBERO-Long), clustering still separates closer from further states, as an ordering still exists in latent space. We find that Memory Anchors still impacts highly heterogeneous task sequences (see results), though the selection process becomes less interpretable. </p>
+            </div>
+          </details>
         </div>
         <div class="sub" id="finding-action-disagreement">
           <h3 class="sub__title">Action Disagreement</h3>
           <p class="sub__lede">In the previous step, we found a subset of new task data that occupies the same latent space as the old task data. In this step, we want to further subsample the new task data by isolating the points that require different actions from what the current policy expects. To measure action disagreement, we add noise to the action labels, run denoising using the diffusion policy, and compare to the original labels. We select transitions with significantly higher divergences than a baseline computed on a validation set.</p>
-
-          <details class="disclosure">
-            <summary class="disclosure__summary">FAQ &middot; Why can you trust the predictions of a policy fed with new task data that it hasn't seen yet?</summary>
-            <div class="disclosure__body">
-              <p>The new task data fed into the policy in Step #2 has already been filtered to be within the latent space of old task data. This doesn't guarentee that it will be fully in-distribution (e.g. the language description will be new), but it increases the likelihood of the policy producing a meaningful denoising. Even if the new task data is fully out of distribution (e.g. new environment), the result is letting all of the representation overlap data through to anchor selection, which is a valid strategy when the new data is very different.</p>
-            </div>
-          </details>
-          <details class="disclosure">
-            <summary class="disclosure__summary">FAQ &middot; Why not just run inference on the data and compare to action labels?</summary>
-            <div class="disclosure__body">
-              <p>This approach also works, but it can produce false positives for multimodal data with multiple correct actions. By adding noise, we preserve enough action structure to preserve the chosen modality if the policy agrees with the action.</p>
-            </div>
-          </details>
 
           <div class="stagepanel overlappanel" id="overlap-demo-action-disagreement" data-overlap-demo>
             <div class="overlappanel__media">
@@ -412,92 +398,105 @@
               <button type="button" class="overlapdemo__btn" data-overlap-resample>Resample</button>
             </div>
           </div>
+           <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; Why can you trust the predictions of a policy fed with new task data that it hasn't seen yet?</summary>
+            <div class="disclosure__body">
+              <p>The new task data fed into the policy in Step #2 has already been filtered to be within the latent space of old task data. This doesn't guarentee that it will be fully in-distribution (e.g. the language description will be new), but it increases the likelihood of the policy producing a meaningful denoising. Even if the new task data is fully out of distribution (e.g. new environment), the result is letting all of the representation overlap data through to anchor selection, which is a valid strategy when the new data is very different.</p>
+            </div>
+          </details>
+          <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; Why not just run inference on the data and compare to action labels?</summary>
+            <div class="disclosure__body">
+              <p>This approach also works, but it can produce false positives for multimodal data with multiple correct actions. By adding noise, we preserve enough action structure to preserve the chosen modality if the policy agrees with the action.</p>
+            </div>
+          </details>
         </div>
+         
         <div class="sub" id="finding-anchor-selection">
           <h3 class="sub__title">Anchor Selection</h3>
-          <p class="sub__lede">That action disagreement subset of the new task data is most likely to cause catastrophic forgetting during training. The old data most similar to this subset therefore plays a critical role in anchoring past performance, which we call the Memory Anchors. Below are examples of Memory Anchors extracted for the <code>Bowl to Plate</code>. Hover over the images to see the tasks they come from. Notice how they focus on critical decision areas, including the bowl grasp and the initial object reaching.</p>
+          <p class="sub__lede">That action disagreement subset of the new task data is most likely to cause catastrophic forgetting during training. The old data most similar to this subset therefore plays a critical role in anchoring past performance, which we call the <b>Memory Anchors.</b> Below are examples of Memory Anchors extracted for the <code>Bowl to Plate</code> task. Hover over the images to see the tasks they come from. Notice how they focus on critical decision areas, including the bowl grasp and the initial object reaching.</p>
 
           <div class="framestrip">
             <div class="framestrip__track" data-autoscroll tabindex="0" aria-label="Sampled training frames across demos, scrollable">
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between reaching for the cream cheese and the bowl.">
                 <div class="framestrip__frame">
                   <img src="assets/method/003_put_the_cream_cheese_in_the_bowl_demo_demo039_frame0010.png" alt="Put the cream cheese in the bowl, frame 0010" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 10</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between putting the bowl on the stove (moving back) and moving the bowl on the plate (moving forward).">
                 <div class="framestrip__frame">
                   <img src="assets/method/032_put_the_bowl_on_the_stove_demo_demo041_frame0043.png" alt="Put the bowl on the stove, frame 0043" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 43</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between reaching for the cream cheese and the bowl.">
                 <div class="framestrip__frame">
                   <img src="assets/method/149_put_the_cream_cheese_in_the_bowl_demo_demo002_frame0014.png" alt="Put the cream cheese in the bowl, frame 0014" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 14</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between putting the bowl on the stove (moving back) and moving the bowl on the plate (moving forward).">
                 <div class="framestrip__frame">
                   <img src="assets/method/104_put_the_bowl_on_the_stove_demo_demo014_frame0059.png" alt="Put the bowl on the stove, frame 0059" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 59</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between putting the bowl on the cabinet (moving up) and moving the bowl on the plate (moving forward).">
                 <div class="framestrip__frame">
                   <img src="assets/method/114_put_the_bowl_on_top_of_the_cabinet_demo_demo020_frame0045.png" alt="Put the bowl on top of the cabinet, demo 020, frame 0045" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Bowl on Top of the Cabinet<br>Frame 45</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between reaching for the cream cheese and the bowl.">
                 <div class="framestrip__frame">
                   <img src="assets/method/182_put_the_cream_cheese_in_the_bowl_demo_demo045_frame0013.png" alt="Put the cream cheese in the bowl, frame 0013" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 13</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between putting the bowl on the stove (moving back) and moving the bowl on the plate (moving forward).">
                 <div class="framestrip__frame">
                   <img src="assets/method/121_put_the_bowl_on_the_stove_demo_demo014_frame0062.png" alt="Put the bowl on the stove, frame 0044" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 62</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between putting the bowl on the stove (moving back) and moving the bowl on the plate (moving forward).">
                 <div class="framestrip__frame">
                   <img src="assets/method/121_put_the_bowl_on_the_stove_demo_demo007_frame0052.png" alt="Put the bowl on the stove, frame 0052" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 52</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between reaching for the cream cheese and the bowl.">
                 <div class="framestrip__frame">
                   <img src="assets/method/007_put_the_cream_cheese_in_the_bowl_demo_demo026_frame0012.png" alt="Put the cream cheese in the bowl, frame 0012" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 12</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the initial decisions to reach towards objects on the table.">
                 <div class="framestrip__frame">
                   <img src="assets/method/132_put_the_bowl_on_the_stove_demo_demo044_frame0014.png" alt="Put the bowl on the stove, frame 0014" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 14</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the initial decisions to reach towards objects on the table.">
                 <div class="framestrip__frame">
                   <img src="assets/method/139_put_the_bowl_on_the_stove_demo_demo022_frame0004.png" alt="Put the bowl on the stove, frame 0004" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Bowl on the Stove<br>Frame 4</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between reaching for the cream cheese and the bowl.">
                 <div class="framestrip__frame">
                   <img src="assets/method/139_put_the_cream_cheese_in_the_bowl_demo_demo047_frame0012.png" alt="Put the cream cheese in the bowl, frame 0012" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Put the Cream Cheese in the Bowl<br>Frame 12</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between reaching for the plate and the bowl.">
                 <div class="framestrip__frame">
                   <img src="assets/method/150_push_the_plate_to_the_front_of_the_stove_demo_demo008_frame0011.png" alt="Push the plate to the front of the stove,  frame 0011" loading="lazy">
                 </div>
                 <figcaption class="framestrip__tooltip">Push the Plate to the Front of the Stove<br>Frame 11</figcaption>
               </figure>
-              <figure class="framestrip__card" tabindex="0" data-explain="Placeholder explanation — describe why this frame was selected as a Memory Anchor.">
+              <figure class="framestrip__card" tabindex="0" data-explain="Anchors the difference between reaching for the cream cheese and the bowl.">
                 <div class="framestrip__frame">
                   <img src="assets/method/170_put_the_cream_cheese_in_the_bowl_demo_demo034_frame0012.png" alt="Put the cream cheese in the bowl, frame 0012" loading="lazy">
                 </div>
@@ -509,6 +508,12 @@
               <p class="framestrip__detail-text" data-framestrip-detail-text>Hover over a Memory Anchor for more details.</p>
             </div>
           </div>
+            <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; Is the whole process resource intensive?</summary>
+            <div class="disclosure__body">
+              <p>The whole extraction process takes up a very small percentage of the training run (~3%) and unlike other enhanced ER methods, does not require any per-step costs or gradient computations. Extracting Memory Anchors does scale with the size of the past task dataset. If the dataset becomes unwieldy, it can be subsampled and/or the selection processes can be approximated to bound the compute.</p>
+            </div>
+          </details>
         </div>
       </div>
     </section>
