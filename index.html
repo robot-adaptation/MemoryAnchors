@@ -39,10 +39,10 @@
     <nav class="rail__links">
       <a data-level="1" href="#about">About</a>
       <a data-level="1" href="#challenge">Mechanics of Continual Imitation Learning</a>
-      <a data-level="2" data-part="challenge" href="#challenge-setup">Sequential Task Learning</a>
+      <!-- <a data-level="2" data-part="challenge" href="#challenge-setup">Sequential Task Learning</a>
       <a data-level="2" data-part="challenge" href="#challenge-why-hard">New Task Interactions with Existing Tasks</a>
       <a data-level="2" data-part="challenge" href="#challenge-representation-overlap">Initial Representation Overlap</a>
-      <a data-level="2" data-part="challenge" href="#challenge-conflicting-actions">Conflicting Actions</a>
+      <a data-level="2" data-part="challenge" href="#challenge-conflicting-actions">Conflicting Actions</a> -->
       <a data-level="1" href="#finding">Finding Memory Anchors</a>
       <a data-level="2" data-part="finding" href="#finding-three-step-approach">The Three Step Approach</a>
       <a data-level="2" data-part="finding" href="#finding-state-overlap">State Overlap</a>
@@ -312,13 +312,19 @@
         <h2 class="sec__title">Finding Memory Anchors</h2>
         <div class="sub" id="finding-three-step-approach">
           <h3 class="sub__title">The Three Step Approach</h3>
-          <p class="sub__lede">To test our claims, we propose a three-step approach for identifying Memory Anchors using the current policy, old task data, and the new task data.</p>
+          <p class="sub__lede">We turn our observations above into a three-step approach for identifying Memory Anchors using the current policy, old task data, and the new task data.</p>
           <ol class="sub__lede sub__lede--gap sec__sub--list">
-            <li><b>State Overlap.</b> Using the observation latent space of the current policy, find the transitions in the new data that overlap with the old task data.</li>
-            <li><b>Action Disagreement.</b> Within this state intersection, identify transitions from new task data where the policy's predicted actions differ significantly from the ground truth actions.</li>
-            <li><b>Anchor Selection.</b> Using the new task data from the identified conflict region, select the nearest old task data points using the observation latent space again.</li>
+            <li><b>State Representation Overlap.</b> Using the latent space of the current policy, find the transitions in the <span class="hl-new">new</span> data that overlap with the <span class="hl-old">old</span> task data.</li>
+            <li><b>Action Prediction Disagreement.</b> Within this state overlap of the <span class="hl-new">new</span> task data, identify transitions where the current policy predicts something significantly different from the action labels.</li>
+            <li><b>Anchor Selection.</b> Using the current policy's latent space again, select the nearest <span class="hl-old">old</span> task data that are closest to the <span class="hl-new">new</span> task data isolated from the previous action disagreement step.</li>
           </ol>
-          <p class="sub__lede sub__lede--gap">The following sections detail each step of our approach and provide accompanying visualizations from the LIBERO benchmark.</p>
+          <p class="sub__lede sub__lede--gap">The figure below illustrates the whole process, which is described in detail with interactive visualizations in the sections below.</p>
+
+          <div class="stageplayer stageplayer--full">
+            <div class="stageplayer__frame">
+              <img src="assets/method/methods.png" alt="Overview diagram of the three-step Memory Anchor identification method.">
+            </div>
+          </div>
         </div>
 
         <div class="sub" id="finding-state-overlap">
@@ -335,6 +341,12 @@
             <summary class="disclosure__summary">FAQ &middot; Why not segment by timestep?</summary>
             <div class="disclosure__body">
               <p>While it is true that LIBERO typically starts in state overlap and then diverges, it requires tuning the timestep threshold. This heuristic is also not generally true. In our real robot experiment, state overlap is interleaved throughout a new task trajectory.</p>
+            </div>
+          </details>
+            <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; What if the new task is very different?</summary>
+            <div class="disclosure__body">
+              <p>If the new task is in an entirely different environment (like it happens in LIBERO-Long), clustering still separates closer from further states, as an ordering still exists in latent space. We find that Memory Anchors still impacts highly heterogeneous task sequences (see results), though the selection process becomes less interpretable. </p>
             </div>
           </details>
 
@@ -361,7 +373,32 @@
         </div>
         <div class="sub" id="finding-action-disagreement">
           <h3 class="sub__title">Action Disagreement</h3>
-          <p class="sub__lede">Placeholder for how memory anchors are identified.</p>
+          <p class="sub__lede">From the last step, we have the state overlap subset of the new task data. In this step, we want to find transitions in this subset that require different actions from what the policy expects. To measure action disagreement, we add noise to the action labels, run denoising using the diffusion policy, and compare to the original labels. Then, we compare the action divergences using appropiate metrics for translation and rotation. We select transitions with significantly higher divergences than a baseline computed on a validation set. (FAQ, why can you feed new data into a policy that hasn't seen things yet? Why use this type of prediction?)</p>
+
+          <div class="stagepanel overlappanel" id="overlap-demo-action-disagreement" data-overlap-demo>
+            <div class="overlappanel__media">
+              <div class="overlapdemo__imgwrap">
+                <p class="overlapdemo__tag">New Task Observation (from State Overlap)</p>
+                <img class="overlapdemo__img" data-overlap-img src="assets/method/agree_1.png" alt="Sampled new-task observation.">
+              </div>
+              <div class="overlapdemo__imgwrap">
+                <p class="overlapdemo__tag">Action Disagreement</p>
+                <video class="overlapdemo__img" data-overlap-video src="assets/method/agree_1.mp4" autoplay loop muted playsinline></video>
+                <div class="overlapdemo__legend">
+                  <span class="overlapdemo__legend-item"><span class="overlapdemo__swatch overlapdemo__swatch--pred"></span>Predicted action</span>
+                  <span class="overlapdemo__legend-item"><span class="overlapdemo__swatch overlapdemo__swatch--gt"></span>Ground truth</span>
+                </div>
+              </div>
+            </div>
+            <div class="overlappanel__interaction">
+              <div class="overlapdemo__info">
+                <p class="overlapdemo__label" data-overlap-label>Predicted Action Agrees</p>
+                <p class="overlapdemo__text" data-overlap-text>Placeholder explanation for agree example 1: despite the state overlap, the policy predicts an action consistent with the new task.</p>
+                <p class="overlapdemo__count">Example <span data-overlap-index>1</span>/<span data-overlap-total>8</span></p>
+              </div>
+              <button type="button" class="overlapdemo__btn" data-overlap-resample>Resample</button>
+            </div>
+          </div>
         </div>
         <div class="sub" id="finding-anchor-selection">
           <h3 class="sub__title">Anchor Selection</h3>

@@ -245,6 +245,16 @@
       { image: 'assets/method/od_3.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
       { image: 'assets/method/od_4.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
       { image: 'assets/method/od_5.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+    ],
+    'overlap-demo-action-disagreement': [
+      { image: 'assets/method/agree_1.png', video: 'assets/method/agree_1.mp4', label: 'Predicted Action Agrees', text: 'Placeholder explanation for agree example 1: despite the state overlap, the policy predicts an action consistent with the new task.' },
+      { image: 'assets/method/agree_2.png', video: 'assets/method/agree_2.mp4', label: 'Predicted Action Agrees', text: 'Placeholder explanation for agree example 2: despite the state overlap, the policy predicts an action consistent with the new task.' },
+      { image: 'assets/method/agree_3.png', video: 'assets/method/agree_3.mp4', label: 'Predicted Action Agrees', text: 'Placeholder explanation for agree example 3: despite the state overlap, the policy predicts an action consistent with the new task.' },
+      { image: 'assets/method/agree_4.png', video: 'assets/method/agree_4.mp4', label: 'Predicted Action Agrees', text: 'Placeholder explanation for agree example 4: despite the state overlap, the policy predicts an action consistent with the new task.' },
+      { image: 'assets/method/disagree_1.png', video: 'assets/method/disagree_1.mp4', label: 'Predicted Action Disagrees', text: 'Placeholder explanation for disagree example 1: the policy predicts an action drawn from an existing task instead of the new one.' },
+      { image: 'assets/method/disagree_2.png', video: 'assets/method/disagree_2.mp4', label: 'Predicted Action Disagrees', text: 'Placeholder explanation for disagree example 2: the policy predicts an action drawn from an existing task instead of the new one.' },
+      { image: 'assets/method/disagree_3.png', video: 'assets/method/disagree_3.mp4', label: 'Predicted Action Disagrees', text: 'Placeholder explanation for disagree example 3: the policy predicts an action drawn from an existing task instead of the new one.' },
+      { image: 'assets/method/disagree_4.png', video: 'assets/method/disagree_4.mp4', label: 'Predicted Action Disagrees', text: 'Placeholder explanation for disagree example 4: the policy predicts an action drawn from an existing task instead of the new one.' }
     ]
   };
 
@@ -252,6 +262,7 @@
     var demos = document.querySelectorAll('[data-overlap-demo]');
     demos.forEach(function (demo) {
       var img = demo.querySelector('[data-overlap-img]');
+      var video = demo.querySelector('[data-overlap-video]');
       var label = demo.querySelector('[data-overlap-label]');
       var text = demo.querySelector('[data-overlap-text]');
       var indexEl = demo.querySelector('[data-overlap-index]');
@@ -261,6 +272,7 @@
 
       var examples = OVERLAP_EXAMPLE_SETS[demo.id] || [{
         image: img.getAttribute('src'),
+        video: video ? video.getAttribute('src') : null,
         label: label ? label.textContent : '',
         text: text ? text.textContent : ''
       }];
@@ -270,6 +282,11 @@
       function show(i) {
         var ex = examples[i];
         img.src = ex.image;
+        if (video && ex.video) {
+          video.src = ex.video;
+          video.load();
+          video.play().catch(function () {});
+        }
         if (label) label.textContent = ex.label;
         if (text) text.textContent = ex.text;
         if (indexEl) indexEl.textContent = i + 1;
