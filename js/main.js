@@ -235,9 +235,9 @@
      the array can hold as many examples as you like (10-15 is plenty). */
   var OVERLAP_EXAMPLE_SETS = {
     'overlap-demo-state-overlap': [
-      { image: 'assets/method/id_1.png', label: 'Inside Overlap', text: 'Reaching down is shared by many existing tasks, including Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
+      { image: 'assets/method/id_1.png', label: 'Inside Overlap', text: 'Reaching down is shared by many existing tasks, including Plate to Stove, Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
       { image: 'assets/method/id_2.png', label: 'Inside Overlap', text: 'Grabbing the bowl is shared by existing tasks Bowl to Drawer, Bowl to Stove.' },
-      { image: 'assets/method/id_3.png', label: 'Inside Overlap', text: 'Reaching down is shared by many existing tasks, including Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
+      { image: 'assets/method/id_3.png', label: 'Inside Overlap', text: 'Reaching down is shared by many existing tasks, including Plate to Stove, Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
       { image: 'assets/method/id_4.png', label: 'Inside Overlap', text: 'The initial robot pose is shared by all existing tasks.' },
       { image: 'assets/method/id_5.png', label: 'Inside Overlap', text: 'Grabbing the bowl is shared by existing tasks Bowl to Drawer, Bowl to Stove.' },
       { image: 'assets/method/od_1.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
@@ -247,14 +247,14 @@
       { image: 'assets/method/od_5.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
     ],
     'overlap-demo-action-disagreement': [
-      { image: 'assets/method/agree_1.png', video: 'assets/method/agree_1.mp4', label: 'Predicted Action Agrees', text: 'Placeholder explanation for agree example 1: despite the state overlap, the policy predicts an action consistent with the new task.' },
-      { image: 'assets/method/agree_2.png', video: 'assets/method/agree_2.mp4', label: 'Predicted Action Agrees', text: 'Placeholder explanation for agree example 2: despite the state overlap, the policy predicts an action consistent with the new task.' },
-      { image: 'assets/method/agree_3.png', video: 'assets/method/agree_3.mp4', label: 'Predicted Action Agrees', text: 'Placeholder explanation for agree example 3: despite the state overlap, the policy predicts an action consistent with the new task.' },
-      { image: 'assets/method/agree_4.png', video: 'assets/method/agree_4.mp4', label: 'Predicted Action Agrees', text: 'Placeholder explanation for agree example 4: despite the state overlap, the policy predicts an action consistent with the new task.' },
-      { image: 'assets/method/disagree_1.png', video: 'assets/method/disagree_1.mp4', label: 'Predicted Action Disagrees', text: 'Placeholder explanation for disagree example 1: the policy predicts an action drawn from an existing task instead of the new one.' },
-      { image: 'assets/method/disagree_2.png', video: 'assets/method/disagree_2.mp4', label: 'Predicted Action Disagrees', text: 'Placeholder explanation for disagree example 2: the policy predicts an action drawn from an existing task instead of the new one.' },
-      { image: 'assets/method/disagree_3.png', video: 'assets/method/disagree_3.mp4', label: 'Predicted Action Disagrees', text: 'Placeholder explanation for disagree example 3: the policy predicts an action drawn from an existing task instead of the new one.' },
-      { image: 'assets/method/disagree_4.png', video: 'assets/method/disagree_4.mp4', label: 'Predicted Action Disagrees', text: 'Placeholder explanation for disagree example 4: the policy predicts an action drawn from an existing task instead of the new one.' }
+      { image: 'assets/method/agree_1.png', video: 'assets/method/agree_1.mp4', label: 'Low Action Disagreement', text: 'The current policy already agrees with the new task reaching towards the bowl.' },
+      { image: 'assets/method/agree_2.png', video: 'assets/method/agree_2.mp4', label: 'Low Action Disagreement', text: 'The current policy already agrees with the new task reaching towards the bowl.'},
+      { image: 'assets/method/agree_3.png', video: 'assets/method/agree_3.mp4', label: 'Low Action Disagreement', text: 'The current policy already agrees with the new task reaching towards the bowl.' },
+      { image: 'assets/method/agree_4.png', video: 'assets/method/agree_4.mp4', label: 'Low Action Disagreement', text: 'The current policy already agrees with the new task reaching towards the bowl.' },
+      { image: 'assets/method/disagree_1.png', video: 'assets/method/disagree_1.mp4', label: 'Moderate Action Disagreement', text: 'The current policy reaches more towards the plate / cream cheese (old task), not the bowl.' },
+      { image: 'assets/method/disagree_2.png', video: 'assets/method/disagree_2.mp4', label: 'High Action Disagreement', text: 'Closer to the bowl, the current policy strongly reaches for the plate (old task), not the bowl' },
+      { image: 'assets/method/disagree_3.png', video: 'assets/method/disagree_3.mp4', label: 'High Action Disagreement', text: 'After grabbing the bowl, the current policy moves the bowl back to the stove (old task), not the plate.' },
+      { image: 'assets/method/disagree_4.png', video: 'assets/method/disagree_4.mp4', label: 'High Action Disagreement', text: 'After grabbing the bowl, the current policy moves the bowl back to the stove (old task), not the plate.' }
     ]
   };
 

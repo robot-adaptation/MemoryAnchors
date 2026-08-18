@@ -328,8 +328,8 @@
         </div>
 
         <div class="sub" id="finding-state-overlap">
-          <h3 class="sub__title">State Overlap</h3>
-          <p class="sub__lede">Old and new task data are both placed into the policy's representation space. Their distances naturally segment the new task data into two groups: inside the state overlap, and outside the state overlap. We care about isolating new data that exists inside the state overlap. Look at how this approach segments the <code>Bowl to Plate</code> task.</p>
+          <h3 class="sub__title">State Representation Overlap</h3>
+          <p class="sub__lede">Old and new task data are both placed into the current policy's representation space. Latent distances between new and old data naturally segment the new task data into two groups: inside the representation overlap, and outside the overlap. Using clustering, we isolate the new task data within this overlap. Look at how this approach segments the <code>Bowl to Plate</code> task:</p>
 
           <details class="disclosure">
             <summary class="disclosure__summary">FAQ &middot; What representations do you use?</summary>
@@ -373,7 +373,20 @@
         </div>
         <div class="sub" id="finding-action-disagreement">
           <h3 class="sub__title">Action Disagreement</h3>
-          <p class="sub__lede">From the last step, we have the state overlap subset of the new task data. In this step, we want to find transitions in this subset that require different actions from what the policy expects. To measure action disagreement, we add noise to the action labels, run denoising using the diffusion policy, and compare to the original labels. Then, we compare the action divergences using appropiate metrics for translation and rotation. We select transitions with significantly higher divergences than a baseline computed on a validation set. (FAQ, why can you feed new data into a policy that hasn't seen things yet? Why use this type of prediction?)</p>
+          <p class="sub__lede">In the last step, we found a subset of new task data that occupies the same latent space as the old task data. In this step, we want to further subsample the new task data by isolating the points that require different actions from what the current policy expects. To measure action disagreement, we add noise to the action labels, run denoising using the diffusion policy, and compare to the original labels. We select transitions with significantly higher divergences than a baseline computed on a validation set.</p>
+
+          <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; Why can you trust the predictions of a policy fed with new task data that it hasn't seen yet?</summary>
+            <div class="disclosure__body">
+              <p>The new task data fed into the policy in Step #2 has already been filtered to be within the latent space of old task data. This doesn't guarentee that it will be fully in-distribution (e.g. the language description will be new), but it increases the likelihood of the policy producing a meaningful denoising. Even if the new task data is fully out of distribution (e.g. new environment), the result is letting all of the representation overlap data through to anchor selection, which is a valid strategy when the new data is very different.</p>
+            </div>
+          </details>
+          <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; Why not just run inference on the data and compare to action labels?</summary>
+            <div class="disclosure__body">
+              <p>This approach also works, but it can produce false positives for multimodal data with multiple correct actions. By adding noise, we preserve enough action structure to preserve the chosen modality if the policy agrees with the action.</p>
+            </div>
+          </details>
 
           <div class="stagepanel overlappanel" id="overlap-demo-action-disagreement" data-overlap-demo>
             <div class="overlappanel__media">
