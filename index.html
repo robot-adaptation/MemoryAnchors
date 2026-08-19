@@ -109,7 +109,7 @@
       <div class="wrap wrap--wide reveal">
         <p class="eyebrow">02 &middot; Continual Learning Challenge</p>
         <h2 class="sec__title">Mechanics of Continual Imitation Learning</h2>
-        <p class="sec__sub">To understand Memory Anchors, we first need to take a closer look at why robot policies forget old tasks when learning new ones.</p>
+        <p class="sec__sub sec__sub--full">To understand Memory Anchors, we first need to take a closer look at why robot policies forget old tasks when learning new ones.</p>
         <div class="sub" id="challenge-setup">
           <h3 class="sub__title">Sequential Task Learning</h3>
           <p class="sub__lede">We explore the problem setting of imitation learning on tasks in sequence. Drag the slider to step through ten tasks. Observe how the policy learns new tasks (horizontal) and remembers old ones (vertical).</p>
@@ -522,11 +522,11 @@
       <div class="wrap wrap--wide reveal">
         <p class="eyebrow">04 &middot; Impact of Memory Anchors</p>
         <h2 class="sec__title">Impact of Memory Anchors</h2>
-        <p class="sec__sub">A simple card grid for linking out to whatever you're building.</p>
+        <p class="sec__sub sec__sub--full">In the experiments below, we test our claims about Memory Anchors on the LIBERO continual learning benchmark and real-world robot tasks.</p>
 
         <div class="sub" id="impact-taking-away">
           <h3 class="sub__title">Taking Memory Anchors Away</h3>
-          <p class="sub__lede">Randomly discarding a small fraction of Memory Anchors from the ER buffer is enough to erode their benefit: backward transfer degrades (higher NBT is worse) in proportion to how many are removed, across every LIBERO suite.</p>
+          <p class="sub__lede">Memory Anchors are naturally present in a randomly selected ER buffer (<code>RandER</code>). To test their importance, we conduct a simple experiment. We remove some Memory Anchors (top 1%, 5%, 10%) from the sampling process and measure catastrophic forgetting. Here, the results are significant and general: the fewer Memory Anchors available, the worse the forgetting, even as the total number of memories in the ER buffer stay the same.</p>
           <figure class="barchart">
             <div class="barchart__frame">
               <svg class="barchart__svg" viewBox="0 0 710 364" role="img" aria-labelledby="removeAnchorsTitle removeAnchorsDesc">
@@ -630,24 +630,199 @@
                         <text x="502.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Spatial</text>
                         <text x="630.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Average</text>
                         </svg>
+              <div class="barchart__legend">
+                <span class="barchart__legend-item"><span class="barchart__swatch" style="background:#338467"></span>RandER</span>
+                <span class="barchart__legend-item">
+                  <span class="barchart__swatch-group"><span style="background:#326753"></span><span style="background:#2C443B"></span><span style="background:#242B28"></span></span>
+                  RandER without 1% / 5% / 10% anchors
+                </span>
+              </div>
             </div>
-            <div class="barchart__legend">
-              <span class="barchart__legend-item"><span class="barchart__swatch" style="background:#338467"></span>RandER</span>
-              <span class="barchart__legend-item">
-                <span class="barchart__swatch-group"><span style="background:#326753"></span><span style="background:#2C443B"></span><span style="background:#242B28"></span></span>
-                RandER &minus; 1% / 5% / 10% Anchors
-              </span>
-            </div>
-            <figcaption class="barchart__caption">Normalized backward transfer (NBT average, lower is better) when 1%, 5%, or 10% of Memory Anchors are randomly removed from the ER buffer, vs. the RandER baseline. Error bars show &plusmn;1 SEM.</figcaption>
+            <!-- <figcaption class="barchart__caption">Normalized backward transfer (NBT average, lower is better) when 1%, 5%, or 10% of Memory Anchors are randomly removed from the ER buffer, vs. the RandER baseline. Error bars show &plusmn;1 SEM.</figcaption> -->
           </figure>
+          <details class="disclosure">
+            <summary class="disclosure__summary">Show Experiment Details</summary>
+            <div class="disclosure__body">
+              <p>Using an ER buffer size of 1000 (total, not per task) across all trials. The only difference between all experimental conditions is the past task dataset. In the RandER condition, all of the dataset is equally likely to be chosen. In the RandER w/o X% condition, the X% best Memory Anchors are removed from the datasets before running RandER sampling. The reported values are average NBT (Negative Backward Transfer), error bars across one SEM. </p>
+            </div>
+          </details>
         </div>
         <div class="sub" id="impact-adding-more">
           <h3 class="sub__title">Adding More Memory Anchors</h3>
-          <p class="sub__lede">Placeholder for the effect of enriching the ER buffer with more Memory Anchors.</p>
+          <p class="sub__lede">If taking away Memory Anchors worsened forgetting, adding more Memory Anchors should reduce forgetting. We test this by adding Memory Anchors into the ER buffer (10% / 20%) and then filling the rest randomly. We look at the worst case task-task interactions, which measures how a new task reduces an old task's performance across numerous training orders. By enriching the buffer with more Memory Anchor samples, catastrophic forgetting is reduced significantly on the worst task-task interactions.</p>
+          <figure class="barchart">
+            <div class="barchart__frame">
+              <svg class="barchart__svg" viewBox="0 0 710 364" role="img" aria-labelledby="addAnchorsTitle addAnchorsDesc">
+                        <title id="addAnchorsTitle">Effect of adding extracted Memory Anchors on high-conflict backward transfer</title>
+                        <desc id="addAnchorsDesc">Grouped bar chart of NBT high conflict (lower is better) across Long, Goal, Object, Spatial suites and their average, comparing RandER against AnchorER with 10% or 20% of the ER buffer replaced by extracted Memory Anchors. Adding anchors substantially reduces NBT high conflict, with a larger share of anchors reducing it further.</desc>
+                        <line x1="54" y1="330.00" x2="694" y2="330.00" stroke="#0c1010" stroke-opacity="0.32" stroke-width="1"/>
+                        <text x="44" y="333.50" text-anchor="end" font-size="11" font-family="IBM Plex Serif, Georgia, serif" fill="rgba(12,16,16,.6)">0.0</text>
+                        <line x1="54" y1="276.43" x2="694" y2="276.43" stroke="#0c1010" stroke-opacity="0.12" stroke-width="1"/>
+                        <text x="44" y="279.93" text-anchor="end" font-size="11" font-family="IBM Plex Serif, Georgia, serif" fill="rgba(12,16,16,.6)">0.1</text>
+                        <line x1="54" y1="222.86" x2="694" y2="222.86" stroke="#0c1010" stroke-opacity="0.12" stroke-width="1"/>
+                        <text x="44" y="226.36" text-anchor="end" font-size="11" font-family="IBM Plex Serif, Georgia, serif" fill="rgba(12,16,16,.6)">0.2</text>
+                        <line x1="54" y1="169.29" x2="694" y2="169.29" stroke="#0c1010" stroke-opacity="0.12" stroke-width="1"/>
+                        <text x="44" y="172.79" text-anchor="end" font-size="11" font-family="IBM Plex Serif, Georgia, serif" fill="rgba(12,16,16,.6)">0.3</text>
+                        <line x1="54" y1="115.71" x2="694" y2="115.71" stroke="#0c1010" stroke-opacity="0.12" stroke-width="1"/>
+                        <text x="44" y="119.21" text-anchor="end" font-size="11" font-family="IBM Plex Serif, Georgia, serif" fill="rgba(12,16,16,.6)">0.4</text>
+                        <line x1="54" y1="62.14" x2="694" y2="62.14" stroke="#0c1010" stroke-opacity="0.12" stroke-width="1"/>
+                        <text x="44" y="65.64" text-anchor="end" font-size="11" font-family="IBM Plex Serif, Georgia, serif" fill="rgba(12,16,16,.6)">0.5</text>
+                        <text x="16" y="180.00" text-anchor="middle" font-size="11.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="600" fill="rgba(12,16,16,.68)" transform="rotate(-90 16 180.00)">NBT High Conflict (Lower Better)</text>
+                        <line x1="54" y1="330.00" x2="694" y2="330.00" stroke="#0c1010" stroke-opacity="0.55" stroke-width="1.2"/>
+                        <path d="M77.0,330.0 L77.0,143.0909090909091 Q77.0,139.0909090909091 81.0,139.0909090909091 L97.0,139.0909090909091 Q101.0,139.0909090909091 101.0,143.0909090909091 L101.0,330.0 Z" fill="#338467"><title>RandER: 0.356 ± 0.064 (SEM)</title></path>
+                        <path d="M106.0,330.0 L106.0,274.5844155844155 Q106.0,270.5844155844155 110.0,270.5844155844155 L126.0,270.5844155844155 Q130.0,270.5844155844155 130.0,274.5844155844155 L130.0,330.0 Z" fill="#FAD0AC"><title>+10%: 0.111 ± 0.075 (SEM)</title></path>
+                        <path d="M135.0,330.0 L135.0,274.58441558441564 Q135.0,270.58441558441564 139.0,270.58441558441564 L155.0,270.58441558441564 Q159.0,270.58441558441564 159.0,274.58441558441564 L159.0,330.0 Z" fill="var(--palette-orange)"><title>+20%: 0.111 ± 0.056 (SEM)</title></path>
+                        <path d="M205.0,330.0 L205.0,93.99999999999999 Q205.0,89.99999999999999 209.0,89.99999999999999 L225.0,89.99999999999999 Q229.0,89.99999999999999 229.0,93.99999999999999 L229.0,330.0 Z" fill="#338467"><title>RandER: 0.448 ± 0.064 (SEM)</title></path>
+                        <path d="M234.0,330.0 L234.0,223.64285714285717 Q234.0,219.64285714285717 238.0,219.64285714285717 L254.0,219.64285714285717 Q258.0,219.64285714285717 258.0,223.64285714285717 L258.0,330.0 Z" fill="#FAD0AC"><title>+10%: 0.206 ± 0.095 (SEM)</title></path>
+                        <path d="M263.0,330.0 L263.0,197.92857142857144 Q263.0,193.92857142857144 267.0,193.92857142857144 L283.0,193.92857142857144 Q287.0,193.92857142857144 287.0,197.92857142857144 L287.0,330.0 Z" fill="var(--palette-orange)"><title>+20%: 0.254 ± 0.075 (SEM)</title></path>
+                        <path d="M333.0,330.0 L333.0,122.77551020408158 Q333.0,118.77551020408158 337.0,118.77551020408158 L353.0,118.77551020408158 Q357.0,118.77551020408158 357.0,122.77551020408158 L357.0,330.0 Z" fill="#338467"><title>RandER: 0.394 ± 0.083 (SEM)</title></path>
+                        <path d="M362.0,330.0 L362.0,309.51020408163265 Q362.0,305.51020408163265 366.0,305.51020408163265 L382.0,305.51020408163265 Q386.0,305.51020408163265 386.0,309.51020408163265 L386.0,330.0 Z" fill="#FAD0AC"><title>+10%: 0.046 ± 0.073 (SEM)</title></path>
+                        <path d="M391.0,330.0 L391.0,220.73469387755105 Q391.0,216.73469387755105 395.0,216.73469387755105 L411.0,216.73469387755105 Q415.0,216.73469387755105 415.0,220.73469387755105 L415.0,330.0 Z" fill="var(--palette-orange)"><title>+20%: 0.211 ± 0.099 (SEM)</title></path>
+                        <path d="M461.0,330.0 L461.0,157.21428571428575 Q461.0,153.21428571428575 465.0,153.21428571428575 L481.0,153.21428571428575 Q485.0,153.21428571428575 485.0,157.21428571428575 L485.0,330.0 Z" fill="#338467"><title>RandER: 0.330 ± 0.027 (SEM)</title></path>
+                        <path d="M490.0,330.0 L490.0,255.42857142857142 Q490.0,251.42857142857142 494.0,251.42857142857142 L510.0,251.42857142857142 Q514.0,251.42857142857142 514.0,255.42857142857142 L514.0,330.0 Z" fill="#FAD0AC"><title>+10%: 0.147 ± 0.114 (SEM)</title></path>
+                        <path d="M519.0,330.0 L519.0,305.4285714285714 Q519.0,301.4285714285714 523.0,301.4285714285714 L539.0,301.4285714285714 Q543.0,301.4285714285714 543.0,305.4285714285714 L543.0,330.0 Z" fill="var(--palette-orange)"><title>+20%: 0.053 ± 0.066 (SEM)</title></path>
+                        <path d="M589.0,330.0 L589.0,129.27017625231915 Q589.0,125.27017625231915 593.0,125.27017625231915 L609.0,125.27017625231915 Q613.0,125.27017625231915 613.0,129.27017625231915 L613.0,330.0 Z" fill="#338467"><title>RandER: 0.382 ± 0.026 (SEM)</title></path>
+                        <path d="M618.0,330.0 L618.0,265.7915120593692 Q618.0,261.7915120593692 622.0,261.7915120593692 L638.0,261.7915120593692 Q642.0,261.7915120593692 642.0,265.7915120593692 L642.0,330.0 Z" fill="#FAD0AC"><title>+10%: 0.127 ± 0.034 (SEM)</title></path>
+                        <path d="M647.0,330.0 L647.0,249.66906307977737 Q647.0,245.66906307977737 651.0,245.66906307977737 L667.0,245.66906307977737 Q671.0,245.66906307977737 671.0,249.66906307977737 L671.0,330.0 Z" fill="var(--palette-orange)"><title>+20%: 0.157 ± 0.046 (SEM)</title></path>
+                        <line x1="89.00" y1="104.54" x2="89.00" y2="173.64" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="84.00" y1="104.54" x2="94.00" y2="104.54" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="84.00" y1="173.64" x2="94.00" y2="173.64" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="89.00" y1="104.54" x2="89.00" y2="173.64" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="84.00" y1="104.54" x2="94.00" y2="104.54" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="84.00" y1="173.64" x2="94.00" y2="173.64" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="118.00" y1="230.56" x2="118.00" y2="310.60" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="113.00" y1="230.56" x2="123.00" y2="230.56" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="113.00" y1="310.60" x2="123.00" y2="310.60" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="118.00" y1="230.56" x2="118.00" y2="310.60" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="113.00" y1="230.56" x2="123.00" y2="230.56" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="113.00" y1="310.60" x2="123.00" y2="310.60" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="147.00" y1="240.79" x2="147.00" y2="300.38" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="142.00" y1="240.79" x2="152.00" y2="240.79" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="142.00" y1="300.38" x2="152.00" y2="300.38" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="147.00" y1="240.79" x2="147.00" y2="300.38" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="142.00" y1="240.79" x2="152.00" y2="240.79" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="142.00" y1="300.38" x2="152.00" y2="300.38" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="217.00" y1="55.77" x2="217.00" y2="124.23" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="212.00" y1="55.77" x2="222.00" y2="55.77" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="212.00" y1="124.23" x2="222.00" y2="124.23" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="217.00" y1="55.77" x2="217.00" y2="124.23" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="212.00" y1="55.77" x2="222.00" y2="55.77" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="212.00" y1="124.23" x2="222.00" y2="124.23" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="246.00" y1="168.86" x2="246.00" y2="270.43" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="241.00" y1="168.86" x2="251.00" y2="168.86" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="241.00" y1="270.43" x2="251.00" y2="270.43" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="246.00" y1="168.86" x2="246.00" y2="270.43" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="241.00" y1="168.86" x2="251.00" y2="168.86" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="241.00" y1="270.43" x2="251.00" y2="270.43" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="275.00" y1="153.65" x2="275.00" y2="234.21" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="270.00" y1="153.65" x2="280.00" y2="153.65" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="270.00" y1="234.21" x2="280.00" y2="234.21" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="275.00" y1="153.65" x2="275.00" y2="234.21" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="270.00" y1="153.65" x2="280.00" y2="153.65" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="270.00" y1="234.21" x2="280.00" y2="234.21" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="345.00" y1="74.37" x2="345.00" y2="163.18" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="340.00" y1="74.37" x2="350.00" y2="74.37" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="340.00" y1="163.18" x2="350.00" y2="163.18" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="345.00" y1="74.37" x2="345.00" y2="163.18" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="340.00" y1="74.37" x2="350.00" y2="74.37" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="340.00" y1="163.18" x2="350.00" y2="163.18" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="374.00" y1="266.55" x2="374.00" y2="330.00" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="369.00" y1="266.55" x2="379.00" y2="266.55" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="369.00" y1="330.00" x2="379.00" y2="330.00" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="374.00" y1="266.55" x2="374.00" y2="330.00" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="369.00" y1="266.55" x2="379.00" y2="266.55" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="369.00" y1="330.00" x2="379.00" y2="330.00" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="403.00" y1="163.79" x2="403.00" y2="269.68" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="398.00" y1="163.79" x2="408.00" y2="163.79" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="398.00" y1="269.68" x2="408.00" y2="269.68" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="403.00" y1="163.79" x2="403.00" y2="269.68" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="398.00" y1="163.79" x2="408.00" y2="163.79" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="398.00" y1="269.68" x2="408.00" y2="269.68" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="473.00" y1="138.91" x2="473.00" y2="167.52" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="468.00" y1="138.91" x2="478.00" y2="138.91" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="468.00" y1="167.52" x2="478.00" y2="167.52" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="473.00" y1="138.91" x2="473.00" y2="167.52" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="468.00" y1="138.91" x2="478.00" y2="138.91" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="468.00" y1="167.52" x2="478.00" y2="167.52" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="502.00" y1="190.21" x2="502.00" y2="312.64" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="497.00" y1="190.21" x2="507.00" y2="190.21" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="497.00" y1="312.64" x2="507.00" y2="312.64" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="502.00" y1="190.21" x2="502.00" y2="312.64" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="497.00" y1="190.21" x2="507.00" y2="190.21" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="497.00" y1="312.64" x2="507.00" y2="312.64" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="531.00" y1="266.25" x2="531.00" y2="330.00" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="526.00" y1="266.25" x2="536.00" y2="266.25" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="526.00" y1="330.00" x2="536.00" y2="330.00" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="531.00" y1="266.25" x2="531.00" y2="330.00" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="526.00" y1="266.25" x2="536.00" y2="266.25" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="526.00" y1="330.00" x2="536.00" y2="330.00" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="601.00" y1="111.55" x2="601.00" y2="138.99" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="596.00" y1="111.55" x2="606.00" y2="111.55" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="596.00" y1="138.99" x2="606.00" y2="138.99" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="601.00" y1="111.55" x2="601.00" y2="138.99" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="596.00" y1="111.55" x2="606.00" y2="111.55" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="596.00" y1="138.99" x2="606.00" y2="138.99" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="630.00" y1="243.83" x2="630.00" y2="279.76" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="625.00" y1="243.83" x2="635.00" y2="243.83" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="625.00" y1="279.76" x2="635.00" y2="279.76" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="630.00" y1="243.83" x2="630.00" y2="279.76" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="625.00" y1="243.83" x2="635.00" y2="243.83" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="625.00" y1="279.76" x2="635.00" y2="279.76" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <line x1="659.00" y1="221.10" x2="659.00" y2="270.24" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="654.00" y1="221.10" x2="664.00" y2="221.10" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/><line x1="654.00" y1="270.24" x2="664.00" y2="270.24" stroke="#f4f3ef" stroke-opacity="0.9" stroke-width="3.4"/>
+                        <line x1="659.00" y1="221.10" x2="659.00" y2="270.24" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="654.00" y1="221.10" x2="664.00" y2="221.10" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/><line x1="654.00" y1="270.24" x2="664.00" y2="270.24" stroke="#0c1010" stroke-opacity="1" stroke-width="1.3"/>
+                        <text x="89.00" y="98.54" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.36</text>
+                        <text x="118.00" y="224.56" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.11</text>
+                        <text x="147.00" y="234.79" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.11</text>
+                        <text x="217.00" y="49.77" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.45</text>
+                        <text x="246.00" y="162.86" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.21</text>
+                        <text x="275.00" y="147.65" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.25</text>
+                        <text x="345.00" y="68.37" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.39</text>
+                        <text x="374.00" y="260.55" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.05</text>
+                        <text x="403.00" y="157.79" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.21</text>
+                        <text x="473.00" y="132.91" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.33</text>
+                        <text x="502.00" y="184.21" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.15</text>
+                        <text x="531.00" y="260.25" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.05</text>
+                        <text x="601.00" y="105.55" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.38</text>
+                        <text x="630.00" y="237.83" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.13</text>
+                        <text x="659.00" y="215.10" text-anchor="middle" font-size="10.5" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" fill="rgba(12,16,16,.78)">0.16</text>
+                        <text x="118.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Long</text>
+                        <text x="246.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Goal</text>
+                        <text x="374.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Object</text>
+                        <text x="502.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Spatial</text>
+                        <text x="630.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Average</text>
+                        </svg>
+              <div class="barchart__legend">
+                <span class="barchart__legend-item"><span class="barchart__swatch" style="background:#338467"></span>RandER</span>
+                <span class="barchart__legend-item">
+                  <span class="barchart__swatch-group"><span style="background:#FAD0AC"></span><span style="background:var(--palette-orange)"></span></span>
+                  AnchorER using 10% / 20% extracted anchors
+                </span>
+              </div>
+            </div>
+          </figure>
+          <details class="disclosure">
+            <summary class="disclosure__summary">Show Experiment Details</summary>
+            <div class="disclosure__body">
+              <p>Using an ER buffer size of 1% of the past data size. The randomly selected Memory Anchors can be enough to support many task-task pairings, which is why we chose to focus on the worst case interaction subset for this experiment. This subset was found by looking at all of the task-task interactions on a set of RandER runs and picking the 6 interactions with the highest average forgetting across training orders. We report the average forgetting on these interactions for AnchorER and RandER.</p>
+            </div>
+          </details>
+           <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; Why not use all Memory Anchors?</summary>
+            <div class="disclosure__body">
+              <p>As seen in some of the Memory Anchor examples in the last section, Memory Anchors concentrate around critical areas of high conflict. They are critical for maintaining past task performance (as supported by our subtraction experiment), but they are not the only critical pieces of data in the ER buffer. Having high buffer diversity is also important to fully cover the support of past tasks.</p>
+            </div>
+          </details>
         </div>
         <div class="sub" id="impact-vla">
           <h3 class="sub__title">On VLA models</h3>
-          <p class="sub__lede">Placeholder for how Memory Anchors generalize to vision-language-action models.</p>
+          <p class="sub__lede">All the results so far have been reported on a diffusion policy trained from scratch. We verify that Memory Anchors still impact larger, pretrained models like the &pi;<sub>0.5</sub> VLA. Complementary to the findings in <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">this paper</a>, we did observe that VLAs have high task retention with sufficient memory budgets. However, at the low ER buffer sizes and full finetuning used in our experiments, the &pi;<sub>0.5</sub> VLA performed <i>worse</i> than from-scratch diffusion policy. Under these conditions, adding more Memory Anchors was beneficial. Removing Memory Anchors also degraded performance. Click through the success rate matrices to see the different conditions, and refer to the table for results. </p>
+          <div class="stagesplit stagesplit--gap">
+            <div>
+              <p class="splitcol__title">Qualitative Example</p>
+              <div class="stageplayer" data-vla-viewer>
+                <div class="viewer-toggle" role="group" aria-label="Success matrix selection">
+                  <button type="button" class="viewer-toggle__btn" data-image="rander" data-caption="RandER: keeping behind 1% of past data in the ER buffer leads to low task retention." aria-pressed="true">RandER</button>
+                  <button type="button" class="viewer-toggle__btn" data-image="anchors" data-caption="AnchorER: enriching the buffer with Memory Anchors raises overall task retention (darker colors in the off-diagonals)." aria-pressed="false">AnchorER</button>
+                  <button type="button" class="viewer-toggle__btn" data-image="high_buffer" data-caption="RandER with Large Buffer: using the same 1000 memories/task setting as previous work validates that a VLA can reach near perfect retention. However, at this budget, it is also possible with a diffusion policy (see Sequential Task Learning)." aria-pressed="false">High Buffer</button>
+                </div>
+                <div class="stageplayer__frame">
+                  <img id="vla-matrix-img" src="assets/results/rander.png" alt="Continual learning success matrix for RandER with a 1% replay buffer, &pi;0.5 VLA">
+                  <p class="stageplayer__credit stageplayer__credit--center" id="vla-matrix-caption">RandER: keeping behind 1% of past data in the ER buffer leads to low task retention.</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p class="splitcol__title">VLA Continual Learning Result</p>
+              <div class="vlatables">
+                <div class="vlatable">
+                  <p class="vlatable__caption">Reducing Memory Anchors &mdash; &pi;<sub>0.5</sub> VLA</p>
+                  <table class="vlatable__table">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>RandER</th>
+                        <th>&minus;5% Anchors</th>
+                        <th>&minus;10% Anchors</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Avg. NBT &darr;</td>
+                        <td><strong>0.12 &plusmn; 0.02</strong></td>
+                        <td>0.20 &plusmn; 0.04</td>
+                        <td>0.35 &plusmn; 0.04</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="vlatable">
+                  <p class="vlatable__caption">Enriching Memory Anchors &mdash; &pi;<sub>0.5</sub> VLA</p>
+                  <table class="vlatable__table">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>RandER</th>
+                        <th>AnchorER 10%</th>
+                        <th>AnchorER 20%</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Avg. NBT &darr;</td>
+                        <td>0.45 &plusmn; 0.05</td>
+                        <td><strong>0.35 &plusmn; 0.04</strong></td>
+                        <td><strong>0.36 &plusmn; 0.04</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="sub" id="impact-jar-opening">
           <h3 class="sub__title">Real World: Jar Opening Task</h3>

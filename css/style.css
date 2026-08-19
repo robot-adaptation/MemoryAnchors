@@ -291,6 +291,22 @@ section[id] { scroll-margin-top: 80px; }
   color: var(--bg); background: var(--primary); border-color: var(--primary);
 }
 
+/* same pill-toggle look as .settings-toggle, kept as its own class: main.js's
+   initStagePlayer() queries .settings-toggle__btn globally (not scoped to its
+   own panel), so reusing that class for an unrelated image switcher would
+   pull it into the ER-buffer-size handler */
+.viewer-toggle { display: flex; flex-wrap: wrap; gap: 8px; }
+.viewer-toggle__btn {
+  font-family: var(--ff-mono); font-size: 12px; letter-spacing: var(--ls-meta); text-transform: uppercase;
+  padding: 7px 14px; border-radius: var(--radius-pill);
+  border: 1px solid var(--border); background: var(--surface); color: var(--fg-dim);
+  cursor: pointer; transition: background .18s var(--ease), border-color .18s var(--ease), color .18s var(--ease);
+}
+.viewer-toggle__btn:hover { color: var(--fg); background: var(--surface-2); }
+.viewer-toggle__btn[aria-pressed="true"] {
+  color: var(--bg); background: var(--primary); border-color: var(--primary);
+}
+
 /* link buttons */
 .links { display: flex; flex-wrap: wrap; gap: 9px; margin-top: clamp(26px, 4vw, 40px); }
 .btn {
@@ -363,6 +379,12 @@ section[id] { scroll-margin-top: 80px; }
 @media (max-width: 760px) { .stagesplit { grid-template-columns: 1fr; } }
 .stagesplit--gap { margin-top: clamp(32px, 5vw, 48px); }
 .stagesplit__prose { padding-top: clamp(2px, .6vw, 10px); }
+/* small heading for a stagesplit column, used when a pair of columns needs
+   its own title to visually balance against its sibling */
+.splitcol__title {
+  font-size: 17px; font-weight: 600; color: var(--fg);
+  letter-spacing: -.006em; margin: 0 0 14px;
+}
 
 .stageplayer { max-width: var(--col-wide); }
 .stageplayer--full { width: 100%; max-width: none; margin-top: clamp(20px, 3vw, 32px); }
@@ -633,6 +655,32 @@ section[id] { scroll-margin-top: 80px; }
 }
 .nbt-readout__value { font-family: var(--ff-mono); font-weight: 700; color: var(--primary-ink); }
 
+/* ---------- results table: booktabs-style (rule above header, rule under
+   header, rule at foot, no vertical rules), theme-aware since it's plain
+   text/borders rather than a fixed-light media frame ---------- */
+.vlatables { display: flex; flex-direction: column; gap: clamp(26px, 3.6vw, 36px); }
+.vlatable__caption {
+  font-size: 15px; font-weight: 600; color: var(--fg); text-align: center;
+  line-height: 1.45; margin: 0 0 12px;
+}
+.vlatable__table {
+  width: 100%; border-collapse: collapse; font-size: 15px;
+  border-top: 1px solid var(--border);
+}
+.vlatable__table th, .vlatable__table td {
+  padding: 8px 10px; text-align: center; font-variant-numeric: tabular-nums;
+}
+.vlatable__table thead th {
+  font-weight: 600; color: var(--fg); font-size: 13.5px;
+  border-bottom: 1px solid var(--border);
+}
+.vlatable__table tbody td { color: var(--fg-muted); }
+.vlatable__table tbody tr:last-child td { border-bottom: 1px solid var(--border); }
+.vlatable__table th:first-child, .vlatable__table td:first-child {
+  text-align: left; color: var(--fg-dim); font-weight: 500;
+}
+.vlatable__table strong { color: var(--primary-ink); font-weight: 700; }
+
 /* ---------- results bar chart: grouped bars in a fixed light frame (same
    convention as .stageplayer__frame / .orderings__frame — the SVG is authored
    with dark ink on a light ground, so the frame stays light in both themes)
@@ -643,16 +691,17 @@ section[id] { scroll-margin-top: 80px; }
   padding: clamp(16px, 2.6vw, 28px);
 }
 .barchart__svg { width: 100%; height: auto; display: block; }
+/* sits inside the frame's fixed-light background (see .barchart__frame
+   comment), so it needs the fixed dark-ink tone rather than a theme var */
 .barchart__legend {
   display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px;
-  margin-top: 16px;
-  font-family: var(--ff-mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta);
-  text-transform: uppercase; color: var(--fg-dim);
+  margin-top: 14px;
+  font-family: var(--ff-body); font-size: var(--fs-fine); color: var(--media-fg);
 }
-.barchart__legend-item { display: inline-flex; align-items: center; gap: 7px; }
-.barchart__swatch { width: 10px; height: 10px; border-radius: 2px; flex: none; }
-.barchart__swatch-group { display: inline-flex; height: 10px; border-radius: 2px; overflow: hidden; flex: none; }
-.barchart__swatch-group span { width: 7px; height: 100%; }
+.barchart__legend-item { display: inline-flex; align-items: center; gap: 8px; }
+.barchart__swatch { width: 15px; height: 15px; border-radius: 3px; flex: none; }
+.barchart__swatch-group { display: inline-flex; height: 15px; border-radius: 3px; overflow: hidden; flex: none; }
+.barchart__swatch-group span { width: 10px; height: 100%; }
 .barchart__caption { margin-top: 10px; font-size: var(--fs-fine); color: var(--fg-faint); text-align: center; }
 
 /* ---------- card grid ---------- */

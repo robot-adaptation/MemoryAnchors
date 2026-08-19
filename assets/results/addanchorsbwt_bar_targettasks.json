@@ -1,0 +1,95 @@
+{
+  "metric": "bwt",
+  "suffix": "_targettasks",
+  "x_labels": [
+    "Libero10",
+    "LiberoGoal",
+    "LiberoObject",
+    "LiberoSpatial",
+    "Average"
+  ],
+  "x_tick_labels": [
+    "Long",
+    "Goal",
+    "Object",
+    "Spatial",
+    "Average"
+  ],
+  "methods": [
+    {
+      "label": "ReRandERStandardSuite_001prop",
+      "by_suite": {
+        "Libero10": {
+          "mean": 0.3563636363636364,
+          "sem": 0.06448781036715709
+        },
+        "LiberoGoal": {
+          "mean": 0.44800000000000006,
+          "sem": 0.06388879227045834
+        },
+        "LiberoObject": {
+          "mean": 0.3942857142857144,
+          "sem": 0.08288997707394861
+        },
+        "LiberoSpatial": {
+          "mean": 0.32999999999999996,
+          "sem": 0.02670830083201352
+        },
+        "Average": {
+          "mean": 0.38216233766233765,
+          "sem": 0.02560608082393001
+        }
+      }
+    },
+    {
+      "label": "SelectiveERStandardSuite_1090_001prop",
+      "by_suite": {
+        "Libero10": {
+          "mean": 0.11090909090909093,
+          "sem": 0.07470492919668013
+        },
+        "LiberoGoal": {
+          "mean": 0.20600000000000002,
+          "sem": 0.09480037505786097
+        },
+        "LiberoObject": {
+          "mean": 0.04571428571428572,
+          "sem": 0.07273098320775917
+        },
+        "LiberoSpatial": {
+          "mean": 0.1466666666666667,
+          "sem": 0.11427063392568441
+        },
+        "Average": {
+          "mean": 0.12732251082251084,
+          "sem": 0.03353312594431302
+        }
+      }
+    },
+    {
+      "label": "SelectiveERStandardSuite_8020_001prop",
+      "by_suite": {
+        "Libero10": {
+          "mean": 0.1109090909090909,
+          "sem": 0.05561972419032897
+        },
+        "LiberoGoal": {
+          "mean": 0.25399999999999995,
+          "sem": 0.07519160709665525
+        },
+        "LiberoObject": {
+          "mean": 0.21142857142857144,
+          "sem": 0.09883677191710177
+        },
+        "LiberoSpatial": {
+          "mean": 0.053333333333333344,
+          "sem": 0.06565905201197404
+        },
+        "Average": {
+          "mean": 0.1574177489177489,
+          "sem": 0.045863857420382584
+        }
+      }
+    }
+  ]
+}

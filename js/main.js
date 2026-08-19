@@ -116,6 +116,32 @@
     else setTimeout(prefetchStageAssets, 1000);
   }
 
+  /* the VLA success-matrix switcher: same pill-toggle interaction as
+     initStagePlayer's ER-buffer picker, but scoped to its own [data-vla-viewer]
+     container (rather than a global .settings-toggle__btn query) so it can't
+     get pulled into that unrelated handler */
+  function initVlaViewer() {
+    var root = document.querySelector('[data-vla-viewer]');
+    if (!root) return;
+    var img = root.querySelector('#vla-matrix-img');
+    var caption = root.querySelector('#vla-matrix-caption');
+    var btns = root.querySelectorAll('.viewer-toggle__btn');
+    if (!img || !btns.length) return;
+
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (btn.getAttribute('aria-pressed') === 'true') return;
+        btns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        btn.setAttribute('aria-pressed', 'true');
+        var key = btn.getAttribute('data-image');
+        var text = btn.getAttribute('data-caption');
+        img.src = 'assets/results/' + key + '.png';
+        img.alt = 'Continual learning success matrix: ' + text;
+        if (caption) caption.textContent = text;
+      });
+    });
+  }
+
   /* keeps a group of [data-video-sync] videos playing side by side in lockstep:
      starts them together once all are loaded, restarts the whole group the
      moment any one clip ends (so mismatched lengths don't drift apart), and
@@ -408,6 +434,7 @@
     initReveal();
     initBibCopy();
     initStagePlayer();
+    initVlaViewer();
     initVideoSync();
     initOverlapDemo();
     initAutoScrollTracks();
