@@ -53,7 +53,6 @@
       <a data-level="2" data-part="impact" href="#impact-adding-more">Adding More Memory Anchors</a>
       <a data-level="2" data-part="impact" href="#impact-vla">On VLA models</a>
       <a data-level="2" data-part="impact" href="#impact-jar-opening">Real World: Jar Opening Task</a>
-      <a data-level="2" data-part="impact" href="#impact-cross-task">Real World: Cross-Task Transfer</a>
       <a data-level="2" data-part="impact" href="#impact-sweater-folding">Real World: Sweater Folding Task</a>
       <a data-level="1" href="#bibtex">BibTeX</a>
     </nav>
@@ -834,7 +833,7 @@
         </div>
         <div class="sub" id="impact-jar-opening">
           <h3 class="sub__title">Real World: Jar Opening Task</h3>
-          <p class="sub__lede">The simulated LIBERO benchmark shows that Memory Anchors are effective in long sequences of eclectic learning tasks, but what about on a real robot? To investigate, we design a real robot task suite, <b>OpenJar</b>. It consists of three jar opening tasks on three different jars that look similar but require different strategies: counterclockwise, clockwise, and lift. Unlike the LIBERO benchmark that has only a few decision points, <b>OpenJar</b> requires the robot to make a decision every time the gripper is moving towards the jar. For the screw-type jars, this happens many times during the task. </p>
+          <p class="sub__lede">The simulated LIBERO benchmark shows that Memory Anchors are effective in long sequences of eclectic learning tasks, but what about on a real robot? To investigate, we design a real robot task suite, <b>OpenJar</b>. It consists of three jar opening tasks on three different jars that look similar but require different strategies: <code>Counterclockwise</code>, <code>Clockwise</code>, and <code>Lift</code>. Unlike the LIBERO benchmark that has only a few decision points, <b>OpenJar</b> requires the robot to make a decision every time the gripper is moving towards the jar. For the screw-type jars, this happens many times during the task. </p>
           <div class="jargrid">
             <div class="jarcard">
               <video class="jarcard__video" src="assets/results/task1.mp4" autoplay muted loop playsinline></video>
@@ -852,7 +851,7 @@
               <p class="jarcard__text">Open the jar by directly lifting the lid.</p>
             </div>
           </div>
-          <p class="sub__lede">asdf asdf asdf asdf asdf asdf asdf asdf asdf asdfasdf sadf asdf asdf asdf asdf asdf asdf d f</p>
+          <p class="sub__lede sub__lede--gap">We train a diffusion policy on the three jars in sequence and use either RandER or AnchorER. Because of the multiple decision points and the visually similar appearances, the performance differences between RandER and AnchorER are more pronounced than LIBERO. The videos below show a representative rollout from each of the evaluated tasks in the training order. Hover over a clip to see the success rates and additional details.</p>
           <div class="taskgrid-wrap" data-taskgrid>
             <div class="taskgrids">
           <div>
@@ -861,12 +860,12 @@
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:1;">Eval Task 3</span>
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:2;">Eval Task 2</span>
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:3;">Eval Task 1</span>
-              <video class="taskgrid__video" style="grid-column:4; grid-row:1;" src="assets/results/fp_ours_3_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="3" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 3."></video>
-              <video class="taskgrid__video" style="grid-column:3; grid-row:2;" src="assets/results/fp_ours_2_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="2" data-rate="—" data-note="Trained through Task 2, evaluated on Task 2."></video>
-              <video class="taskgrid__video" style="grid-column:4; grid-row:2;" src="assets/results/fp_ours_2_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 2."></video>
-              <video class="taskgrid__video" style="grid-column:2; grid-row:3;" src="assets/results/fp_ours_1_1.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="1" data-rate="—" data-note="Trained through Task 1, evaluated on Task 1."></video>
-              <video class="taskgrid__video" style="grid-column:3; grid-row:3;" src="assets/results/fp_ours_1_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="2" data-rate="—" data-note="Trained through Task 2, evaluated on Task 1."></video>
-              <video class="taskgrid__video" style="grid-column:4; grid-row:3;" src="assets/results/fp_ours_1_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 1."></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:1;" src="assets/results/fp_ours_3_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="3" data-train="3" data-rate="19/20 (95%)" data-note="As expected, the current policy is able to learn the new task well."></video>
+              <video class="taskgrid__video" style="grid-column:3; grid-row:2;" src="assets/results/fp_ours_2_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="2" data-rate="16/20 (80%)" data-note="As expected, the current policy is able to learn the new task well."></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:2;" src="assets/results/fp_ours_2_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="3" data-rate="13/20 (65%)" data-note="Anchor Memories ensure that the previous skill is retained even as a conflicting task is learned. The failure modes include lifting the Clockwise jar (catastrophic forgetting)."></video>
+              <video class="taskgrid__video" style="grid-column:2; grid-row:3;" src="assets/results/fp_ours_1_1.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="1" data-rate="20/20 (100%)" data-note="As expected, the current policy is able to learn the new task well."></video>
+              <video class="taskgrid__video" style="grid-column:3; grid-row:3;" src="assets/results/fp_ours_1_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="2" data-rate="15/20 (75%)" data-note="Anchor Memories ensure that the previous skill is retained even as a conflicting task is learned. The failure modes include trying to rotate the Counterclockwise jar the wrong way (catastrophic forgetting)"></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:3;" src="assets/results/fp_ours_1_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="3" data-rate="8/20 (40%)" data-note="Anchor Memories ensure that the previous skill is retained even as a conflicting task is learned. Due to the highly conflicting Lift task, catastrophic forgetting still occurs even with Anchor Memories. The failure modes include lifting the Counterclockwise jar. "></video>
               <span class="taskgrid__collabel" style="grid-column:2; grid-row:4;">Train Task 1</span>
               <span class="taskgrid__collabel" style="grid-column:3; grid-row:4;">Train Task 2</span>
               <span class="taskgrid__collabel" style="grid-column:4; grid-row:4;">Train Task 3</span>
@@ -878,12 +877,12 @@
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:1;">Eval Task 3</span>
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:2;">Eval Task 2</span>
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:3;">Eval Task 1</span>
-              <video class="taskgrid__video" style="grid-column:4; grid-row:1;" src="assets/results/fp_base_3_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="3" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 3."></video>
-              <video class="taskgrid__video" style="grid-column:3; grid-row:2;" src="assets/results/fp_base_2_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="2" data-rate="—" data-note="Trained through Task 2, evaluated on Task 2."></video>
-              <video class="taskgrid__video" style="grid-column:4; grid-row:2;" src="assets/results/fp_base_2_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 2."></video>
-              <video class="taskgrid__video" style="grid-column:2; grid-row:3;" src="assets/results/fp_base_1_1.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="1" data-rate="—" data-note="Trained through Task 1, evaluated on Task 1."></video>
-              <video class="taskgrid__video" style="grid-column:3; grid-row:3;" src="assets/results/fp_base_1_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="2" data-rate="—" data-note="Trained through Task 2, evaluated on Task 1."></video>
-              <video class="taskgrid__video" style="grid-column:4; grid-row:3;" src="assets/results/fp_base_1_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 1."></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:1;" src="assets/results/fp_base_3_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="3" data-train="3" data-rate="18/20 (90%)" data-note="As expected, the current policy is able to learn the new task well."></video>
+              <video class="taskgrid__video" style="grid-column:3; grid-row:2;" src="assets/results/fp_base_2_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="2" data-rate="5/20 (25%)" data-note="Surprisingly, RandER struggles to learn a second task and instead generalizes backward to the first task. We also observe this phenomenon on the second task suite (see next section). Our best explanation is that the observation overlap between the jars is very high, making it difficult to change the policy that has already converged on the first task. "></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:2;" src="assets/results/fp_base_2_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="3" data-rate="2/20 (10%)" data-note="Without Anchor Memories, the model fails to retain the second Clockwise task after training on Lift and instead tries to lift all jars."></video>
+              <video class="taskgrid__video" style="grid-column:2; grid-row:3;" src="assets/results/fp_base_1_1.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="1" data-rate="20/20 (100%)" data-note="As expected, the current policy is able to learn the new task well."></video>
+              <video class="taskgrid__video" style="grid-column:3; grid-row:3;" src="assets/results/fp_base_1_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="2" data-rate="16/20 (80%)" data-note="Consistent with our observation in Train: 2, Eval: 2, the RandER is able to remember the first task at the cost of not learning the second task."></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:3;" src="assets/results/fp_base_1_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="3" data-rate="3/20 (15%)" data-note="Without Anchor Memories, the model fails to retain the first Counterclockwise task after training on Lift and instead tries to lift all jars."></video>
               <span class="taskgrid__collabel" style="grid-column:2; grid-row:4;">Train Task 1</span>
               <span class="taskgrid__collabel" style="grid-column:3; grid-row:4;">Train Task 2</span>
               <span class="taskgrid__collabel" style="grid-column:4; grid-row:4;">Train Task 3</span>
@@ -891,9 +890,13 @@
           </div>
             </div>
             <div class="framestrip__detail" data-taskgrid-detail>
-              <p class="framestrip__detail-label" data-taskgrid-detail-label>Cross-Task Transfer</p>
-              <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover or focus a clip to see its eval task, training coverage, and success rate.</p>
+              <p class="framestrip__detail-label" data-taskgrid-detail-label>OpenJar Continual Learning Task</p>
+              <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover over a clip to see the corresponding evaluation success.</p>
             </div>
+          </div>
+          <p class="sub__lede sub__lede--gap">The summary figure below shows the success rates of the methods and baselines. It also includes further visualizations of catastrophic forgetting on the OpenJar suite.</p>
+          <div class="realrobot__frame">
+            <img class="realrobot__img" src="assets/results/realrobot.png" alt="Real-robot setup for the OpenJar continual learning task.">
           </div>
         </div>
         <div class="sub" id="impact-sweater-folding">

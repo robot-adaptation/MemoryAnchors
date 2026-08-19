@@ -433,6 +433,15 @@ section[id] { scroll-margin-top: 80px; }
   background: var(--bg-raise);
 }
 .overlapdemo__img { width: 100%; height: auto; display: block; background: var(--media-bg); border-radius: var(--radius); }
+
+/* plain photo with a fixed-light backdrop, so it stays on white rather than
+   the near-black night-theme page background — no caption needed */
+.realrobot__frame {
+  margin-top: 20px;
+  background: var(--media-bg); border: 1px solid var(--border-faint); border-radius: var(--radius);
+  padding: clamp(10px, 2vw, 20px);
+}
+.realrobot__img { width: 100%; height: auto; display: block; border-radius: var(--radius); }
 .overlapdemo__info { text-align: center; }
 .overlapdemo__label { font-size: 17px; font-weight: 600; color: var(--fg); margin-bottom: .35em; }
 .overlapdemo__text { font-size: 15px; line-height: 1.55; color: var(--fg-muted); margin-bottom: 12px; }

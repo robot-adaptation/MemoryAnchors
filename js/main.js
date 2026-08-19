@@ -357,8 +357,8 @@
      data-method/data-eval/data-train/data-rate/data-note rather than a
      figcaption tooltip */
   function initTaskGridDetail() {
-    var DEFAULT_LABEL = 'Cross-Task Transfer';
-    var DEFAULT_TEXT = 'Hover or focus a clip to see its eval task, training coverage, and success rate.';
+    var DEFAULT_LABEL = 'OpenJar Continual Learning Task';
+    var DEFAULT_TEXT = 'Hover over a clip to see the corresponding evaluation success.';
 
     document.querySelectorAll('[data-taskgrid]').forEach(function (root) {
       var detail = root.querySelector('[data-taskgrid-detail]');
