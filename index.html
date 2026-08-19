@@ -53,6 +53,7 @@
       <a data-level="2" data-part="impact" href="#impact-adding-more">Adding More Memory Anchors</a>
       <a data-level="2" data-part="impact" href="#impact-vla">On VLA models</a>
       <a data-level="2" data-part="impact" href="#impact-jar-opening">Real World: Jar Opening Task</a>
+      <a data-level="2" data-part="impact" href="#impact-cross-task">Real World: Cross-Task Transfer</a>
       <a data-level="2" data-part="impact" href="#impact-sweater-folding">Real World: Sweater Folding Task</a>
       <a data-level="1" href="#bibtex">BibTeX</a>
     </nav>
@@ -759,15 +760,16 @@
         </div>
         <div class="sub" id="impact-vla">
           <h3 class="sub__title">On VLA models</h3>
-          <p class="sub__lede">All the results so far have been reported on a diffusion policy trained from scratch. We verify that Memory Anchors still impact larger, pretrained models like the &pi;<sub>0.5</sub> VLA. Complementary to the findings in <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">this paper</a>, we did observe that VLAs have high task retention with sufficient memory budgets. However, at the low ER buffer sizes and full finetuning used in our experiments, the &pi;<sub>0.5</sub> VLA performed <i>worse</i> than from-scratch diffusion policy. Under these conditions, adding more Memory Anchors was beneficial. Removing Memory Anchors also degraded performance. Click through the success rate matrices to see the different conditions, and refer to the table for results. </p>
+          <p class="sub__lede">All the results so far have been reported on a diffusion policy trained from scratch. We verify that Memory Anchors still impact larger, pretrained models like the &pi;<sub>0.5</sub> VLA. Complementary to the findings in <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">this paper</a>, we did observe that VLAs have near perfect task retention with sufficient memory budgets. However, at the low ER buffer sizes and full finetuning used in our experiments, the &pi;<sub>0.5</sub> VLA actually performed <i>worse</i> than from-scratch diffusion policy. Under these conditions, adding more Memory Anchors was beneficial. Removing Memory Anchors also further degraded performance. Click through the success rate matrices to see how buffer sizes and Memory Anchors affect performance, and refer to the table for results. </p>
+          <!-- TODO: I still need to fix the two column issue; it doesn't look very good -->
           <div class="stagesplit stagesplit--gap">
             <div>
               <p class="splitcol__title">Qualitative Example</p>
               <div class="stageplayer" data-vla-viewer>
                 <div class="viewer-toggle" role="group" aria-label="Success matrix selection">
-                  <button type="button" class="viewer-toggle__btn" data-image="rander" data-caption="RandER: keeping behind 1% of past data in the ER buffer leads to low task retention." aria-pressed="true">RandER</button>
-                  <button type="button" class="viewer-toggle__btn" data-image="anchors" data-caption="AnchorER: enriching the buffer with Memory Anchors raises overall task retention (darker colors in the off-diagonals)." aria-pressed="false">AnchorER</button>
-                  <button type="button" class="viewer-toggle__btn" data-image="high_buffer" data-caption="RandER with Large Buffer: using the same 1000 memories/task setting as previous work validates that a VLA can reach near perfect retention. However, at this budget, it is also possible with a diffusion policy (see Sequential Task Learning)." aria-pressed="false">High Buffer</button>
+                  <button type="button" class="viewer-toggle__btn" data-image="rander" data-caption="RandER: keeping behind 1% of past data in the ER buffer leads to low task retention." aria-pressed="true">RandER 1%</button>
+                  <button type="button" class="viewer-toggle__btn" data-image="anchors" data-caption="AnchorER: enriching the buffer with Memory Anchors raises overall task retention (darker colors in the off-diagonals)." aria-pressed="false">AnchorER 1%</button>
+                  <button type="button" class="viewer-toggle__btn" data-image="high_buffer" data-caption="RandER with Large Buffer: using the 1000 memories/task (~20% past data) validates that a VLA can reach near perfect retention." aria-pressed="false">Large Buffer RandER 20%</button>
                 </div>
                 <div class="stageplayer__frame">
                   <img id="vla-matrix-img" src="assets/results/rander.png" alt="Continual learning success matrix for RandER with a 1% replay buffer, &pi;0.5 VLA">
@@ -776,7 +778,7 @@
               </div>
             </div>
             <div>
-              <p class="splitcol__title">VLA Continual Learning Result</p>
+              <p class="splitcol__title">VLA Continual Learning Results</p>
               <div class="vlatables">
                 <div class="vlatable">
                   <p class="vlatable__caption">Reducing Memory Anchors &mdash; &pi;<sub>0.5</sub> VLA</p>
@@ -823,10 +825,76 @@
               </div>
             </div>
           </div>
+          <details class="disclosure">
+            <summary class="disclosure__summary">FAQ &middot; Why are the RandER numbers different in the two experiments?</summary>
+            <div class="disclosure__body">
+              <p>Consistent with our experiment setup on diffusion policy, we use a 1% buffer size for the addition experiment and a 1000 total buffer for the subtraction experiment. We use the larger, fixed-size buffer for the subtraction experiment because RandER does better, showing us that memory anchors are still important even at a larger budget. Likewise, we use a smaller buffer on the addition experiment to show that Memory Anchors can improve performance even with limited data. This finding is consistent between VLAs and diffusion policies.</p>
+            </div>
+          </details>
         </div>
         <div class="sub" id="impact-jar-opening">
           <h3 class="sub__title">Real World: Jar Opening Task</h3>
-          <p class="sub__lede">Placeholder for the real-robot jar opening task results.</p>
+          <p class="sub__lede">The simulated LIBERO benchmark shows that Memory Anchors are effective in long sequences of eclectic learning tasks, but what about on a real robot? To investigate, we design a real robot task suite, <b>OpenJar</b>. It consists of three jar opening tasks on three different jars that look similar but require different strategies: counterclockwise, clockwise, and lift. Unlike the LIBERO benchmark that has only a few decision points, <b>OpenJar</b> requires the robot to make a decision every time the gripper is moving towards the jar. For the screw-type jars, this happens many times during the task. </p>
+          <div class="jargrid">
+            <div class="jarcard">
+              <video class="jarcard__video" src="assets/results/task1.mp4" autoplay muted loop playsinline></video>
+              <p class="jarcard__title">Task 1: Counterclockwise</p>
+              <p class="jarcard__text">Open the jar by rotating the lid counterclockwise and then lifting.</p>
+            </div>
+            <div class="jarcard">
+              <video class="jarcard__video" src="assets/results/task2.mp4" autoplay muted loop playsinline></video>
+              <p class="jarcard__title">Task 2: Clockwise</p>
+              <p class="jarcard__text">Open the jar by rotating the lid clockwise and then lifting.</p>
+            </div>
+            <div class="jarcard">
+              <video class="jarcard__video" src="assets/results/task3.mp4" autoplay muted loop playsinline></video>
+              <p class="jarcard__title">Task 3: Lift</p>
+              <p class="jarcard__text">Open the jar by directly lifting the lid.</p>
+            </div>
+          </div>
+          <p class="sub__lede">asdf asdf asdf asdf asdf asdf asdf asdf asdf asdfasdf sadf asdf asdf asdf asdf asdf asdf d f</p>
+          <div class="taskgrid-wrap" data-taskgrid>
+            <div class="taskgrids">
+          <div>
+            <p class="taskgrids__title" style="color:var(--palette-orange)">AnchorER (Ours)</p>
+            <div class="taskgrid taskgrid--ours">
+              <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:1;">Eval Task 3</span>
+              <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:2;">Eval Task 2</span>
+              <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:3;">Eval Task 1</span>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:1;" src="assets/results/fp_ours_3_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="3" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 3."></video>
+              <video class="taskgrid__video" style="grid-column:3; grid-row:2;" src="assets/results/fp_ours_2_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="2" data-rate="—" data-note="Trained through Task 2, evaluated on Task 2."></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:2;" src="assets/results/fp_ours_2_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 2."></video>
+              <video class="taskgrid__video" style="grid-column:2; grid-row:3;" src="assets/results/fp_ours_1_1.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="1" data-rate="—" data-note="Trained through Task 1, evaluated on Task 1."></video>
+              <video class="taskgrid__video" style="grid-column:3; grid-row:3;" src="assets/results/fp_ours_1_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="2" data-rate="—" data-note="Trained through Task 2, evaluated on Task 1."></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:3;" src="assets/results/fp_ours_1_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 1."></video>
+              <span class="taskgrid__collabel" style="grid-column:2; grid-row:4;">Train Task 1</span>
+              <span class="taskgrid__collabel" style="grid-column:3; grid-row:4;">Train Task 2</span>
+              <span class="taskgrid__collabel" style="grid-column:4; grid-row:4;">Train Task 3</span>
+            </div>
+          </div>
+          <div>
+            <p class="taskgrids__title" style="color:#338467">RandER (Baseline)</p>
+            <div class="taskgrid taskgrid--base">
+              <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:1;">Eval Task 3</span>
+              <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:2;">Eval Task 2</span>
+              <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:3;">Eval Task 1</span>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:1;" src="assets/results/fp_base_3_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="3" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 3."></video>
+              <video class="taskgrid__video" style="grid-column:3; grid-row:2;" src="assets/results/fp_base_2_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="2" data-rate="—" data-note="Trained through Task 2, evaluated on Task 2."></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:2;" src="assets/results/fp_base_2_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 2."></video>
+              <video class="taskgrid__video" style="grid-column:2; grid-row:3;" src="assets/results/fp_base_1_1.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="1" data-rate="—" data-note="Trained through Task 1, evaluated on Task 1."></video>
+              <video class="taskgrid__video" style="grid-column:3; grid-row:3;" src="assets/results/fp_base_1_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="2" data-rate="—" data-note="Trained through Task 2, evaluated on Task 1."></video>
+              <video class="taskgrid__video" style="grid-column:4; grid-row:3;" src="assets/results/fp_base_1_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="3" data-rate="—" data-note="Trained through Task 3, evaluated on Task 1."></video>
+              <span class="taskgrid__collabel" style="grid-column:2; grid-row:4;">Train Task 1</span>
+              <span class="taskgrid__collabel" style="grid-column:3; grid-row:4;">Train Task 2</span>
+              <span class="taskgrid__collabel" style="grid-column:4; grid-row:4;">Train Task 3</span>
+            </div>
+          </div>
+            </div>
+            <div class="framestrip__detail" data-taskgrid-detail>
+              <p class="framestrip__detail-label" data-taskgrid-detail-label>Cross-Task Transfer</p>
+              <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover or focus a clip to see its eval task, training coverage, and success rate.</p>
+            </div>
+          </div>
         </div>
         <div class="sub" id="impact-sweater-folding">
           <h3 class="sub__title">Real World: Sweater Folding Task</h3>

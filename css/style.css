@@ -297,7 +297,7 @@ section[id] { scroll-margin-top: 80px; }
    pull it into the ER-buffer-size handler */
 .viewer-toggle { display: flex; flex-wrap: wrap; gap: 8px; }
 .viewer-toggle__btn {
-  font-family: var(--ff-mono); font-size: 12px; letter-spacing: var(--ls-meta); text-transform: uppercase;
+  font-family: var(--ff-body); font-size: 13.5px;
   padding: 7px 14px; border-radius: var(--radius-pill);
   border: 1px solid var(--border); background: var(--surface); color: var(--fg-dim);
   cursor: pointer; transition: background .18s var(--ease), border-color .18s var(--ease), color .18s var(--ease);
@@ -576,6 +576,54 @@ section[id] { scroll-margin-top: 80px; }
   letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg); text-align: center;
 }
 @media (max-width: 480px) { .videocompare__media { flex-direction: column; } }
+
+/* ---------- three-up video grid: a looping demo clip per card, with its
+   own title + description underneath (no scrubbar — just autoplay/loop) ---------- */
+.jargrid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.4vw, 28px); margin-top: 22px;
+}
+@media (max-width: 760px) { .jargrid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; } }
+.jarcard__video {
+  width: 100%; height: auto; display: block;
+  background: var(--muted); border: 1px solid var(--border-faint); border-radius: var(--radius);
+}
+.jarcard__title { margin: 14px 0 6px; font-size: 17px; font-weight: 600; color: var(--fg); text-align: center; }
+.jarcard__text { margin: 0; font-size: 15px; line-height: 1.55; color: var(--fg-muted); text-align: center; }
+
+/* ---------- cross-task video matrix: two side-by-side triangular grids
+   (one per method), row = eval task, column = train task, present only
+   where train >= eval (a task can only be checked once it or a later task
+   has been trained). Hover/focus enlarges a clip and drives the shared
+   info box below, mirroring .framestrip's carousel + detail-box pattern. ---------- */
+.taskgrids {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 48px);
+  margin-top: 22px;
+}
+@media (max-width: 640px) { .taskgrids { grid-template-columns: 1fr; gap: 40px; } }
+.taskgrids__title { font-size: 17px; font-weight: 700; margin: 0 0 16px; text-align: center; }
+.taskgrid {
+  display: grid; grid-template-columns: auto repeat(3, 1fr); grid-template-rows: repeat(3, 1fr) auto;
+  gap: 10px; align-items: center; justify-items: center;
+}
+.taskgrid__rowlabel {
+  font-size: 12px; color: var(--fg-dim); white-space: nowrap;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+}
+.taskgrid__collabel { font-size: 12px; color: var(--fg-dim); margin-top: 4px; white-space: nowrap; }
+.taskgrid__video {
+  width: 100%; height: auto; display: block; border-radius: var(--radius);
+  border: 2px solid var(--border-faint); background: var(--muted); cursor: pointer;
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease);
+}
+.taskgrid__video:hover, .taskgrid__video:focus-visible {
+  transform: scale(1.9); position: relative; z-index: 5;
+  box-shadow: 0 14px 34px rgba(0,0,0,.32); outline: none;
+}
+.taskgrid--ours .taskgrid__video { border-color: color-mix(in srgb, var(--palette-orange) 50%, var(--border-faint)); }
+.taskgrid--ours .taskgrid__video:hover, .taskgrid--ours .taskgrid__video:focus-visible { border-color: var(--palette-orange); }
+.taskgrid--base .taskgrid__video { border-color: color-mix(in srgb, #338467 50%, var(--border-faint)); }
+.taskgrid--base .taskgrid__video:hover, .taskgrid--base .taskgrid__video:focus-visible { border-color: #338467; }
 
 /* shared scrub bar: two coloured segments (state similarity), a dimming
    overlay marks what's already played, a handle marks the exact position.

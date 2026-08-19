@@ -352,6 +352,49 @@
     });
   }
 
+  /* the cross-task video matrix's shared info box: same show/showDefault
+     pattern as initFramestripDetail, but keyed off each clip's
+     data-method/data-eval/data-train/data-rate/data-note rather than a
+     figcaption tooltip */
+  function initTaskGridDetail() {
+    var DEFAULT_LABEL = 'Cross-Task Transfer';
+    var DEFAULT_TEXT = 'Hover or focus a clip to see its eval task, training coverage, and success rate.';
+
+    document.querySelectorAll('[data-taskgrid]').forEach(function (root) {
+      var detail = root.querySelector('[data-taskgrid-detail]');
+      var labelEl = detail && detail.querySelector('[data-taskgrid-detail-label]');
+      var textEl = detail && detail.querySelector('[data-taskgrid-detail-text]');
+      var videos = root.querySelectorAll('.taskgrid__video');
+      if (!detail || !videos.length) return;
+
+      function show(v) {
+        var method = v.getAttribute('data-method');
+        var evalTask = v.getAttribute('data-eval');
+        var trainTask = v.getAttribute('data-train');
+        var rate = v.getAttribute('data-rate');
+        var note = v.getAttribute('data-note') || '';
+        if (labelEl) labelEl.textContent = method + ' · Eval Task ' + evalTask + ', Trained Through Task ' + trainTask;
+        if (textEl) textEl.textContent = 'Success rate: ' + rate + '. ' + note;
+      }
+      function showDefault() {
+        if (labelEl) labelEl.textContent = DEFAULT_LABEL;
+        if (textEl) textEl.textContent = DEFAULT_TEXT;
+      }
+
+      videos.forEach(function (v) {
+        v.setAttribute('tabindex', '0');
+        v.addEventListener('pointerenter', function () { show(v); });
+        v.addEventListener('focusin', function () { show(v); });
+      });
+      root.addEventListener('pointerleave', showDefault);
+      root.addEventListener('focusout', function (e) {
+        if (!root.contains(e.relatedTarget)) showDefault();
+      });
+
+      showDefault();
+    });
+  }
+
   function initOverlapDemo() {
     var demos = document.querySelectorAll('[data-overlap-demo]');
     demos.forEach(function (demo) {
@@ -436,6 +479,7 @@
     initStagePlayer();
     initVlaViewer();
     initVideoSync();
+    initTaskGridDetail();
     initOverlapDemo();
     initAutoScrollTracks();
     initFramestripDetail();
