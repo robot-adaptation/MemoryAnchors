@@ -759,16 +759,21 @@
         </div>
         <div class="sub" id="impact-vla">
           <h3 class="sub__title">On VLA models</h3>
-          <p class="sub__lede">All the results so far have been reported on a diffusion policy trained from scratch. We verify that Memory Anchors still impact larger, pretrained models like the &pi;<sub>0.5</sub> VLA. Complementary to the findings in <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">this paper</a>, we did observe that VLAs have near perfect task retention with sufficient memory budgets. However, at the low ER buffer sizes and full finetuning used in our experiments, the &pi;<sub>0.5</sub> VLA actually performed <i>worse</i> than from-scratch diffusion policy. Under these conditions, adding more Memory Anchors was beneficial. Removing Memory Anchors also further degraded performance. Click through the success rate matrices to see how buffer sizes and Memory Anchors affect performance, and refer to the table for results. </p>
-          <!-- TODO: I still need to fix the two column issue; it doesn't look very good -->
-          <div class="stagesplit stagesplit--gap">
-            <div>
-              <p class="splitcol__title">Qualitative Example</p>
-              <div class="stageplayer" data-vla-viewer>
-                <div class="viewer-toggle" role="group" aria-label="Success matrix selection">
-                  <button type="button" class="viewer-toggle__btn" data-image="rander" data-caption="RandER: keeping behind 1% of past data in the ER buffer leads to low task retention." aria-pressed="true">RandER 1%</button>
-                  <button type="button" class="viewer-toggle__btn" data-image="anchors" data-caption="AnchorER: enriching the buffer with Memory Anchors raises overall task retention (darker colors in the off-diagonals)." aria-pressed="false">AnchorER 1%</button>
-                  <button type="button" class="viewer-toggle__btn" data-image="high_buffer" data-caption="RandER with Large Buffer: using the 1000 memories/task (~20% past data) validates that a VLA can reach near perfect retention." aria-pressed="false">Large Buffer RandER 20%</button>
+          <p class="sub__lede">All the results so far have been reported on a diffusion policy trained from scratch. We verify that Memory Anchors still impact larger, pretrained models like the &pi;<sub>0.5</sub> VLA. Complementary to the findings in <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">this paper</a>, we did observe that VLAs have near perfect task retention with sufficient memory budgets. However, at the low ER buffer sizes and full finetuning used in our experiments, the &pi;<sub>0.5</sub> VLA actually performed <i>worse</i> than from-scratch diffusion policy. Under these conditions, adding more Memory Anchors was beneficial. Removing Memory Anchors also further degraded performance. </p>
+          <div class="stagesplit stagesplit--gap vla-explorer" data-vla-viewer>
+            <p class="splitcol__title vla-explorer__title">VLA Continual Learning Results</p>
+            <p class="sub__lede">Click on the two experimental conditions to see examples of how Memory Anchors impact VLA performance. </p>
+            <div class="vla-explorer__viewer">
+              <div class="stageplayer">
+                <div class="viewer-toggle-groups">
+                  <div class="viewer-toggle" role="group" aria-label="Success matrix selection" data-toggle-group="enriching">
+                    <button type="button" class="viewer-toggle__btn" data-image="rander" data-caption="RandER: keeping behind 1% of past data in the ER buffer leads to low task retention." aria-pressed="true">RandER 1%</button>
+                    <button type="button" class="viewer-toggle__btn" data-image="anchors" data-caption="AnchorER: enriching the buffer with Memory Anchors raises overall task retention (darker colors in the off-diagonals)." aria-pressed="false">AnchorER 1%</button>
+                  </div>
+                  <div class="viewer-toggle" role="group" aria-label="Success matrix selection" data-toggle-group="reducing" hidden>
+                    <button type="button" class="viewer-toggle__btn" data-image="base_1000" data-caption="Mockup placeholder &mdash; reuses the RandER matrix above; swap in the real full-anchor matrix once available." aria-pressed="true">RandER 1000 Memories</button>
+                    <button type="button" class="viewer-toggle__btn" data-image="invert_10" data-caption="Mockup placeholder &mdash; reuses the AnchorER matrix above; swap in the real &minus;10% anchors matrix once available." aria-pressed="false">&minus;10% Anchors</button>
+                  </div>
                 </div>
                 <div class="stageplayer__frame">
                   <img id="vla-matrix-img" src="assets/results/rander.png" alt="Continual learning success matrix for RandER with a 1% replay buffer, &pi;0.5 VLA">
@@ -776,50 +781,53 @@
                 </div>
               </div>
             </div>
-            <div>
-              <p class="splitcol__title">VLA Continual Learning Results</p>
-              <div class="vlatables">
-                <div class="vlatable">
-                  <p class="vlatable__caption">Reducing Memory Anchors &mdash; &pi;<sub>0.5</sub> VLA</p>
-                  <table class="vlatable__table">
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>RandER</th>
-                        <th>&minus;5% Anchors</th>
-                        <th>&minus;10% Anchors</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Avg. NBT &darr;</td>
-                        <td><strong>0.12 &plusmn; 0.02</strong></td>
-                        <td>0.20 &plusmn; 0.04</td>
-                        <td>0.35 &plusmn; 0.04</td>
-                      </tr>
-                    </tbody>
-                  </table>
+            <div class="vla-explorer__cards">
+              <div class="vlacards">
+                <!-- <div class="vlacard vlacard--highlight">
+                  <p class="vlacard__eyebrow">Main Finding</p>
+                  <p class="vlacard__title">Memory Anchors matter even on large, pretrained VLAs</p>
+                </div> -->
+                <div class="vlacard vlacard--selectable" data-card-target="reducing" role="button" tabindex="0" aria-pressed="false">
+                  <p class="vlacard__title">Reducing Memory Anchors</p>
+                  <p class="vlacard__subtitle">On the &pi;<sub>0.5</sub> VLA, performance degrades as Memory Anchors are removed from the past task data before the ER buffer is sampled.</p>
+                  <div class="vlacard__row">
+                    <span class="vlacard__metric">Avg. NBT &darr;</span>
+                    <div class="vlacard__stats">
+                      <div class="vlacard__stat">
+                        <span class="vlacard__stat-label">RandER</span>
+                        <span class="vlacard__stat-value vlacard__stat-value--best">0.12<small>&plusmn;0.02</small></span>
+                      </div>
+                      <div class="vlacard__stat">
+                        <span class="vlacard__stat-label">&minus;5% Anchors</span>
+                        <span class="vlacard__stat-value">0.20<small>&plusmn;0.04</small></span>
+                      </div>
+                      <div class="vlacard__stat">
+                        <span class="vlacard__stat-label">&minus;10% Anchors</span>
+                        <span class="vlacard__stat-value">0.35<small>&plusmn;0.04</small></span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="vlatable">
-                  <p class="vlatable__caption">Enriching Memory Anchors &mdash; &pi;<sub>0.5</sub> VLA</p>
-                  <table class="vlatable__table">
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>RandER</th>
-                        <th>AnchorER 10%</th>
-                        <th>AnchorER 20%</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Avg. NBT &darr;</td>
-                        <td>0.45 &plusmn; 0.05</td>
-                        <td><strong>0.35 &plusmn; 0.04</strong></td>
-                        <td><strong>0.36 &plusmn; 0.04</strong></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="vlacard vlacard--selectable vlacard--selected" data-card-target="enriching" role="button" tabindex="0" aria-pressed="true">
+                  <p class="vlacard__title">Enriching Memory Anchors</p>
+                  <p class="vlacard__subtitle">On the &pi;<sub>0.5</sub> VLA, enriching the ER buffer with 20% best Memory Anchors reduces forgetting over Random ER.</p>
+                  <div class="vlacard__row">
+                    <span class="vlacard__metric">Avg. NBT &darr;</span>
+                    <div class="vlacard__stats">
+                      <div class="vlacard__stat">
+                        <span class="vlacard__stat-label">RandER</span>
+                        <span class="vlacard__stat-value">0.45<small>&plusmn;0.05</small></span>
+                      </div>
+                      <div class="vlacard__stat">
+                        <span class="vlacard__stat-label">AnchorER 10%</span>
+                        <span class="vlacard__stat-value vlacard__stat-value--best">0.35<small>&plusmn;0.04</small></span>
+                      </div>
+                      <div class="vlacard__stat">
+                        <span class="vlacard__stat-label">AnchorER 20%</span>
+                        <span class="vlacard__stat-value vlacard__stat-value--best">0.36<small>&plusmn;0.04</small></span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -855,7 +863,7 @@
           <div class="taskgrid-wrap" data-taskgrid>
             <div class="taskgrids">
           <div>
-            <p class="taskgrids__title" style="color:var(--palette-orange)">AnchorER (Ours)</p>
+            <p class="taskgrids__title">AnchorER (Ours)</p>
             <div class="taskgrid taskgrid--ours">
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:1;">Eval Task 3</span>
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:2;">Eval Task 2</span>
@@ -872,7 +880,7 @@
             </div>
           </div>
           <div>
-            <p class="taskgrids__title" style="color:#338467">RandER (Baseline)</p>
+            <p class="taskgrids__title">RandER (Baseline)</p>
             <div class="taskgrid taskgrid--base">
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:1;">Eval Task 3</span>
               <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:2;">Eval Task 2</span>

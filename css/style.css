@@ -281,7 +281,7 @@ section[id] { scroll-margin-top: 80px; }
 /* setting switcher — picks which asset folder the stage player reads from */
 .settings-toggle { display: flex; flex-wrap: wrap; gap: 8px; }
 .settings-toggle__btn {
-  font-family: var(--ff-mono); font-size: 12px; letter-spacing: var(--ls-meta); text-transform: uppercase;
+  font-family: var(--ff-body); font-size: 13.5px;
   padding: 7px 14px; border-radius: var(--radius-pill);
   border: 1px solid var(--border); background: var(--surface); color: var(--fg-dim);
   cursor: pointer; transition: background .18s var(--ease), border-color .18s var(--ease), color .18s var(--ease);
@@ -296,6 +296,10 @@ section[id] { scroll-margin-top: 80px; }
    own panel), so reusing that class for an unrelated image switcher would
    pull it into the ER-buffer-size handler */
 .viewer-toggle { display: flex; flex-wrap: wrap; gap: 8px; }
+/* .viewer-toggle's own display:flex outranks the UA stylesheet's [hidden]
+   rule (author styles beat UA styles regardless of specificity), so the
+   toggle-group switcher needs this to actually hide the inactive group */
+.viewer-toggle[hidden] { display: none; }
 .viewer-toggle__btn {
   font-family: var(--ff-body); font-size: 13.5px;
   padding: 7px 14px; border-radius: var(--radius-pill);
@@ -427,18 +431,19 @@ section[id] { scroll-margin-top: 80px; }
    .framestrip captions, just heavier — reads as a title rather than a
    fine-print label, and sits above the image instead of over it */
 .overlapdemo__tag {
-  margin: 0 0 8px; font-family: var(--ff-mono); font-size: clamp(12.5px, 1.15vw, 14px);
+  margin: 0 0 8px; font-family: var(--ff-body); font-size: clamp(12.5px, 1.15vw, 14px);
   font-weight: 700; letter-spacing: calc(var(--ls-meta) * 1.6); text-transform: uppercase;
   color: var(--fg); text-align: center;
   background: var(--bg-raise);
 }
 .overlapdemo__img { width: 100%; height: auto; display: block; background: var(--media-bg); border-radius: var(--radius); }
 
-/* plain photo with a fixed-light backdrop, so it stays on white rather than
-   the near-black night-theme page background — no caption needed */
+/* plain photo on a fixed pure-white backdrop (not --media-bg — this photo
+   reads better against true white than the theme's off-white/aqua frame
+   tone) in both themes, rather than the near-black night-theme page bg */
 .realrobot__frame {
   margin-top: 20px;
-  background: var(--media-bg); border: 1px solid var(--border-faint); border-radius: var(--radius);
+  background: #ffffff; border: 1px solid var(--border-faint); border-radius: var(--radius);
   padding: clamp(10px, 2vw, 20px);
 }
 .realrobot__img { width: 100%; height: auto; display: block; border-radius: var(--radius); }
@@ -538,7 +543,7 @@ section[id] { scroll-margin-top: 80px; }
   border: 1px solid var(--border-soft); border-radius: var(--radius); background: var(--bg-raise);
 }
 .framestrip__detail-label {
-  font-family: var(--ff-mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta);
+  font-family: var(--ff-body); font-size: var(--fs-meta); letter-spacing: var(--ls-meta);
   text-transform: uppercase; color: var(--fg-dim); margin: 0 0 8px;
 }
 .framestrip__detail-text { font-size: 15px; line-height: 1.6; color: var(--fg-muted); margin: 0; }
@@ -581,7 +586,7 @@ section[id] { scroll-margin-top: 80px; }
   background: var(--muted); border: 1px solid var(--border-faint); border-radius: var(--radius);
 }
 .videocompare__caption {
-  margin-top: 10px; font-family: var(--ff-mono); font-size: 15px; font-weight: 600;
+  margin-top: 10px; font-family: var(--ff-body); font-size: 15px; font-weight: 600;
   letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg); text-align: center;
 }
 @media (max-width: 480px) { .videocompare__media { flex-direction: column; } }
@@ -712,31 +717,67 @@ section[id] { scroll-margin-top: 80px; }
 }
 .nbt-readout__value { font-family: var(--ff-mono); font-weight: 700; color: var(--primary-ink); }
 
-/* ---------- results table: booktabs-style (rule above header, rule under
-   header, rule at foot, no vertical rules), theme-aware since it's plain
-   text/borders rather than a fixed-light media frame ---------- */
-.vlatables { display: flex; flex-direction: column; gap: clamp(26px, 3.6vw, 36px); }
-.vlatable__caption {
-  font-size: 15px; font-weight: 600; color: var(--fg); text-align: center;
-  line-height: 1.45; margin: 0 0 12px;
+/* ---------- results cards: same bordered-box shell as .stagepanel, one
+   card per experiment condition, a labeled stat row standing in for a table ---------- */
+.vlacards { display: flex; flex-direction: column; gap: clamp(18px, 2.6vw, 24px); }
+.vlacard {
+  border: 2px solid var(--border-soft); border-radius: var(--radius);
+  background: var(--bg-raise); padding: clamp(18px, 2.4vw, 24px);
 }
-.vlatable__table {
-  width: 100%; border-collapse: collapse; font-size: 15px;
-  border-top: 1px solid var(--border);
+/* headline takeaway, sits ahead of the per-condition cards below it — same
+   shell, just a soft teal tint and an accent-colored eyebrow so it reads as
+   a summary rather than another data condition */
+.vlacard--highlight, .vlacard--selected {
+  background: color-mix(in srgb, var(--primary-soft), var(--bg-raise) 25%);
+  border-color: var(--primary);
 }
-.vlatable__table th, .vlatable__table td {
-  padding: 8px 10px; text-align: center; font-variant-numeric: tabular-nums;
+/* clicking a card drives the viewer on the left, so it needs to read as a
+   control: pointer cursor, hover/focus feedback, and a distinct look once
+   selected (shared with .vlacard--highlight's tint, above) */
+.vlacard--selectable {
+  cursor: pointer;
+  transition: border-color .18s var(--ease), background .18s var(--ease), opacity .18s var(--ease);
 }
-.vlatable__table thead th {
-  font-weight: 600; color: var(--fg); font-size: 13.5px;
-  border-bottom: 1px solid var(--border);
+.vlacard--selectable:hover { border-color: var(--fg-dim); }
+.vlacard--selectable:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* wraps the qualitative viewer and the result cards in one bordered surface
+   (stagesplit's grid still lays out the two columns) so a card click visibly
+   drives the image beside it instead of reading as two disconnected widgets */
+.vla-explorer {
+  border: 1px solid var(--border-soft); border-radius: var(--radius);
+  background: var(--bg-raise); padding: clamp(18px, 2.4vw, 28px);
 }
-.vlatable__table tbody td { color: var(--fg-muted); }
-.vlatable__table tbody tr:last-child td { border-bottom: 1px solid var(--border); }
-.vlatable__table th:first-child, .vlatable__table td:first-child {
-  text-align: left; color: var(--fg-dim); font-weight: 500;
+.vla-explorer__title { grid-column: 1 / -1; }
+/* cards need to stand out from the explorer's own bg-raise surface, and the
+   unselected one should read as visibly de-emphasized next to the selected
+   card's primary tint (above) — a stronger surface tone plus a touch of
+   faded opacity does that without touching the selected card's own rule */
+.vla-explorer .vlacard:not(.vlacard--selected) { background: var(--surface-3); opacity: .8; }
+.vlacard__eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: .01em; text-transform: uppercase;
+  color: var(--primary-ink); margin: 0 0 6px;
 }
-.vlatable__table strong { color: var(--primary-ink); font-weight: 700; }
+.vlacard__title { font-size: 16px; font-weight: 700; color: var(--fg); margin: 0 0 4px; }
+.vlacard__subtitle { font-size: 14px; line-height: 1.5; color: var(--fg-muted); margin: 0; }
+.vlacard__row {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+  gap: 12px 24px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-faint);
+}
+.vlacard__metric {
+  font-size: 13px; font-weight: 500; color: var(--fg-dim); white-space: nowrap;
+  padding-bottom: 4px;
+}
+.vlacard__stats { display: flex; gap: clamp(18px, 3vw, 32px); }
+.vlacard__stat { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.vlacard__stat-label {
+  font-size: 12.5px; color: var(--fg-faint); white-space: nowrap;
+}
+.vlacard__stat-value {
+  font-size: 17px; font-weight: 600; color: var(--fg-muted); font-variant-numeric: tabular-nums;
+}
+.vlacard__stat-value small { margin-left: 3px; font-size: 12px; font-weight: 500; opacity: .75; }
+.vlacard__stat-value--best { color: var(--primary-ink); font-weight: 700; }
 
 /* ---------- results bar chart: grouped bars in a fixed light frame (same
    convention as .stageplayer__frame / .orderings__frame — the SVG is authored

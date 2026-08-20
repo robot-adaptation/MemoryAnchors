@@ -116,28 +116,64 @@
     else setTimeout(prefetchStageAssets, 1000);
   }
 
-  /* the VLA success-matrix switcher: same pill-toggle interaction as
-     initStagePlayer's ER-buffer picker, but scoped to its own [data-vla-viewer]
-     container (rather than a global .settings-toggle__btn query) so it can't
-     get pulled into that unrelated handler */
+  /* the VLA success-matrix switcher: each result card on the right owns a
+     [data-toggle-group] of viewer-toggle buttons; clicking a card swaps in
+     that card's group (hiding the other) and resets it to its first option,
+     so the qualitative viewer always reflects whichever card is selected */
   function initVlaViewer() {
     var root = document.querySelector('[data-vla-viewer]');
     if (!root) return;
     var img = root.querySelector('#vla-matrix-img');
     var caption = root.querySelector('#vla-matrix-caption');
-    var btns = root.querySelectorAll('.viewer-toggle__btn');
-    if (!img || !btns.length) return;
+    var groups = root.querySelectorAll('.viewer-toggle-groups .viewer-toggle');
+    var cards = root.querySelectorAll('.vlacard--selectable');
+    if (!img || !groups.length) return;
 
-    btns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        if (btn.getAttribute('aria-pressed') === 'true') return;
-        btns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
-        btn.setAttribute('aria-pressed', 'true');
-        var key = btn.getAttribute('data-image');
-        var text = btn.getAttribute('data-caption');
-        img.src = 'assets/results/' + key + '.png';
-        img.alt = 'Continual learning success matrix: ' + text;
-        if (caption) caption.textContent = text;
+    function showImage(btn) {
+      var key = btn.getAttribute('data-image');
+      var text = btn.getAttribute('data-caption');
+      img.src = 'assets/results/' + key + '.png';
+      img.alt = 'Continual learning success matrix: ' + text;
+      if (caption) caption.textContent = text;
+    }
+
+    function selectGroup(name) {
+      groups.forEach(function (group) {
+        var active = group.getAttribute('data-toggle-group') === name;
+        group.hidden = !active;
+        if (!active) return;
+        var groupBtns = group.querySelectorAll('.viewer-toggle__btn');
+        groupBtns.forEach(function (b, i) { b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false'); });
+        if (groupBtns.length) showImage(groupBtns[0]);
+      });
+    }
+
+    groups.forEach(function (group) {
+      var groupBtns = group.querySelectorAll('.viewer-toggle__btn');
+      groupBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (btn.getAttribute('aria-pressed') === 'true') return;
+          groupBtns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+          btn.setAttribute('aria-pressed', 'true');
+          showImage(btn);
+        });
+      });
+    });
+
+    cards.forEach(function (card) {
+      function select() {
+        if (card.getAttribute('aria-pressed') === 'true') return;
+        cards.forEach(function (c) {
+          c.classList.remove('vlacard--selected');
+          c.setAttribute('aria-pressed', 'false');
+        });
+        card.classList.add('vlacard--selected');
+        card.setAttribute('aria-pressed', 'true');
+        selectGroup(card.getAttribute('data-card-target'));
+      }
+      card.addEventListener('click', select);
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(); }
       });
     });
   }
@@ -358,7 +394,7 @@
      figcaption tooltip */
   function initTaskGridDetail() {
     var DEFAULT_LABEL = 'OpenJar Continual Learning Task';
-    var DEFAULT_TEXT = 'Hover over a clip to see the corresponding evaluation success.';
+    var DEFAULT_TEXT = 'Hover over a clip to see the corresponding task evaluation success and notes.';
 
     document.querySelectorAll('[data-taskgrid]').forEach(function (root) {
       var detail = root.querySelector('[data-taskgrid-detail]');
