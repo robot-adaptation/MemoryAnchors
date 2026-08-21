@@ -1,6 +1,12 @@
 (function () {
   'use strict';
 
+  function escapeHTML(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
   function initTheme() {
     var btn = document.getElementById('theme-toggle');
     if (!btn) return;
@@ -393,15 +399,19 @@
      data-method/data-eval/data-train/data-rate/data-note rather than a
      figcaption tooltip */
   function initTaskGridDetail() {
-    var DEFAULT_LABEL = 'OpenJar Continual Learning Task';
-    var DEFAULT_TEXT = 'Hover over a clip to see the corresponding task evaluation success and notes.';
-
     document.querySelectorAll('[data-taskgrid]').forEach(function (root) {
       var detail = root.querySelector('[data-taskgrid-detail]');
       var labelEl = detail && detail.querySelector('[data-taskgrid-detail-label]');
       var textEl = detail && detail.querySelector('[data-taskgrid-detail-text]');
       var videos = root.querySelectorAll('.taskgrid__video');
       if (!detail || !videos.length) return;
+      /* each grid ships its own default copy in the detail box's initial
+         markup (e.g. "OpenJar Continual Learning Task") — read it once
+         instead of a shared module-level constant, so multiple grids on
+         the same page (OpenJar, sweater folding, ...) each restore their
+         own idle text rather than all falling back to the first one's */
+      var DEFAULT_LABEL = labelEl ? labelEl.textContent : '';
+      var DEFAULT_TEXT = textEl ? textEl.textContent : '';
 
       function show(v) {
         var method = v.getAttribute('data-method');
@@ -410,7 +420,17 @@
         var rate = v.getAttribute('data-rate');
         var note = v.getAttribute('data-note') || '';
         if (labelEl) labelEl.textContent = method + ' · Eval Task ' + evalTask + ', Trained Through Task ' + trainTask;
-        if (textEl) textEl.textContent = 'Success rate: ' + rate + '. ' + note;
+        if (textEl) {
+          /* same 65% / 30% split used for each clip's corner badge, so the
+             rate's color always agrees with its check/x/dot; unparseable
+             rates (the sweater grid's "Placeholder" text, for now) just
+             stay bold with no color tier */
+          var pctMatch = /\((\d+(?:\.\d+)?)%\)/.exec(rate || '');
+          var pct = pctMatch ? parseFloat(pctMatch[1]) : null;
+          var tier = pct === null ? '' : pct >= 65 ? 'pass' : pct <= 30 ? 'fail' : 'partial';
+          var rateHTML = '<strong class="taskgrid__rate' + (tier ? ' taskgrid__rate--' + tier : '') + '">' + escapeHTML(rate) + '</strong>';
+          textEl.innerHTML = 'Success rate: ' + rateHTML + '. ' + escapeHTML(note);
+        }
       }
       function showDefault() {
         if (labelEl) labelEl.textContent = DEFAULT_LABEL;

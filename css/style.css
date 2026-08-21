@@ -182,12 +182,7 @@ section[id] { scroll-margin-top: 80px; }
   transition: color .18s var(--ease), background .18s var(--ease);
 }
 .navbtn:hover { color: var(--fg); background: var(--surface-2); }
-.navbtn em {
-  font-style: normal; font-family: var(--ff-mono); font-size: 10px;
-  letter-spacing: var(--ls-meta); text-transform: uppercase;
-  border: 1px solid var(--border-soft); border-radius: var(--radius-pill);
-  padding: 1px 5px; color: var(--fg-faint);
-}
+.navbtn svg { width: 14px; height: 14px; flex: none; }
 @media (min-width: 1024px) {
   .nav__title { display: block; flex: 1 1 auto; min-width: 0; }
 }
@@ -625,19 +620,51 @@ section[id] { scroll-margin-top: 80px; }
   writing-mode: vertical-rl; transform: rotate(180deg);
 }
 .taskgrid__collabel { font-size: 12px; color: var(--fg-dim); margin-top: 4px; white-space: nowrap; }
+/* wraps each clip so a pass/fail badge can be pinned to its corner; carries
+   the grid-column/grid-row placement that used to live on the video itself.
+   The hover-zoom transform now lives here (not on the video) so the badge
+   scales and moves together with its clip instead of staying pinned to the
+   clip's original, pre-zoom position. */
+.taskgrid__cell { position: relative; width: 100%; transition: transform .22s var(--ease); }
+.taskgrid__cell:hover, .taskgrid__cell:focus-within { transform: scale(1.9); z-index: 5; }
 .taskgrid__video {
   width: 100%; height: auto; display: block; border-radius: var(--radius);
   border: 2px solid var(--border-faint); background: var(--muted); cursor: pointer;
-  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease);
+  transition: box-shadow .22s var(--ease), border-color .22s var(--ease);
 }
-.taskgrid__video:hover, .taskgrid__video:focus-visible {
-  transform: scale(1.9); position: relative; z-index: 5;
+.taskgrid__cell:hover .taskgrid__video, .taskgrid__cell:focus-within .taskgrid__video {
   box-shadow: 0 14px 34px rgba(0,0,0,.32); outline: none;
 }
 .taskgrid--ours .taskgrid__video { border-color: color-mix(in srgb, var(--palette-orange) 50%, var(--border-faint)); }
 .taskgrid--ours .taskgrid__video:hover, .taskgrid--ours .taskgrid__video:focus-visible { border-color: var(--palette-orange); }
 .taskgrid--base .taskgrid__video { border-color: color-mix(in srgb, #338467 50%, var(--border-faint)); }
 .taskgrid--base .taskgrid__video:hover, .taskgrid--base .taskgrid__video:focus-visible { border-color: #338467; }
+/* pass/fail/partial marker, guessed from each clip's success rate — muted
+   chip + outline icon rather than a bright emoji, so it reads as a data
+   label and not decoration. Scales with its clip on hover since it lives
+   inside .taskgrid__cell, which owns the zoom transform. */
+.taskgrid__badge {
+  position: absolute; top: 5px; left: 5px; z-index: 1;
+  width: 18px; height: 18px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--bg-raise) 88%, transparent);
+  border: 1px solid var(--border-soft);
+  pointer-events: none;
+}
+.taskgrid__badge svg { width: 10px; height: 10px; }
+.taskgrid__badge--pass { color: var(--palette-teal); }
+.taskgrid__badge--fail { color: var(--palette-red); }
+/* muted gold rather than --palette-orange, which is already the AnchorER
+   method accent color — a distinct hue keeps "partial" from reading as
+   just a washed-out version of that method's own border tint */
+.taskgrid__badge--partial { color: var(--palette-khaki); }
+/* success-rate readout in the shared detail box below the grid — same
+   65%/30% tiers and colors as the clip's own corner badge, always bold so
+   the number reads as a highlighted stat rather than running prose */
+.taskgrid__rate { font-weight: 700; }
+.taskgrid__rate--pass { color: var(--palette-teal); }
+.taskgrid__rate--fail { color: var(--palette-red); }
+.taskgrid__rate--partial { color: var(--palette-khaki); }
 
 /* shared scrub bar: two coloured segments (state similarity), a dimming
    overlay marks what's already played, a handle marks the exact position.
@@ -748,7 +775,28 @@ section[id] { scroll-margin-top: 80px; }
   border: 1px solid var(--border-soft); border-radius: var(--radius);
   background: var(--bg-raise); padding: clamp(18px, 2.4vw, 28px);
 }
-.vla-explorer__title { grid-column: 1 / -1; }
+/* groups the title and intro blurb as one grid item spanning both columns
+   (an item with no explicit placement otherwise lands beside the viewer
+   instead of above it) so their spacing is plain flow margin rather than
+   the grid's own row-gap, which was stretching the two apart; a bottom rule
+   separates the panel's header from its two interactive columns below,
+   echoing .stagepanel__row's own divider convention */
+.vla-explorer__header {
+  grid-column: 1 / -1;
+  padding-bottom: 16px; border-bottom: 1px solid var(--border-faint);
+}
+/* a real heading for the panel (not the borrowed .splitcol__title label
+   style, which was sized for pairing two mini column headers and read as
+   too slight against the box's own border/padding) — same display font and
+   weight as .sub__title, just scaled down since this titles a nested panel
+   rather than a page section */
+.vla-explorer__title {
+  font-family: var(--ff-display); font-size: clamp(17px, 1.6vw, 19px); font-weight: 600;
+  letter-spacing: -.006em; color: var(--fg); margin: 0;
+}
+.vla-explorer__lede {
+  font-size: 15px; line-height: 1.55; color: var(--fg-muted); margin: 6px 0 0;
+}
 /* cards need to stand out from the explorer's own bg-raise surface, and the
    unselected one should read as visibly de-emphasized next to the selected
    card's primary tint (above) — a stronger surface tone plus a touch of
