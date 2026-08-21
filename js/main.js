@@ -30,6 +30,13 @@
       els.forEach(function (el) { el.classList.add('in'); });
       return;
     }
+    /* Trigger on a shrunken root rather than a ratio threshold. A ratio can
+       never exceed viewportHeight / elementHeight, so a threshold like 0.12
+       is silently unreachable for any .reveal taller than ~8 viewports — the
+       Impact section clears that on a short window, and the section would
+       then stay at opacity 0 forever. rootMargin doesn't depend on the
+       element's height, so it behaves the same for a 260px block and a
+       6000px one: reveal once the top edge is 12% of a viewport in. */
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -37,7 +44,7 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0, rootMargin: '0px 0px -12% 0px' });
     els.forEach(function (el) { io.observe(el); });
   }
 
