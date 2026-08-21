@@ -176,7 +176,7 @@
 
           <div class="sub" id="challenge-why-hard">
           <h3 class="sub__title">New Task Interactions with Existing Tasks</h3>
-          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <em>how it arises.</em> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders. Look at how this task's performance (task 6) changes as the model learns task 8. Notice the steep drop in performance shared across different learning orders.</p>
+          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <em>how it arises.</em> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders. Look at how this task's performance (task 6) changes as the model learns task 8 (orange region).</p>
 
           <div class="orderings">
             <div class="orderings__track" tabindex="0" aria-label="Performance on 'put the cream cheese in the bowl' across different learning-order positions, scrollable">
@@ -224,7 +224,7 @@
               <p>Diffusion U-Net policy trained on the first few supplied LIBERO task training orderings where task 8 comes after task 6. Using a 1% buffer size.</p>
             </div>
           </details>
-          <p class="sub__lede">The forgetting is not gradual. Past task performance drops steeply when the model learns some new tasks but not others. To understand why this happens, let's look at what Tasks 6 and 8 are. Notice the target objects in the tasks are next to each other, giving the two task trajectories high similarity at the start.</p>
+          <p class="sub__lede sub__lede--gap"><b><u>What we found:</u></b> forgetting a task does not occur gradually. When some tasks are learned, other tasks experience a steep decline in performance. To understand why this happens, let's look at our conflicting task pairs, 6 and 8. The target objects in the tasks are next to each other, which makes the observations in the two tasks similar at the start.</p>
 
           <div class="videocompare" data-video-sync>
             <div class="videocompare__media">
@@ -259,10 +259,10 @@
           <div class="sub" id="challenge-representation-overlap">
           <h3 class="sub__title">Initial Representation Overlap</h3>
 
-          <div class="stagesplit stagesplit">
+          <div class="stagesplit">
             <div class="stagesplit__prose prose">
-              <p>If a policy has only seen <code>Cream Cheese to Bowl</code>, it collapses <code>Bowl to Plate</code> states into the same latent space. A latent projection of these states shows the extent of this collapse.</p>
-              <p>We claim that this is a general phenomenon: because the policy has never needed to distinguish between them (unlike a policy trained on all the tasks at once), the representation space may collapse some of the distinguishing features between old and new tasks.</p>
+              <p>If two similar tasks are trained simultaneously, the policy will learn to tell their states apart. But if they are trained in sequence, a policy may incidentally collapse the observation space of the second (new) task into the space of the first one. This happens because the latent space was never construted with the new task in mind, and broad visual similarities can lead to full overlap.</p>
+              <p>We indeed see this phenomenon for the <code>Cream Cheese to Bowl</code> and <code>Bowl to Plate</code> tasks described above. In the latent space of a policy trained on <code>Cream Cheese to Bowl</code>, the new <code>Bowl to Plate</code> task has many states in the overlap of the past task representations.</p>
             </div>
 
             <div class="stageplayer">
@@ -276,21 +276,18 @@
 
           <div class="sub" id="challenge-conflicting-actions">
           <h3 class="sub__title">Conflicting Actions</h3>
-          <p class="sub__lede">Collapsing new tasks into existing representation spaces can be helpful if there's shared subtrajectories, but it can also create significant conflict. To understand this, consider the same example as above: a policy that knows <code>Cream Cheese to Bowl</code>. We feed in the new <code>Bowl to Plate</code> task and plot both state similarity to past tasks (left) and action disagreement (right). We compute action disagreement by comparing the predicted actions of the policy with the ground truth actions for each state. Look carefully between steps 40-60: as state similarity increases, action disagreement also increases.</p>
-
+          <p class="sub__lede">Collapsing new tasks into existing representation spaces can create conflict if the required actions are different. To understand this, we plot both state similarity to past tasks and action disagreement of the new <code>Bowl to Plate</code> task. We compute action disagreement by comparing the predicted actions of the policy with the ground truth actions for each state. We compute state novelty from the nearest neighbor distance to past task data in the latent space.</p>
           <div class="videocompare videocompare--wide" data-video-sync>
+            <!-- --clip-ar is each clip's intrinsic aspect ratio; .videocompare__item
+                 sizes its column by it so both videos render at the same height -->
             <div class="videocompare__media">
-              <div class="videocompare__item">
+              <div class="videocompare__item" style="--clip-ar: 1">
                 <video class="videocompare__video" src="assets/task_comparisons/bowl_on_plate_action_dis.mp4" muted playsinline preload="auto"></video>
-                <p class="stageplayer__credit stageplayer__credit--center">New trajectory: Bowl to Plate</p>
+                <p class="stageplayer__credit stageplayer__credit--center">New trajectory: <code>Bowl to Plate</code></p>
               </div>
-              <div class="videocompare__item">
-                <video class="videocompare__video" src="assets/task_comparisons/state_similarity.mp4" muted playsinline preload="auto"></video>
-                <p class="stageplayer__credit stageplayer__credit--center">State similarity between the new and old task trajectories.</p>
-              </div>
-              <div class="videocompare__item">
-                <video class="videocompare__video" src="assets/task_comparisons/action_dis.mp4" muted playsinline preload="auto"></video>
-                <p class="stageplayer__credit stageplayer__credit--center">Action prediction error of existing policy on unseen new task data.</p>
+              <div class="videocompare__item" style="--clip-ar: 2">
+                <video class="videocompare__video" src="assets/task_comparisons/action_state.mp4" muted playsinline preload="auto"></video>
+                <p class="stageplayer__credit stageplayer__credit--center">The two highlighted regions show areas of high state similarity paired with high action disagreement.</p>
               </div>
             </div>
 
@@ -304,7 +301,8 @@
               <div class="scrubbar__handle"></div>
             </div>
           </div>
-            <p class="sub__lede">In these high state similarity, high action disagreement areas of the new task, the policy is presented with similar inputs and different required outputs to its existing task set. We propose these conflict regions as a mechanism for catastrophic forgetting in robot policies. Therefore, the old task data most similar to these conflict regions should be especially important for rehearsal in an ER buffer. We call this subset of old task data, <b>Memory Anchors.</b></p>
+            <p class="sub__lede sub__lede--gap">The first region is the conflict between the <code>Cream Cheese to Bowl</code> and previous <code>Bowl</code>-related tasks. The second region is the conflict between the <code>Bowl to Plate</code> and previous <code>Bowl</code>-related tasks.</p>
+            <p class="sub__lede sub__lede--gap">In these high state similarity, high action disagreement areas of the new task, the policy is presented with similar inputs and different required outputs to its existing task set. We propose these conflict regions as a mechanism for catastrophic forgetting in robot policies. Therefore, the old task data most similar to these conflict regions should be especially important for rehearsal in an ER buffer. We call this subset of old task data, <b>Memory Anchors.</b></p>
             <details class="disclosure">
             <summary class="disclosure__summary">Show Experiment Details</summary>
             <div class="disclosure__body">

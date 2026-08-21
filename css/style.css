@@ -378,6 +378,22 @@ section[id] { scroll-margin-top: 80px; }
 @media (max-width: 760px) { .stagesplit { grid-template-columns: 1fr; } }
 .stagesplit--gap { margin-top: clamp(32px, 5vw, 48px); }
 .stagesplit__prose { padding-top: clamp(2px, .6vw, 10px); }
+/* .stagesplit's 22px top margin assumes it follows body content. Directly
+   under a .sub__title it instead wins the margin collapse against the
+   heading's own .45em bottom margin, and the prose column's alignment
+   padding stacks on top of that — so the heading-to-text gap came out ~3x
+   the one a plain .sub__lede gets under the same heading. Drop both here so
+   the first line starts where a lede would. */
+.sub__title + .stagesplit { margin-top: 0; }
+.sub__title + .stagesplit .stagesplit__prose { padding-top: 0; }
+/* .prose's own 19px is sized for the standalone reading column in About;
+   inside a .sub these paragraphs sit right next to .sub__lede blocks, where
+   that extra 1px (and the ~1.6px of line-height it drags along) reads as an
+   inconsistency. Match .sub__lede here without touching the About block.
+   Both classes land on the same element, so this has to be the compound
+   selector — a bare .stagesplit__prose ties with .prose on specificity and
+   loses to it on source order (.prose is defined further down). */
+.stagesplit__prose.prose { font-size: 18px; }
 /* small heading for a stagesplit column, used when a pair of columns needs
    its own title to visually balance against its sibling */
 .splitcol__title {
@@ -570,12 +586,17 @@ section[id] { scroll-margin-top: 80px; }
 
 /* ---------- side-by-side synced video comparison, sized as a figure, not a full column ---------- */
 .videocompare { max-width: 640px; margin: 20px auto 0; }
-/* trio needs more room per video, but the scrub bar should stay the same
-   width as the other one on this page rather than stretching to match */
+/* multi-clip rows need more room per video, but the scrub bar should stay
+   the same width as the other one on this page rather than stretching */
 .videocompare--wide { max-width: 900px; }
 .videocompare--wide .scrubbar { max-width: 640px; margin-inline: auto; }
-.videocompare__media { display: flex; gap: 14px; }
-.videocompare__item { flex: 1 1 0; min-width: 0; }
+.videocompare__media { display: flex; gap: 14px; align-items: start; }
+/* Columns grow in proportion to --clip-ar (the clip's own width/height), set
+   per item in the markup. Since rendered height is width / aspect-ratio,
+   making width track the ratio leaves every clip in the row the same height
+   — equal-width columns would instead render a 2:1 clip half as tall as a
+   1:1 one. Defaults to 1 so rows of same-shaped clips need no annotation. */
+.videocompare__item { flex: var(--clip-ar, 1) 1 0; min-width: 0; }
 .videocompare__video {
   width: 100%; height: auto; display: block;
   background: var(--muted); border: 1px solid var(--border-faint); border-radius: var(--radius);
@@ -584,6 +605,12 @@ section[id] { scroll-margin-top: 80px; }
   margin-top: 10px; font-family: var(--ff-body); font-size: 15px; font-weight: 600;
   letter-spacing: var(--ls-meta); text-transform: uppercase; color: var(--fg); text-align: center;
 }
+/* These clips sit directly on the page rather than in a .stageplayer__frame,
+   so their captions miss the frame's --media-fg override and fall back to
+   .stageplayer__credit's much lighter --fg-faint. --fg-dim is the closest
+   theme token to that override's weight and, unlike the fixed --media-fg,
+   still inverts correctly against the dark theme's page background. */
+.videocompare .stageplayer__credit { color: var(--fg-dim); }
 @media (max-width: 480px) { .videocompare__media { flex-direction: column; } }
 
 /* ---------- three-up video grid: a looping demo clip per card, with its
