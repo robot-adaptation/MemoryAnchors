@@ -476,7 +476,17 @@ section[id] { scroll-margin-top: 80px; }
 }
 .realrobot__img { width: 100%; height: auto; display: block; border-radius: var(--radius); }
 .overlapdemo__info { text-align: center; }
-.overlapdemo__label { font-size: 17px; font-weight: 600; color: var(--fg); margin-bottom: .35em; }
+.overlapdemo__label {
+  font-size: 17px; font-weight: 600; color: var(--fg); margin-bottom: .35em;
+  transition: color .18s var(--ease);
+}
+/* Inside/outside is the categorical value that flips when you resample, so it
+   carries the accent. Orange is the site's "the subset we're after" accent
+   (same as .hl-new / AnchorER), and the discarded half drops to muted ink —
+   deliberately not the teal/khaki/red trio, which now reads as success-rate
+   tiers further down the page. */
+.overlapdemo__label--in { color: var(--palette-orange); }
+.overlapdemo__label--out { color: var(--fg-dim); }
 .overlapdemo__text { font-size: 15px; line-height: 1.55; color: var(--fg-muted); margin-bottom: 12px; }
 .overlapdemo__count {
   font-family: var(--ff-mono); font-size: var(--fs-fine); color: var(--fg-faint); margin-bottom: 0;

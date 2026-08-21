@@ -54,15 +54,15 @@
       <a data-level="2" data-part="challenge" href="#challenge-conflicting-actions">Conflicting Actions</a> -->
       <a data-level="1" href="#finding">Finding Memory Anchors</a>
       <a data-level="2" data-part="finding" href="#finding-three-step-approach">The Three Step Approach</a>
-      <a data-level="2" data-part="finding" href="#finding-state-overlap">State Overlap</a>
-      <a data-level="2" data-part="finding" href="#finding-action-disagreement">Action Disagreement</a>
-      <a data-level="2" data-part="finding" href="#finding-anchor-selection">Anchor Selection</a>
+      <a data-level="2" data-part="finding" href="#finding-state-overlap">1) State Overlap</a>
+      <a data-level="2" data-part="finding" href="#finding-action-disagreement">2) Action Disagreement</a>
+      <a data-level="2" data-part="finding" href="#finding-anchor-selection">3) Anchor Selection</a>
       <a data-level="1" href="#impact">Impact of Memory Anchors</a>
-      <a data-level="2" data-part="impact" href="#impact-taking-away">Taking Memory Anchors Away</a>
-      <a data-level="2" data-part="impact" href="#impact-adding-more">Adding More Memory Anchors</a>
+      <a data-level="2" data-part="impact" href="#impact-taking-away">Taking Away</a>
+      <a data-level="2" data-part="impact" href="#impact-adding-more">Adding More</a>
       <a data-level="2" data-part="impact" href="#impact-vla">On VLA models</a>
-      <a data-level="2" data-part="impact" href="#impact-jar-opening">Real World: Jar Opening Task</a>
-      <a data-level="2" data-part="impact" href="#impact-sweater-folding">Real World: Sweater Folding Task</a>
+      <a data-level="2" data-part="impact" href="#impact-jar-opening">Real World: Opening Jars</a>
+      <a data-level="2" data-part="impact" href="#impact-sweater-folding">Real World: Sweater Folding</a>
       <a data-level="1" href="#faq">FAQs</a>
       <a data-level="1" href="#bibtex">BibTeX</a>
     </nav>
@@ -315,7 +315,7 @@
           </div>
             <p class="sub__lede sub__lede--gap"><b><u>What we found:</u></b> New task data on a policy has regions of combined high state familiarity and high action disagreement. Two regions are highlighted in the example above. The first region is the conflict between reaching for the Cream Cheese and the Bowl. The second region is the conflict between the <code>Bowl to Plate</code> and previous <code>Bowl</code>-related tasks that arises when the robot moves the bowl towards the plate.</p>
             <div class="claimbox">
-              <p class="sub__lede"><b>Our claim:</b> Continual learning conflicts arise when the new data contains overlapping state representations but different actions. Past task data similar to these conflict regions is especially important in regulating catastrophic forgetting. We call this subset of old task data, <b>Memory Anchors.</b></p>
+              <p class="sub__lede"><b>Our claim:</b> Continual learning conflicts arise when the new data contains overlapping state representations but different actions. Past task data similar to these conflict regions is especially important in regulating catastrophic forgetting. We call this subset of old task data: <b>Memory Anchors.</b></p>
             </div>
             <details class="disclosure">
             <summary class="disclosure__summary">Show Experiment Details</summary>
@@ -334,7 +334,7 @@
         <h2 class="sec__title">Finding Memory Anchors</h2>
         <div class="sub" id="finding-three-step-approach">
           <h3 class="sub__title">The Three Step Approach</h3>
-          <p class="sub__lede">We turn our observations above into a three-step approach for identifying Memory Anchors using the current policy, old task data, and the new task data.</p>
+          <p class="sub__lede">To test our claim, we must extract the Memory Anchors. We present a three-step filter approach that uses the current policy, old task data, and the new task data.</p>
           <ol class="sub__lede sub__lede--gap sec__sub--list">
             <li><b>State Representation Overlap.</b> Using the latent space of the current policy, find the transitions in the <span class="hl-new">new</span> data that overlap with the <span class="hl-old">old</span> task data.</li>
             <li><b>Action Prediction Disagreement.</b> Within this state overlap of the <span class="hl-new">new</span> task data, identify transitions where the current policy predicts something significantly different from the action labels.</li>
@@ -350,7 +350,7 @@
         </div>
 
         <div class="sub" id="finding-state-overlap">
-          <h3 class="sub__title">State Representation Overlap</h3>
+          <h3 class="sub__title">1) State Representation Overlap</h3>
           <p class="sub__lede">Old and new task data are both placed into the current policy's representation space. Latent distances between new and old data naturally segment the new task data into two groups: inside the representation overlap, and outside the overlap. Using clustering, we isolate the new task data within this overlap. Look at how this approach segments the <code>Bowl to Plate</code> task:</p>
 
           <div class="stagepanel overlappanel" id="overlap-demo-state-overlap" data-overlap-demo>
@@ -393,8 +393,8 @@
           </details>
         </div>
         <div class="sub" id="finding-action-disagreement">
-          <h3 class="sub__title">Action Disagreement</h3>
-          <p class="sub__lede">In the previous step, we found a subset of new task data that occupies the same latent space as the old task data. In this step, we want to further subsample the new task data by isolating the points that require different actions from what the current policy expects. To measure action disagreement, we add noise to the action labels, run denoising using the diffusion policy, and compare to the original labels. We select transitions with significantly higher divergences than a baseline computed on a validation set.</p>
+          <h3 class="sub__title">2) Action Disagreement</h3>
+          <p class="sub__lede">In this step, we want to further subsample the new task data by isolating the representation overlap points that require <i>different actions</i> from what the current policy predicts. To measure action disagreement, we add noise to the action labels, run denoising using the diffusion policy, and compare to the original labels. Look at how action disagreement happens in the <code>Bowl to Plate</code> task:</p>
 
           <div class="stagepanel overlappanel" id="overlap-demo-action-disagreement" data-overlap-demo>
             <div class="overlappanel__media">

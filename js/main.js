@@ -327,16 +327,16 @@
      the array can hold as many examples as you like (10-15 is plenty). */
   var OVERLAP_EXAMPLE_SETS = {
     'overlap-demo-state-overlap': [
-      { image: 'assets/method/id_1.png', label: 'Inside Overlap', text: 'Reaching down is shared by many existing tasks, including Plate to Stove, Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
-      { image: 'assets/method/id_2.png', label: 'Inside Overlap', text: 'Grabbing the bowl is shared by existing tasks Bowl to Drawer, Bowl to Stove.' },
-      { image: 'assets/method/id_3.png', label: 'Inside Overlap', text: 'Reaching down is shared by many existing tasks, including Plate to Stove, Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
-      { image: 'assets/method/id_4.png', label: 'Inside Overlap', text: 'The initial robot pose is shared by all existing tasks.' },
-      { image: 'assets/method/id_5.png', label: 'Inside Overlap', text: 'Grabbing the bowl is shared by existing tasks Bowl to Drawer, Bowl to Stove.' },
-      { image: 'assets/method/od_1.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
-      { image: 'assets/method/od_2.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
-      { image: 'assets/method/od_3.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
-      { image: 'assets/method/od_4.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
-      { image: 'assets/method/od_5.png', label: 'Outside Overlap', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+      { image: 'assets/method/id_1.png', label: 'Inside Overlap', tone: 'in', text: 'Reaching down is shared by many existing tasks, including Plate to Stove, Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
+      { image: 'assets/method/id_2.png', label: 'Inside Overlap', tone: 'in', text: 'Grabbing the bowl is shared by existing tasks Bowl to Drawer, Bowl to Stove.' },
+      { image: 'assets/method/id_3.png', label: 'Inside Overlap', tone: 'in', text: 'Reaching down is shared by many existing tasks, including Plate to Stove, Bowl to Drawer, Bowl to Stove, and Cream Cheese to Bowl.' },
+      { image: 'assets/method/id_4.png', label: 'Inside Overlap', tone: 'in', text: 'The initial robot pose is shared by all existing tasks.' },
+      { image: 'assets/method/id_5.png', label: 'Inside Overlap', tone: 'in', text: 'Grabbing the bowl is shared by existing tasks Bowl to Drawer, Bowl to Stove.' },
+      { image: 'assets/method/od_1.png', label: 'Outside Overlap', tone: 'out', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+      { image: 'assets/method/od_2.png', label: 'Outside Overlap', tone: 'out', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+      { image: 'assets/method/od_3.png', label: 'Outside Overlap', tone: 'out', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+      { image: 'assets/method/od_4.png', label: 'Outside Overlap', tone: 'out', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
+      { image: 'assets/method/od_5.png', label: 'Outside Overlap', tone: 'out', text: 'Moving the bowl to the plate no longer matches any other bowl tasks seen before.' },
     ],
     'overlap-demo-action-disagreement': [
       { image: 'assets/method/agree_1.png', video: 'assets/method/agree_1.mp4', label: 'Low Action Disagreement', text: 'The current policy already agrees with the new task reaching towards the bowl.' },
@@ -519,7 +519,16 @@
           video.load();
           video.play().catch(function () {});
         }
-        if (label) label.textContent = ex.label;
+        if (label) {
+          label.textContent = ex.label;
+          /* the label is the one field that flips category between samples, so
+             color it by the example's own `tone` to make that the thing the eye
+             lands on after a resample. Driven by the data rather than matched
+             off the label string, so rewording a label can't silently drop the
+             color; an example with no tone just stays the default ink. */
+          label.classList.remove('overlapdemo__label--in', 'overlapdemo__label--out');
+          if (ex.tone) label.classList.add('overlapdemo__label--' + ex.tone);
+        }
         if (text) text.textContent = ex.text;
         if (indexEl) indexEl.textContent = i + 1;
       }
