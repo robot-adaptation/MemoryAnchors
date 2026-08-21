@@ -713,6 +713,22 @@ section[id] { scroll-margin-top: 80px; }
    method accent color — a distinct hue keeps "partial" from reading as
    just a washed-out version of that method's own border tint */
 .taskgrid__badge--partial { color: var(--palette-khaki); }
+/* Same corner slot and muted chip shell as .taskgrid__badge, but carrying the
+   success rate itself instead of a glyph — so it needs a text-shaped box
+   (rounded rect, tabular figures to stop the digits jittering between clips)
+   rather than the badge's circle. Built by initTaskGridRateChips(). */
+.taskgrid__ratechip {
+  position: absolute; top: 5px; left: 5px; z-index: 1;
+  padding: 1.5px 5px; border-radius: var(--radius);
+  font-family: var(--ff-body); font-size: 10.5px; font-weight: 700;
+  font-variant-numeric: tabular-nums; line-height: 1.45; white-space: nowrap;
+  background: color-mix(in srgb, var(--bg-raise) 88%, transparent);
+  border: 1px solid var(--border-soft);
+  pointer-events: none;
+}
+.taskgrid__ratechip--pass { color: var(--palette-teal); }
+.taskgrid__ratechip--fail { color: var(--palette-red); }
+.taskgrid__ratechip--partial { color: var(--palette-khaki); }
 /* success-rate readout in the shared detail box below the grid — same
    65%/30% tiers and colors as the clip's own corner badge, always bold so
    the number reads as a highlighted stat rather than running prose */

@@ -7,6 +7,23 @@
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
+  /* Splits a clip's data-rate ("14/20 (70%)") into the parts the task grids
+     need. One shared tier calculation drives both the marker on the clip and
+     the rate's color in the detail box, so those two can't drift apart. A
+     rate with no parseable percentage (a "Placeholder" not yet filled in)
+     comes back with tier '' and is left uncolored rather than guessed at. */
+  function parseRate(rate) {
+    var full = rate || '';
+    var m = /\((\d+(?:\.\d+)?)%\)/.exec(full);
+    var pct = m ? parseFloat(m[1]) : null;
+    return {
+      full: full,
+      short: full.replace(/\s*\([^)]*\)\s*/, '').trim() || full, // "14/20"
+      pct: pct,
+      tier: pct === null ? '' : pct >= 65 ? 'pass' : pct <= 30 ? 'fail' : 'partial'
+    };
+  }
+
   function initTheme() {
     var btn = document.getElementById('theme-toggle');
     if (!btn) return;
@@ -428,14 +445,9 @@
         var note = v.getAttribute('data-note') || '';
         if (labelEl) labelEl.textContent = method + ' · Eval Task ' + evalTask + ', Trained Through Task ' + trainTask;
         if (textEl) {
-          /* same 65% / 30% split used for each clip's corner badge, so the
-             rate's color always agrees with its check/x/dot; unparseable
-             rates (the sweater grid's "Placeholder" text, for now) just
-             stay bold with no color tier */
-          var pctMatch = /\((\d+(?:\.\d+)?)%\)/.exec(rate || '');
-          var pct = pctMatch ? parseFloat(pctMatch[1]) : null;
-          var tier = pct === null ? '' : pct >= 65 ? 'pass' : pct <= 30 ? 'fail' : 'partial';
-          var rateHTML = '<strong class="taskgrid__rate' + (tier ? ' taskgrid__rate--' + tier : '') + '">' + escapeHTML(rate) + '</strong>';
+          var r = parseRate(rate);
+          var rateHTML = '<strong class="taskgrid__rate' + (r.tier ? ' taskgrid__rate--' + r.tier : '') + '">'
+            + escapeHTML(r.full) + '</strong>';
           textEl.innerHTML = 'Success rate: ' + rateHTML + '. ' + escapeHTML(note);
         }
       }
@@ -455,6 +467,29 @@
       });
 
       showDefault();
+    });
+  }
+
+  /* Alternative to the pass/fail glyph: show the success rate itself in the
+     same corner slot, in the same tier color. Opted into per grid with
+     [data-rate-chips], so a grid without it keeps its glyph badges. The text
+     is derived from data-rate rather than authored in the markup, so the
+     number on the clip can't drift from the one in the detail box. Clips
+     whose rate is still a placeholder keep their glyph. */
+  function initTaskGridRateChips() {
+    document.querySelectorAll('[data-taskgrid][data-rate-chips] .taskgrid__cell').forEach(function (cell) {
+      var video = cell.querySelector('.taskgrid__video');
+      var badge = cell.querySelector('.taskgrid__badge');
+      if (!video || !badge) return;
+      var r = parseRate(video.getAttribute('data-rate'));
+      if (!r.tier) return;
+      var chip = document.createElement('span');
+      chip.className = 'taskgrid__ratechip taskgrid__ratechip--' + r.tier;
+      /* the same number is announced via the detail box on hover/focus, so
+         keep this copy decorative for screen readers */
+      chip.setAttribute('aria-hidden', 'true');
+      chip.textContent = r.short;
+      badge.replaceWith(chip);
     });
   }
 
@@ -543,6 +578,7 @@
     initVlaViewer();
     initVideoSync();
     initTaskGridDetail();
+    initTaskGridRateChips();
     initOverlapDemo();
     initAutoScrollTracks();
     initFramestripDetail();

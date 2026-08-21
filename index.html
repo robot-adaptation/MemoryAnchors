@@ -881,8 +881,8 @@
               <p class="jarcard__text">Open the jar by directly lifting the lid.</p>
             </div>
           </div>
-          <p class="sub__lede sub__lede--gap">We train a diffusion policy on the jar sequence and compare the success rates with <code>AnchorER</code> and <code>RandER</code>. The videos below show a representative rollout from each of the evaluated tasks in the training order. Hover over a clip to see the success rates and additional details.</p>
-          <div class="taskgrid-wrap" data-taskgrid>
+          <p class="sub__lede sub__lede--gap">We train a diffusion policy on the jar sequence and compare the success rates with <code>AnchorER</code> and <code>RandER</code>. The videos below show a representative rollout from each of the evaluated tasks in the training order. Hover over a clip to see additional details.</p>
+          <div class="taskgrid-wrap" data-taskgrid data-rate-chips>
             <div class="taskgrids">
           <div>
             <p class="taskgrids__title">AnchorER (Ours)</p>
@@ -957,7 +957,7 @@
             </div>
             <div class="framestrip__detail" data-taskgrid-detail>
               <p class="framestrip__detail-label" data-taskgrid-detail-label>OpenJar Continual Learning Task</p>
-              <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover over a clip to see the corresponding evaluation success.</p>
+              <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover over a clip for more details.</p>
             </div>
           </div>
           <p class="sub__lede sub__lede--gap">Memory Anchors impact real robot performance, both reducing forgetting and improving the learning of new tasks compared to RandER. The final success rate of AnchorER on the three tasks is 1.7x higher than RandER. Further results and visualizations are shown in the summary figure below.</p>
@@ -967,26 +967,26 @@
         </div>
         <div class="sub" id="impact-sweater-folding">
           <h3 class="sub__title">Real World: Sweater Folding Task</h3>
-          <p class="sub__lede">The OpenJar task was designed to be diagnostic of continual learning challenges. </p>
+          <p class="sub__lede">The OpenJar task was designed to be diagnostic of continual learning challenges. We now show the impact of Memory Anchors on a realistic sweater folding scenario, where a robot learns a sequence of garment manipulation skills. These tasks have high overlap near the start but require very different actions.</p>
           <div class="jargrid">
             <div class="jarcard">
               <video class="jarcard__video" src="assets/results/sweater_task_1.mp4" autoplay muted loop playsinline></video>
-              <p class="jarcard__title">Task 1: Placeholder</p>
-              <p class="jarcard__text">Placeholder description for sweater folding task 1.</p>
+              <p class="jarcard__title">Task 1: Fold Left</p>
+              <p class="jarcard__text">Left arm reaches towards the left sleeve and folds it over the chest.</p>
             </div>
             <div class="jarcard">
               <video class="jarcard__video" src="assets/results/sweater_task2.mp4" autoplay muted loop playsinline></video>
-              <p class="jarcard__title">Task 2: Placeholder</p>
-              <p class="jarcard__text">Placeholder description for sweater folding task 2.</p>
+              <p class="jarcard__title">Task 2: Fold Right</p>
+              <p class="jarcard__text">Right arm reaches towards the right sleeve and folds it over the chest.</p>
             </div>
             <div class="jarcard">
               <video class="jarcard__video" src="assets/results/sweater_task3.mp4" autoplay muted loop playsinline></video>
-              <p class="jarcard__title">Task 3: Placeholder</p>
-              <p class="jarcard__text">Placeholder description for sweater folding task 3.</p>
+              <p class="jarcard__title">Task 3: Fold Up </p>
+              <p class="jarcard__text">Both arms grab the bottom of the sweater and folds it upwards.</p>
             </div>
           </div>
-          <p class="sub__lede sub__lede--gap">Placeholder for the sweater folding cross-task video matrix description &mdash; explain the training/eval setup and what to look for once real results are in. Hover over a clip to see the success rates and additional details.</p>
-          <div class="taskgrid-wrap" data-taskgrid>
+          <p class="sub__lede sub__lede--gap">As before, we train a diffusion policy with AnchorER and RandER. The videos below show a representative rollout from each of the evaluated tasks in the training order. Hover over a clip to see the success rates and additional details.</p>
+          <div class="taskgrid-wrap" data-taskgrid data-rate-chips>
             <div class="taskgrids">
               <div>
                 <p class="taskgrids__title">AnchorER (Ours)</p>
@@ -995,28 +995,28 @@
                   <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:2;">Eval Task 2</span>
                   <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:3;">Eval Task 1</span>
                   <div class="taskgrid__cell" style="grid-column:4; grid-row:1;">
-                    <video class="taskgrid__video" src="assets/results/sweater_ours_3_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="3" data-train="3" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
+                    <video class="taskgrid__video" src="assets/results/sweater_ours_3_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="3" data-train="3" data-rate="14/20 (70%)" data-note="Placeholder explanation for this clip."></video>
                     <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:3; grid-row:2;">
-                    <video class="taskgrid__video" src="assets/results/sweater_ours_2_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="2" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
+                    <video class="taskgrid__video" src="assets/results/sweater_ours_2_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="2" data-rate="20/20 (100%)" data-note="Placeholder explanation for this clip."></video>
                     <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:4; grid-row:2;">
-                    <video class="taskgrid__video" src="assets/results/sweater_ours_2_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="3" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
-                    <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+                    <video class="taskgrid__video" src="assets/results/sweater_ours_2_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="3" data-rate="10/20 (50%)" data-note="Placeholder explanation for this clip."></video>
+                    <span class="taskgrid__badge taskgrid__badge--partial" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="6"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:2; grid-row:3;">
-                    <video class="taskgrid__video" src="assets/results/sweater_ours_1_1.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="1" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
+                    <video class="taskgrid__video" src="assets/results/sweater_ours_1_1.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="1" data-rate="20/20 (100%)" data-note="Placeholder explanation for this clip."></video>
                     <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:3; grid-row:3;">
-                    <video class="taskgrid__video" src="assets/results/sweater_ours_1_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="2" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
+                    <video class="taskgrid__video" src="assets/results/sweater_ours_1_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="2" data-rate="19/20 (95%)" data-note="Placeholder explanation for this clip."></video>
                     <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:4; grid-row:3;">
-                    <video class="taskgrid__video" src="assets/results/sweater_ours_1_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="3" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
-                    <span class="taskgrid__badge taskgrid__badge--partial" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="6"/></svg></span>
+                    <video class="taskgrid__video" src="assets/results/sweater_ours_1_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="3" data-rate="15/20 (75%)" data-note="Placeholder explanation for this clip."></video>
+                    <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
                   </div>
                   <span class="taskgrid__collabel" style="grid-column:2; grid-row:4;">Train Task 1</span>
                   <span class="taskgrid__collabel" style="grid-column:3; grid-row:4;">Train Task 2</span>
@@ -1030,27 +1030,27 @@
                   <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:2;">Eval Task 2</span>
                   <span class="taskgrid__rowlabel" style="grid-column:1; grid-row:3;">Eval Task 1</span>
                   <div class="taskgrid__cell" style="grid-column:4; grid-row:1;">
-                    <video class="taskgrid__video" src="assets/results/sweater_base_3_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="3" data-train="3" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
+                    <video class="taskgrid__video" src="assets/results/sweater_base_3_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="3" data-train="3" data-rate="15/20 (75%)" data-note="Placeholder explanation for this clip."></video>
                     <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:3; grid-row:2;">
-                    <video class="taskgrid__video" src="assets/results/sweater_base_2_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="2" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
-                    <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+                    <video class="taskgrid__video" src="assets/results/sweater_base_2_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="2" data-rate="10/20 (50%)" data-note="Placeholder explanation for this clip."></video>
+                    <span class="taskgrid__badge taskgrid__badge--partial" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="6"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:4; grid-row:2;">
-                    <video class="taskgrid__video" src="assets/results/sweater_base_2_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="3" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
+                    <video class="taskgrid__video" src="assets/results/sweater_base_2_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="3" data-rate="6/20 (30%)" data-note="Placeholder explanation for this clip."></video>
                     <span class="taskgrid__badge taskgrid__badge--fail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:2; grid-row:3;">
-                    <video class="taskgrid__video" src="assets/results/sweater_base_1_1.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="1" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
+                    <video class="taskgrid__video" src="assets/results/sweater_base_1_1.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="1" data-rate="20/20 (100%)" data-note="Placeholder explanation for this clip."></video>
                     <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:3; grid-row:3;">
-                    <video class="taskgrid__video" src="assets/results/sweater_base_1_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="2" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
-                    <span class="taskgrid__badge taskgrid__badge--fail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+                    <video class="taskgrid__video" src="assets/results/sweater_base_1_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="2" data-rate="16/20 (80%)" data-note="Placeholder explanation for this clip."></video>
+                    <span class="taskgrid__badge taskgrid__badge--pass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
                   </div>
                   <div class="taskgrid__cell" style="grid-column:4; grid-row:3;">
-                    <video class="taskgrid__video" src="assets/results/sweater_base_1_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="3" data-rate="Placeholder" data-note="Placeholder explanation for this clip."></video>
+                    <video class="taskgrid__video" src="assets/results/sweater_base_1_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="3" data-rate="2/20 (10%)" data-note="Placeholder explanation for this clip."></video>
                     <span class="taskgrid__badge taskgrid__badge--fail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
                   </div>
                   <span class="taskgrid__collabel" style="grid-column:2; grid-row:4;">Train Task 1</span>
@@ -1061,7 +1061,7 @@
             </div>
             <div class="framestrip__detail" data-taskgrid-detail>
               <p class="framestrip__detail-label" data-taskgrid-detail-label>Sweater Folding Continual Learning Task</p>
-              <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover over a clip to see the corresponding task evaluation success and notes.</p>
+              <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover over a clip for more details.</p>
             </div>
           </div>
           <p class="sub__lede sub__lede--gap">Placeholder for the sweater folding summary figure &mdash; the image below shows the success rates of the methods and baselines, plus further visualizations of catastrophic forgetting on the sweater folding suite.</p>
