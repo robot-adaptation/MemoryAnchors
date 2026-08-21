@@ -600,6 +600,19 @@ section[id] { scroll-margin-top: 80px; }
 }
 .disclosure__body p { font-size: 15px; line-height: 1.6; color: var(--fg-muted); margin: 0; }
 .disclosure__body p + p { margin-top: .8em; }
+/* the global `a { color: inherit }` would leave links in here indistinguishable
+   from the surrounding muted text — give them the same accent + underline
+   treatment that .prose a uses for links in body copy */
+.disclosure__body a { color: var(--primary-ink); text-decoration: none; border-bottom: 1px solid var(--border); }
+.disclosure__body a:hover { border-bottom-color: var(--primary); }
+/* full-width figure inside a disclosure. No light .stageplayer__frame wrapper
+   here: these contact sheets carry their own dark backdrop, so a light frame
+   would ring them with a bright border instead of framing them. */
+.disclosure__figure {
+  display: block; width: 100%; height: auto;
+  margin-top: 14px; border-radius: var(--radius);
+}
+.disclosure__body p:first-child + .disclosure__figure { margin-top: 12px; }
 
 /* responsive frame for a hosted video embed (YouTube/Vimeo). aspect-ratio
    holds the 16:9 shape at any column width, so the iframe can just fill it
@@ -694,29 +707,11 @@ section[id] { scroll-margin-top: 80px; }
 .taskgrid--ours .taskgrid__video:hover, .taskgrid--ours .taskgrid__video:focus-visible { border-color: var(--palette-orange); }
 .taskgrid--base .taskgrid__video { border-color: color-mix(in srgb, #338467 50%, var(--border-faint)); }
 .taskgrid--base .taskgrid__video:hover, .taskgrid--base .taskgrid__video:focus-visible { border-color: #338467; }
-/* pass/fail/partial marker, guessed from each clip's success rate — muted
-   chip + outline icon rather than a bright emoji, so it reads as a data
-   label and not decoration. Scales with its clip on hover since it lives
-   inside .taskgrid__cell, which owns the zoom transform. */
-.taskgrid__badge {
-  position: absolute; top: 5px; left: 5px; z-index: 1;
-  width: 18px; height: 18px; border-radius: 50%;
-  display: grid; place-items: center;
-  background: color-mix(in srgb, var(--bg-raise) 88%, transparent);
-  border: 1px solid var(--border-soft);
-  pointer-events: none;
-}
-.taskgrid__badge svg { width: 10px; height: 10px; }
-.taskgrid__badge--pass { color: var(--palette-teal); }
-.taskgrid__badge--fail { color: var(--palette-red); }
-/* muted gold rather than --palette-orange, which is already the AnchorER
-   method accent color — a distinct hue keeps "partial" from reading as
-   just a washed-out version of that method's own border tint */
-.taskgrid__badge--partial { color: var(--palette-khaki); }
-/* Same corner slot and muted chip shell as .taskgrid__badge, but carrying the
-   success rate itself instead of a glyph — so it needs a text-shaped box
-   (rounded rect, tabular figures to stop the digits jittering between clips)
-   rather than the badge's circle. Built by initTaskGridRateChips(). */
+/* Each clip's success rate, pinned to its top-left corner: a muted chip so it
+   reads as a data label rather than decoration, with tabular figures to stop
+   the digits jittering between clips. Scales with its clip on hover since it
+   lives inside .taskgrid__cell, which owns the zoom transform. Built by
+   initTaskGridRateChips(). */
 .taskgrid__ratechip {
   position: absolute; top: 5px; left: 5px; z-index: 1;
   padding: 1.5px 5px; border-radius: var(--radius);

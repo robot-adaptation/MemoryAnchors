@@ -470,17 +470,14 @@
     });
   }
 
-  /* Alternative to the pass/fail glyph: show the success rate itself in the
-     same corner slot, in the same tier color. Opted into per grid with
-     [data-rate-chips], so a grid without it keeps its glyph badges. The text
-     is derived from data-rate rather than authored in the markup, so the
-     number on the clip can't drift from the one in the detail box. Clips
-     whose rate is still a placeholder keep their glyph. */
+  /* Pins each clip's success rate into the corner of its cell, colored by the
+     same tier as the rate in the detail box. Built from data-rate rather than
+     authored in the markup so the number on the clip can't drift from the one
+     below it; a clip whose rate is still a placeholder just gets no chip. */
   function initTaskGridRateChips() {
-    document.querySelectorAll('[data-taskgrid][data-rate-chips] .taskgrid__cell').forEach(function (cell) {
+    document.querySelectorAll('[data-taskgrid] .taskgrid__cell').forEach(function (cell) {
       var video = cell.querySelector('.taskgrid__video');
-      var badge = cell.querySelector('.taskgrid__badge');
-      if (!video || !badge) return;
+      if (!video) return;
       var r = parseRate(video.getAttribute('data-rate'));
       if (!r.tier) return;
       var chip = document.createElement('span');
@@ -489,7 +486,7 @@
          keep this copy decorative for screen readers */
       chip.setAttribute('aria-hidden', 'true');
       chip.textContent = r.short;
-      badge.replaceWith(chip);
+      cell.appendChild(chip);
     });
   }
 
