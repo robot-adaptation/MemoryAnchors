@@ -47,7 +47,7 @@
   <aside class="rail" aria-label="On this page">
     <nav class="rail__links">
       <a data-level="1" href="#about">About</a>
-      <a data-level="1" href="#challenge">Mechanics of Continual Imitation Learning</a>
+      <a data-level="1" href="#challenge">Data Sensitivity in Continual Robot Learning</a>
       <!-- <a data-level="2" data-part="challenge" href="#challenge-setup">Sequential Task Learning</a>
       <a data-level="2" data-part="challenge" href="#challenge-why-hard">New Task Interactions with Existing Tasks</a>
       <a data-level="2" data-part="challenge" href="#challenge-representation-overlap">Initial Representation Overlap</a>
@@ -106,19 +106,31 @@
       <div class="wrap wrap--mid reveal">
         <p class="eyebrow">01 &middot; About</p>
         <h2 class="sec__title">About</h2>
-        <!-- <p class="sec__sub">This is a minimal starting point that borrows the layout, type, and color system of the reference site &mdash; a sticky top nav, an on-page outline rail, a centered title block, and calm prose columns &mdash; without any of its research content.</p> -->
         <div class="prose">
-          <p>When learning a new task on a robot, it is common to rehearse past experiences to prevent catastrophic forgetting of past skills. This approach works very well across architectures, task sets, and on real robots too. But why does it work so well? Our work shows that a small set of these experiences contributes greatly in anchoring past performance. Without even a small fraction of them, catastrophic forgetting increases significantly. We call these experiences, <b>Memory Anchors</b>. </p>
-          <p>Our simple insight: new tasks interact with tasks the robot already knows. If a new task shares similar states as old ones but requires different actions, the policy struggles to bridge the gap. For example, learning how to manipulate a familiar object in a new way. The policy is most sensitive to the past task data sampled from this region.</p>
-          <p>We present a simple way of querying a policy to extract Memory Anchors by using the policy's own latent structure and action predictions. Removing access to 10% of these Memory Anchors in the replay buffer leads to more than a 4.5x increase in catastrophic forgetting on the LIBERO benchmark suites. Under a limited memory budget, enriching the replay buffer with Memory Anchors can decrease worst-case forgetting in LIBERO by 63% and allow a real robot to learn a series of highly-conflicting tasks.</p>
+          <p>When learning a new task on a robot, it is common to rehearse past experiences to prevent catastrophic forgetting of past skills. This approach works very well across architectures, task sets, and on real robots too. But why does it work so well? Our work shows that a small set of these experiences contributes greatly to anchoring past performance. Without even a small fraction of them, catastrophic forgetting increases significantly.</p>
+          <p>Our insight: new, unseen tasks already interact with existing knowledge within the policy. If a new task has high representation overlap with past tasks, learning the task can cause forgetting if the new task requires different actions. A simple example is learning how to manipulate a familiar object in a new way. The policy is most sensitive to the past task data sampled from this region. We call these experiences, <b>Memory Anchors</b>. </p>
+          <p>We present a simple way of querying a policy to extract Memory Anchors by using the policy's own latent structure and action predictions. Removing access to 10% of these Memory Anchors in the replay buffer leads to more than a 4.5x increase in catastrophic forgetting on the LIBERO benchmark suites. Under a limited memory budget, enriching the replay buffer with Memory Anchors can decrease worst-case forgetting in LIBERO by 63%. Finally, we show that these trends hold on VLA models and on two real-world task suites.</p>
         </div>
+        <details class="disclosure">
+          <summary class="disclosure__summary">Watch Overview Video</summary>
+          <div class="disclosure__body">
+            <!-- TODO: swap VIDEO_ID below for the YouTube video id - the part
+                 after "watch?v=" or after "youtu.be/". Nothing else to change. -->
+            <div class="videoembed">
+              <iframe src="https://www.youtube.com/embed/VIDEO_ID"
+                      title="Memory Anchors overview video" loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
 
     <section id="challenge" class="section">
       <div class="wrap wrap--wide reveal">
         <p class="eyebrow">02 &middot; Continual Learning Challenge</p>
-        <h2 class="sec__title">Mechanics of Continual Imitation Learning</h2>
+        <h2 class="sec__title">Data Sensitivity in Continual Robot Learning</h2>
         <p class="sec__sub sec__sub--full">To understand Memory Anchors, we first need to take a closer look at why robot policies forget old tasks when learning new ones.</p>
         <div class="sub" id="challenge-setup">
           <h3 class="sub__title">Sequential Task Learning</h3>
@@ -261,7 +273,7 @@
 
           <div class="stagesplit">
             <div class="stagesplit__prose prose">
-              <p>If two similar tasks are trained simultaneously, the policy will learn to tell their states apart. But if they are trained in sequence, a policy may incidentally collapse the observation space of the second (new) task into the space of the first one. This happens because the latent space was never construted with the new task in mind, and broad visual similarities can lead to full overlap.</p>
+              <p>If two similar tasks are trained simultaneously, the policy will learn to tell their states apart. But if they are trained in sequence, a policy may incidentally collapse the observation space of the second (new) task into the space of the first one. This happens because the latent space was never constructed with the new task in mind, and broad visual similarities can lead to full overlap.</p>
               <p>We indeed see this phenomenon for the <code>Cream Cheese to Bowl</code> and <code>Bowl to Plate</code> tasks described above. In the latent space of a policy trained on <code>Cream Cheese to Bowl</code>, the new <code>Bowl to Plate</code> task has many states in the overlap of the past task representations.</p>
             </div>
 
@@ -276,7 +288,7 @@
 
           <div class="sub" id="challenge-conflicting-actions">
           <h3 class="sub__title">Conflicting Actions</h3>
-          <p class="sub__lede">Collapsing new tasks into existing representation spaces can create conflict if the required actions are different. To understand this, we plot both state similarity to past tasks and action disagreement of the new <code>Bowl to Plate</code> task. We compute action disagreement by comparing the predicted actions of the policy with the ground truth actions for each state. We compute state novelty from the nearest neighbor distance to past task data in the latent space.</p>
+          <p class="sub__lede">Collapsing new tasks into existing representation spaces can create conflict if the required actions are different. We plot the state novelty of the new <code>Bowl to Plate</code> task to all previous tasks by finding nearest neighbor distance in the policy's latent space. On the same graph, we plot action disagreement by comparing the predicted actions of the policy with the ground truth actions.</p>
           <div class="videocompare videocompare--wide" data-video-sync>
             <!-- --clip-ar is each clip's intrinsic aspect ratio; .videocompare__item
                  sizes its column by it so both videos render at the same height -->
@@ -301,8 +313,10 @@
               <div class="scrubbar__handle"></div>
             </div>
           </div>
-            <p class="sub__lede sub__lede--gap">The first region is the conflict between the <code>Cream Cheese to Bowl</code> and previous <code>Bowl</code>-related tasks. The second region is the conflict between the <code>Bowl to Plate</code> and previous <code>Bowl</code>-related tasks.</p>
-            <p class="sub__lede sub__lede--gap">In these high state similarity, high action disagreement areas of the new task, the policy is presented with similar inputs and different required outputs to its existing task set. We propose these conflict regions as a mechanism for catastrophic forgetting in robot policies. Therefore, the old task data most similar to these conflict regions should be especially important for rehearsal in an ER buffer. We call this subset of old task data, <b>Memory Anchors.</b></p>
+            <p class="sub__lede sub__lede--gap"><b><u>What we found:</u></b> New task data on a policy has regions of combined high state familiarity and high action disagreement. Two regions are highlighted in the example above. The first region is the conflict between reaching for the Cream Cheese and the Bowl. The second region is the conflict between the <code>Bowl to Plate</code> and previous <code>Bowl</code>-related tasks that arises when the robot moves the bowl towards the plate.</p>
+            <div class="claimbox">
+              <p class="sub__lede"><b>Our claim:</b> Continual learning conflicts arise when the new data contains overlapping state representations but different actions. Past task data similar to these conflict regions is especially important in regulating catastrophic forgetting. We call this subset of old task data, <b>Memory Anchors.</b></p>
+            </div>
             <details class="disclosure">
             <summary class="disclosure__summary">Show Experiment Details</summary>
             <div class="disclosure__body">
@@ -409,7 +423,7 @@
            <details class="disclosure">
             <summary class="disclosure__summary">FAQ &middot; Why can you trust the predictions of a policy fed with new task data that it hasn't seen yet?</summary>
             <div class="disclosure__body">
-              <p>The new task data fed into the policy in Step #2 has already been filtered to be within the latent space of old task data. This doesn't guarentee that it will be fully in-distribution (e.g. the language description will be new), but it increases the likelihood of the policy producing a meaningful denoising. Even if the new task data is fully out of distribution (e.g. new environment), the result is letting all of the representation overlap data through to anchor selection, which is a valid strategy when the new data is very different.</p>
+              <p>The new task data fed into the policy in Step #2 has already been filtered to be within the latent space of old task data. This doesn't guarantee that it will be fully in-distribution (e.g. the language description will be new), but it increases the likelihood of the policy producing a meaningful denoising. Even if the new task data is fully out of distribution (e.g. new environment), the result is letting all of the representation overlap data through to anchor selection, which is a valid strategy when the new data is very different.</p>
             </div>
           </details>
           <details class="disclosure">
