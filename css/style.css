@@ -980,3 +980,40 @@ section[id] { scroll-margin-top: 80px; }
   .nav__brand { font-size: 15px; }
   .nav__in { gap: 8px; }
 }
+
+/* ==========================================================================
+   drive video grid (uncut-videos.html)
+   2x2 of Google Drive player iframes: one row per experimental condition,
+   two evaluation episodes per row. Drive serves its player in an iframe, so
+   the 16:9 box comes from an aspect-ratio wrapper rather than the intrinsic
+   size a <video> would give us.
+   ========================================================================== */
+.drivegrid { display: grid; gap: clamp(30px, 4.5vw, 52px); margin-top: 28px; }
+.drivegrid__rowhead {
+  padding-bottom: 12px; margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.drivegrid__rowlabel {
+  margin: 0; font-size: 17px; font-weight: 600; color: var(--fg); letter-spacing: -.008em;
+}
+.drivegrid__rowtext { margin: 5px 0 0; font-size: 15px; line-height: 1.55; color: var(--fg-muted); }
+.drivegrid__pair {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.4vw, 28px);
+}
+.drivecard__frame {
+  position: relative; aspect-ratio: 16 / 9; overflow: hidden;
+  background: var(--muted);
+  border: 1px solid var(--border-faint); border-radius: var(--radius);
+}
+.drivecard__video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.drivecard__title { margin: 14px 0 6px; font-size: 17px; font-weight: 600; color: var(--fg); text-align: center; }
+.drivecard__text { margin: 0; font-size: 15px; line-height: 1.55; color: var(--fg-muted); text-align: center; }
+.drivegrid__note {
+  margin: clamp(28px, 4vw, 40px) 0 0;
+  font-family: var(--ff-mono); font-size: var(--fs-fine); color: var(--fg-faint);
+}
+.drivegrid__note a { color: var(--primary-ink); text-decoration: none; border-bottom: 1px solid var(--border); }
+.drivegrid__note a:hover { border-bottom-color: var(--primary); }
+@media (max-width: 760px) {
+  .drivegrid__pair { grid-template-columns: 1fr; max-width: 480px; margin-inline: auto; }
+}
