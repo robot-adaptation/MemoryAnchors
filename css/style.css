@@ -455,12 +455,11 @@ section[id] { scroll-margin-top: 80px; }
 .overlappanel__interaction .overlapdemo__btn { margin: 0; flex: none; align-self: flex-start; }
 
 .overlapdemo__imgwrap { position: relative; border-radius: var(--radius); overflow: hidden; }
-/* same plain, mono-uppercase caption aesthetic as .orderings__caption /
-   .framestrip captions, just heavier — reads as a title rather than a
-   fine-print label, and sits above the image instead of over it */
+/* matches .overlapdemo__label below the images (same size, weight and normal
+   casing) so the panel's image titles and its readout title read as one set,
+   rather than the tags being uppercase small-caps and the label sentence case */
 .overlapdemo__tag {
-  margin: 0 0 8px; font-family: var(--ff-body); font-size: clamp(12.5px, 1.15vw, 14px);
-  font-weight: 700; letter-spacing: calc(var(--ls-meta) * 1.6); text-transform: uppercase;
+  margin: 0 0 8px; font-size: 17px; font-weight: 600;
   color: var(--fg); text-align: center;
   background: var(--bg-raise);
 }
@@ -590,6 +589,9 @@ section[id] { scroll-margin-top: 80px; }
    Experiment Details", FAQ entries, ...) — native <details>/<summary>,
    no JS required */
 .disclosure { margin: 8px 0; }
+/* .disclosure's 8px is tuned for stacking rows against each other; where a
+   lede introduces the stack it needs a clearer break from the prose above */
+.sub__lede + .disclosure { margin-top: 18px; }
 .disclosure__summary {
   display: inline-flex; align-items: center; gap: 7px; width: fit-content;
   font-family: var(--ff-mono); font-size: var(--fs-meta); letter-spacing: var(--ls-meta);
