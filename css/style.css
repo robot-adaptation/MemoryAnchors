@@ -8,24 +8,28 @@
 
 /* ---------- base (night) tokens ---------- */
 :root {
-  --bg:            #0c0c0c;
-  --bg-raise:      #141414;
-  --muted:         #191919;
-  --fg:            #ffffff;
-  --fg-muted:      rgba(255,255,255,.74);
-  --fg-dim:        rgba(255,255,255,.56);
-  --fg-faint:      rgba(255,255,255,.38);
-  --border:        rgba(255,255,255,.20);
-  --border-soft:   rgba(255,255,255,.11);
-  --border-faint:  rgba(255,255,255,.065);
-  --surface:       rgba(255,255,255,.028);
-  --surface-2:     rgba(255,255,255,.06);
-  --surface-3:     rgba(255,255,255,.11);
+  /* midnight-blue night, mirroring the day layer's aqua/teal-navy pairing
+     rather than the reference's neutral near-black. Ink and overlay tokens
+     carry the same cool tint (#dbe7f5) so borders and surfaces read as part
+     of the blue family instead of a neutral gray film over it. */
+  --bg:            #0d1524;
+  --bg-raise:      #121c2e;
+  --muted:         #18233a;
+  --fg:            #f2f6fc;
+  --fg-muted:      rgba(219,231,245,.76);
+  --fg-dim:        rgba(219,231,245,.58);
+  --fg-faint:      rgba(219,231,245,.40);
+  --border:        rgba(219,231,245,.22);
+  --border-soft:   rgba(219,231,245,.13);
+  --border-faint:  rgba(219,231,245,.08);
+  --surface:       rgba(219,231,245,.035);
+  --surface-2:     rgba(219,231,245,.07);
+  --surface-3:     rgba(219,231,245,.13);
 
   /* most figures are PNGs/SVGs authored with dark text on a light ground,
      so their frame stays light even in the dark theme rather than following
      --muted into near-black (which would make the dark text unreadable) */
-  --media-bg:      #f4f3ef;
+  --media-bg:      #eef3f7;
   /* caption/code text sitting inside a --media-bg frame: that frame is
      always light in both themes, so this stays a fixed dark tone rather
      than following --fg-faint (which turns white in the dark theme and
