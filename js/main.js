@@ -252,17 +252,52 @@
         updateBar(0);
       }
 
-      var loadedCount = 0;
-      videos.forEach(function (v) {
-        v.addEventListener('loadedmetadata', function () {
-          loadedCount++;
-          if (loadedCount === videos.length) {
-            duration = Math.min.apply(null, videos.map(function (vv) { return vv.duration; }));
-            restart();
-          }
-        }, { once: true });
+      /* Unlike every other clip on the page, these carry no `autoplay`/`loop`
+         attribute -- the group is started and re-looped from here so the two
+         halves stay in lockstep. That makes this readiness check the only
+         thing between a fresh load and a frozen pair, so it must not hang off
+         `loadedmetadata` alone: with preload="auto" and a warm cache the
+         metadata is frequently already in by the time DOMContentLoaded runs
+         this, and a listener attached after the event has fired never runs.
+         Missing it left `duration` at 0, which both stopped playback from
+         ever starting and made the scrub bar inert, since every seek path
+         bails on !duration -- the "frozen video I also can't drag" symptom.
+         So check readyState synchronously here, and treat durationchange /
+         canplay as extra chances rather than trusting one shot at one event. */
+      var ready = videos.map(function () { return false; });
+      var started = false;
+
+      function startGroup(durs) {
+        duration = Math.min.apply(null, durs);
+        started = true;
+        restart();
+      }
+
+      function markReady(i) {
+        var v = videos[i];
+        if (ready[i] || v.readyState < 1 || !isFinite(v.duration) || !v.duration) return;
+        ready[i] = true;
+        if (started || !ready.every(Boolean)) return;
+        startGroup(videos.map(function (vv) { return vv.duration; }));
+      }
+
+      videos.forEach(function (v, i) {
+        ['loadedmetadata', 'durationchange', 'canplay'].forEach(function (evt) {
+          v.addEventListener(evt, function () { markReady(i); });
+        });
         v.addEventListener('ended', restart);
+        markReady(i);
       });
+
+      /* If one clip 404s or stalls, the group would otherwise wait forever on
+         a `ready` slot that never fills. Fall back to whatever did load so the
+         surviving video still plays and the bar still scrubs. */
+      setTimeout(function () {
+        if (started) return;
+        var durs = videos.map(function (v) { return v.duration; })
+          .filter(function (d) { return isFinite(d) && d > 0; });
+        if (durs.length) startGroup(durs);
+      }, 5000);
 
       videos[0].addEventListener('timeupdate', function () {
         videos.slice(1).forEach(function (v) {
