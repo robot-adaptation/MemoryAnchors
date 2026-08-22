@@ -227,6 +227,7 @@
       var duration = 0;
       var scrubbing = false;
       var wasPlaying = false;
+      var pendingSeek = null;
 
       if (bar) {
         var split = Number(bar.getAttribute('data-split')) || 0.5;
@@ -241,9 +242,33 @@
         bar.setAttribute('aria-valuenow', String(Math.round(pct * 100)));
       }
 
-      function seekTo(time) {
+      function applySeek(time) {
+        pendingSeek = null;
         videos.forEach(function (v) { v.currentTime = Math.min(time, v.duration || time); });
+      }
+
+      /* Hold at most one outstanding seek per group. A drag emits pointermove
+         far faster than a decoder can serve seeks, and each queued seek is
+         work the pointer has already moved past -- issuing them all is what
+         makes a fast scrub visibly trail the finger. Keeping only the newest
+         target and handing it over once the previous seek lands lets the clip
+         converge on where the pointer is *now*, dropping the intermediate
+         positions nobody sees anyway. Cheap seeks matter as much as few ones:
+         these clips are encoded with a keyframe every 5 frames so landing on
+         an arbitrary position decodes ~5 frames rather than replaying the
+         whole clip from its only keyframe at t=0. */
+      function flushSeek() {
+        if (pendingSeek === null) return;
+        if (videos.some(function (v) { return v.seeking; })) return;
+        applySeek(pendingSeek);
+      }
+
+      /* the bar moves synchronously so it stays glued to the pointer no
+         matter how far the decoder trails behind it */
+      function seekTo(time) {
+        pendingSeek = time;
         updateBar(time);
+        flushSeek();
       }
 
       function restart() {
@@ -313,6 +338,7 @@
       // reads as a jumpy bar — polling currentTime every animation frame
       // instead gives a smooth 60fps sweep during normal playback.
       (function tick() {
+        flushSeek();
         if (!scrubbing) updateBar(videos[0].currentTime);
         requestAnimationFrame(tick);
       })();
@@ -331,6 +357,9 @@
       function endScrub() {
         if (!scrubbing) return;
         scrubbing = false;
+        /* land exactly where the pointer was released before resuming, so a
+           coalesced-away intermediate can't leave playback a few frames off */
+        if (pendingSeek !== null) applySeek(pendingSeek);
         if (wasPlaying) videos.forEach(function (v) { v.play().catch(function () {}); });
       }
 
