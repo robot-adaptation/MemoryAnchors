@@ -566,6 +566,7 @@
             <p class="sub__lede sub__lede--gap"><b><u>What we found</u></b>: the fewer Memory Anchors available, the worse the forgetting, even as the total number of memories in the ER buffer stay the same.</p>
             <figure class="barchart">
               <div class="barchart__frame">
+                <div class="zoomfig">
                 <svg class="barchart__svg" viewBox="0 0 710 364" role="img" aria-labelledby="removeAnchorsTitle removeAnchorsDesc">
                           <title id="removeAnchorsTitle">Effect of removing Memory Anchors on backward transfer</title>
                           <desc id="removeAnchorsDesc">Grouped bar chart of NBT average (lower is better) across Long, Goal, Object, Spatial suites and their average, comparing RandER against RandER with 1%, 5%, and 10% of Memory Anchors removed. Removing anchors consistently worsens (raises) NBT average, with larger removals causing larger degradation.</desc>
@@ -667,6 +668,7 @@
                           <text x="502.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Spatial</text>
                           <text x="630.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Average</text>
                           </svg>
+                </div>
                 <div class="barchart__legend">
                   <span class="barchart__legend-item"><span class="barchart__swatch" style="background:#338467"></span>RandER</span>
                   <span class="barchart__legend-item">
@@ -676,6 +678,7 @@
                 </div>
               </div>
               <!-- <figcaption class="barchart__caption">Normalized backward transfer (NBT average, lower is better) when 1%, 5%, or 10% of Memory Anchors are randomly removed from the ER buffer, vs. the RandER baseline. Error bars show &plusmn;1 SEM.</figcaption> -->
+              <p class="zoomfig__hint">Swipe across the chart to read &rarr;</p>
             </figure>
             <details class="disclosure">
               <summary class="disclosure__summary">Show Experiment Details</summary>
@@ -690,6 +693,7 @@
             <p class="sub__lede sub__lede--gap"><b><u>What we found</u></b>: by enriching the buffer with more Memory Anchor samples, catastrophic forgetting is reduced significantly on the worst task-task interactions.</p>
             <figure class="barchart">
               <div class="barchart__frame">
+                <div class="zoomfig">
                 <svg class="barchart__svg" viewBox="0 0 710 364" role="img" aria-labelledby="addAnchorsTitle addAnchorsDesc">
                           <title id="addAnchorsTitle">Effect of adding extracted Memory Anchors on high-conflict backward transfer</title>
                           <desc id="addAnchorsDesc">Grouped bar chart of NBT high conflict (lower is better) across Long, Goal, Object, Spatial suites and their average, comparing RandER against AnchorER with 10% or 20% of the ER buffer replaced by extracted Memory Anchors. Adding anchors substantially reduces NBT high conflict, with a larger share of anchors reducing it further.</desc>
@@ -773,6 +777,7 @@
                           <text x="502.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Spatial</text>
                           <text x="630.00" y="352.00" text-anchor="middle" font-size="12.5" font-family="IBM Plex Sans, -apple-system, sans-serif" font-weight="500" fill="rgba(12,16,16,.78)">Average</text>
                           </svg>
+                </div>
                 <div class="barchart__legend">
                   <span class="barchart__legend-item"><span class="barchart__swatch" style="background:#338467"></span>RandER</span>
                   <span class="barchart__legend-item">
@@ -781,6 +786,7 @@
                   </span>
                 </div>
               </div>
+              <p class="zoomfig__hint">Swipe across the chart to read &rarr;</p>
             </figure>
             <details class="disclosure">
               <summary class="disclosure__summary">Show Experiment Details</summary>
@@ -1123,7 +1129,7 @@
           <details class="disclosure">
             <summary class="disclosure__summary">FAQ &middot; Why do you care about small ER buffer sizes?</summary>
             <div class="disclosure__body">
-              <p>Having access to a large ER buffer during training is resource intensive, especially if the past dataset is a large pretraining set. In our work, we study low ER buffer sizes to highlight the importance of data and to reflect the hardest scenario of continual learning.</p>
+              <p>Having access to a large ER buffer during training can become resource intensive. We experiment with ER buffer sizes that are small <i>relative to the past task experience size</i>, which represents a practical setup for continual learning in the real world with longer task sequences. These frugal buffers also  highlights the importance of data and Memory Anchors.</p>
             </div>
           </details>
           <details class="disclosure">

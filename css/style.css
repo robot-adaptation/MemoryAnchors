@@ -933,7 +933,10 @@ section[id], .hero[id] { scroll-margin-top: 80px; }
    convention as .stageplayer__frame / .orderings__frame — the SVG is authored
    with dark ink on a light ground, so the frame stays light in both themes)
    ---------- */
-.barchart { margin-top: 22px; }
+/* zero the inline margin: <figure> carries a UA default of `margin: 1em 40px`,
+   which was quietly insetting both results charts 80px narrower than the body
+   text around them (.orderings__card and .framestrip__card already zero it). */
+.barchart { margin: 22px 0 0; }
 .barchart__frame {
   background: var(--media-bg); border: 1px solid var(--border-faint); border-radius: var(--radius);
   padding: clamp(16px, 2.6vw, 28px);
@@ -1074,7 +1077,9 @@ section[id], .hero[id] { scroll-margin-top: 80px; }
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin; scrollbar-color: var(--border) transparent;
   }
-  .zoomfig > img { min-width: 680px; max-width: none; }
+  /* svg too: the two results bar charts are inline SVG, and their own
+     `width: 100%` is overridden here because min-width wins over width */
+  .zoomfig > img, .zoomfig > svg { min-width: 680px; max-width: none; }
   .zoomfig::-webkit-scrollbar { height: 6px; }
   .zoomfig::-webkit-scrollbar-track { background: transparent; }
   .zoomfig::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
