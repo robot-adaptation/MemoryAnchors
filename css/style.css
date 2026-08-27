@@ -1041,3 +1041,99 @@ section[id], .hero[id] { scroll-margin-top: 80px; }
 @media (max-width: 760px) {
   .drivegrid__pair { grid-template-columns: 1fr; max-width: 480px; margin-inline: auto; }
 }
+
+/* ==========================================================================
+   mobile refinements
+   The layout above is fluid and mostly holds up on its own; these are the
+   things that only break once the column is actually phone-width.
+   ========================================================================== */
+
+/* --- nav ---------------------------------------------------------------
+   Brand + three labelled buttons + theme toggle don't fit in ~390px, so
+   .nav__actions' own `overflow-x: auto` was quietly scrolling BibTeX out of
+   sight behind a hidden scrollbar — unreachable unless you guessed it was
+   there. Collapse the buttons to their icons instead; the aria-labels added
+   in the markup keep the names available to assistive tech. */
+@media (max-width: 620px) {
+  .navbtn__label { display: none; }
+  .navbtn { padding: 9px; }
+  .navbtn svg { width: 17px; height: 17px; }
+  .nav__actions { overflow-x: visible; gap: 5px; }
+}
+
+/* --- dense figures -----------------------------------------------------
+   A three-panel method diagram or a full results sheet is authored to be
+   read at ~1000px+. Fitted into a 350px column it becomes an unreadable
+   smear that tells the reader nothing. Let those specific figures keep a
+   legible intrinsic width and scroll sideways instead. Pinch-zoom still
+   works too (the viewport meta allows it) but is far clumsier. */
+.zoomfig__hint { display: none; }
+@media (max-width: 720px) {
+  .zoomfig {
+    overflow-x: auto; overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  }
+  .zoomfig > img { min-width: 680px; max-width: none; }
+  .zoomfig::-webkit-scrollbar { height: 6px; }
+  .zoomfig::-webkit-scrollbar-track { background: transparent; }
+  .zoomfig::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  /* the scrollbar is an overlay on iOS/Android — invisible until you're
+     already dragging — so the gesture needs to be stated, not implied */
+  .zoomfig__hint {
+    display: block; margin: 8px 0 0;
+    font-family: var(--ff-mono); font-size: var(--fs-fine);
+    letter-spacing: var(--ls-meta); text-transform: uppercase;
+    color: var(--fg-faint);
+  }
+}
+
+/* --- carousels ---------------------------------------------------------
+   Same invisible-scrollbar problem for the two existing side-scrollers. A
+   card is always cut mid-frame at phone width, which hints at more content;
+   a soft right edge makes that read as deliberate rather than as clipping. */
+@media (max-width: 720px) {
+  .orderings__track, .framestrip__track {
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+            mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  }
+}
+
+/* --- touch targets -----------------------------------------------------
+   The pill toggles and disclosure summaries are sized for a mouse cursor
+   (~31px and ~20px tall). Both are primary controls on this page, so give
+   them enough height to hit reliably with a thumb. */
+@media (max-width: 620px) {
+  .settings-toggle__btn, .viewer-toggle__btn {
+    padding: 10px 16px; font-size: 14px;
+  }
+  .disclosure__summary { padding-top: 7px; padding-bottom: 7px; }
+  .themebtn { width: 36px; height: 36px; }
+  /* the scrub handle sits flush against the container edge at its extremes,
+     where a thumb runs out of screen — inset the track so it stays grabbable */
+  .scrubbar { margin-inline: 10px; }
+}
+
+/* --- narrowest phones (320px) ------------------------------------------
+   The VLA panel's three-column stat row has `white-space: nowrap` labels
+   ("AnchorER 10%") whose combined min-content width exceeds a 320px screen,
+   which pushed the whole panel past the viewport. Let them wrap and shrink. */
+@media (max-width: 400px) {
+  /* equal columns via auto-flow rather than a hardcoded repeat(3), so a card
+     with a different number of stats still divides evenly; wrapping the
+     labels is what buys the room the nowrap flex row didn't have */
+  .vlacard__stats {
+    display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px;
+  }
+  .vlacard__stat { min-width: 0; }
+  .vlacard__stat-label {
+    white-space: normal; text-align: center; font-size: 11.5px;
+    /* reserve two lines: otherwise a one-line label ("RandER") rides up and
+       knocks its value out of line with the two-line labels beside it */
+    /* pin the line-height too: the inherited 1.62 makes a real two-line label
+       taller than the reserved box, so min-height alone wouldn't bind */
+    line-height: 1.3; min-height: 2.6em;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .vla-explorer > * { min-width: 0; }
+}

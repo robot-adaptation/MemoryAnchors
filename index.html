@@ -27,17 +27,17 @@
       </a>
       <!-- <span class="nav__title">A minimal, flex-π inspired template</span> -->
       <div class="nav__actions">
-        <a class="navbtn" href="#">
+        <a class="navbtn" href="#" aria-label="Paper">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-          Paper
+          <span class="navbtn__label">Paper</span>
         </a>
-        <a class="navbtn" href="#">
+        <a class="navbtn" href="#" aria-label="Code">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-          Code
+          <span class="navbtn__label">Code</span>
         </a>
-        <a class="navbtn" href="#bibtex">
+        <a class="navbtn" href="#bibtex" aria-label="BibTeX">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          BibTeX
+          <span class="navbtn__label">BibTeX</span>
         </a>
       </div>
       <button class="themebtn" type="button" id="theme-toggle" aria-label="Switch between light and dark">◐</button>
@@ -155,9 +155,10 @@
           </div>
 
           <div class="stageplayer stageplayer--full">
-            <div class="stageplayer__frame">
+            <div class="stageplayer__frame zoomfig">
               <img id="stage-img-2" src="assets/sequential_learning/01/stage04_figure_ready_successes_plot.svg" alt="Figure-ready successes plot at training stage 5">
             </div>
+            <p class="zoomfig__hint">Swipe across the figure to read &rarr;</p>
           </div>
 
           <details class="disclosure">
@@ -325,9 +326,10 @@
             <p class="sub__lede sub__lede--gap">The figure below illustrates the whole process, which is described in detail with interactive visualizations in the sections below.</p>
 
             <div class="stageplayer stageplayer--full">
-              <div class="stageplayer__frame">
+              <div class="stageplayer__frame zoomfig">
                 <img src="assets/method/methods.png" alt="Overview diagram of the three-step Memory Anchor identification method.">
               </div>
+              <p class="zoomfig__hint">Swipe across the figure to read &rarr;</p>
             </div>
           </div>
 
@@ -509,7 +511,7 @@
               </div>
               <div class="framestrip__detail" data-framestrip-detail>
                 <p class="framestrip__detail-label" data-framestrip-detail-label>Memory Anchor</p>
-                <p class="framestrip__detail-text" data-framestrip-detail-text>Hover over a Memory Anchor for more details.</p>
+                <p class="framestrip__detail-text" data-framestrip-detail-text>Hover/tap over a Memory Anchor for more details.</p>
               </div>
             </div>
               <details class="disclosure">
@@ -863,7 +865,7 @@
                 <p class="jarcard__text">Open the jar by directly lifting the lid.</p>
               </div>
             </div>
-            <p class="sub__lede sub__lede--gap">We train a diffusion policy on the jar sequence and compare the success rates with <code>AnchorER</code> and <code>RandER</code>. The videos below show a representative rollout from each of the evaluated tasks in the training order. Hover over a clip to see additional details.</p>
+            <p class="sub__lede sub__lede--gap">We train a diffusion policy on the jar sequence and compare the success rates with <code>AnchorER</code> and <code>RandER</code>. The videos below show a representative rollout from each of the evaluated tasks in the training order. Hover/tap over a clip to see additional details.</p>
             <div class="taskgrid-wrap" data-taskgrid>
               <div class="taskgrids">
             <div>
@@ -927,13 +929,14 @@
               </div>
               <div class="framestrip__detail" data-taskgrid-detail>
                 <p class="framestrip__detail-label" data-taskgrid-detail-label>OpenJar Continual Learning Task</p>
-                <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover over a clip for more details.</p>
+                <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover/tap over a clip for more details.</p>
               </div>
             </div>
             <p class="sub__lede sub__lede--gap"><b><u>What we found:</u></b> Memory Anchors impact real robot performance, both reducing forgetting and improving the learning of new tasks compared to <code>RandER</code>. Interestingly, the targeted coverage of <code>AnchorER</code> mitigates an overregularization effect caused by the large ER buffer on the second task. The final success rate of <code>AnchorER</code> on the three tasks is 1.7x higher than RandER. Further results and visualizations are shown in the summary figure below.</p>
-            <div class="realrobot__frame">
+            <div class="realrobot__frame zoomfig">
               <img class="realrobot__img" src="assets/results/realrobot.png" alt="Real-robot setup for the OpenJar continual learning task.">
             </div>
+            <p class="zoomfig__hint">Swipe across the figure to read &rarr;</p>
               <details class="disclosure">
               <summary class="disclosure__summary">Show Experiment Details</summary>
               <div class="disclosure__body">
@@ -946,8 +949,11 @@
                 <p>Below are the top 100 Memory Anchors extracted from the first task when we are starting to train the second task. Notice how they all focus on the moment when the robot is about to move forward and contact the jar. This is the exact moment that differentiates counterclockwise and clockwise jar rotations.</p>
                 <!-- lazy: a closed <details> is display:none, so this 3.9 MB sheet
                      isn't fetched until someone actually opens the dropdown -->
-                <img class="disclosure__figure" src="assets/results/memory_anchor_examples.png" loading="lazy"
-                     alt="Contact sheet of extracted Memory Anchor frames from the OpenJar task.">
+                <div class="zoomfig">
+                  <img class="disclosure__figure" src="assets/results/memory_anchor_examples.png" loading="lazy"
+                       alt="Contact sheet of extracted Memory Anchor frames from the OpenJar task.">
+                </div>
+                <p class="zoomfig__hint">Swipe across the figure to read &rarr;</p>
               </div>
             </details>
           </div>
@@ -971,7 +977,7 @@
                 <p class="jarcard__text">Both arms grab the bottom of the sweater and folds it upwards.</p>
               </div>
             </div>
-            <p class="sub__lede sub__lede--gap">As before, we train a diffusion policy with <code>AnchorER</code> and <code>RandER</code>. The videos below show a representative rollout from each of the evaluated tasks in the training order. Hover over a clip to see additional details.</p>
+            <p class="sub__lede sub__lede--gap">As before, we train a diffusion policy with <code>AnchorER</code> and <code>RandER</code>. The videos below show a representative rollout from each of the evaluated tasks in the training order. Hover/tap over a clip to see additional details.</p>
             <div class="taskgrid-wrap" data-taskgrid>
               <div class="taskgrids">
                 <div>
@@ -1035,13 +1041,14 @@
               </div>
               <div class="framestrip__detail" data-taskgrid-detail>
                 <p class="framestrip__detail-label" data-taskgrid-detail-label>Sweater Folding Continual Learning Task</p>
-                <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover over a clip for more details.</p>
+                <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover/tap over a clip for more details.</p>
               </div>
             </div>
             <p class="sub__lede sub__lede--gap"><b><u>What we found:</u></b> Consistent with the OpenJar results, Memory Anchors also impact the continual learning performance of SweaterFold by reducing catastrophic forgetting after learning <code>Fold Up</code> and improving the learning of the <code>Fold Left</code> task. Further results and visualizations are shown in the summary figure below.</p>
-            <div class="realrobot__frame">
+            <div class="realrobot__frame zoomfig">
               <img class="realrobot__img" src="assets/results/sweater.png" alt="Real-robot setup for the sweater folding continual learning task.">
             </div>
+            <p class="zoomfig__hint">Swipe across the figure to read &rarr;</p>
             <details class="disclosure">
               <summary class="disclosure__summary">Show Experiment Details</summary>
               <div class="disclosure__body">
