@@ -241,7 +241,10 @@ section[id] { scroll-margin-top: 80px; }
 /* ==========================================================================
    hero
    ========================================================================== */
-.hero { padding: clamp(56px, 9vw, 96px) 0 clamp(40px, 6vw, 64px); text-align: center; }
+/* padding-block, not the `padding` shorthand: a shorthand here would reset the
+   padding-left that `main > *` uses to clear the outline rail, leaving the hero
+   centered on the viewport while every other block centers on the rail-offset column. */
+.hero { padding-block: clamp(56px, 9vw, 96px) clamp(40px, 6vw, 64px); text-align: center; }
 .hero .links { justify-content: center; }
 .hero__title {
   font-size: clamp(28px, 3.4vw, 48px);
