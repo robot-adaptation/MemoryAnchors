@@ -46,7 +46,7 @@
 
   <aside class="rail" aria-label="On this page">
     <nav class="rail__links">
-      <a data-level="1" href="#about">About</a>
+      <a data-level="1" href="#overview">Overview</a>
       <a data-level="1" href="#challenge">Data Sensitivity in Continual Robot Learning</a>
       <!-- <a data-level="2" data-part="challenge" href="#challenge-setup">Sequential Task Learning</a>
       <a data-level="2" data-part="challenge" href="#challenge-why-hard">New Task Interactions with Existing Tasks</a>
@@ -71,12 +71,10 @@
   </aside>
 
   <main id="top">
-    <header class="hero">
+    <header class="hero" id="overview">
       <div class="wrap wrap--mid">
         <p class="eyebrow">Preprint &middot; 2026</p>
         <h1 class="hero__title">Memory <span class="mark">Anchors</span> for Continual Robot Learning</h1>
-        <p class="hero__tagline">When learning a sequence of tasks for robots, rehearsing past tasks prevents forgetting. But not all past data is created equal.</p>
-
         <p class="authors">
           Maximilian Du<sup>1</sup><span class="sep">, </span>Zhanyi Sun<sup>1</sup><span class="sep">, </span>Chen Xu<sup>2</sup><span class="sep">, </span>Paarth Shah<sup>2</sup><span class="sep">, </span>Masha Itkina<sup>,2</sup><span class="sep">, </span></span>Shuran Song<sup>1</sup>
         </p>
@@ -87,51 +85,33 @@
         <p class="eqc">Corresponding contact: <a href="mailto:maxjdu@stanford.edu">maxjdu@stanford.edu</a></p>
         <!-- <p class="eqc"><sup>*</sup>Equal contribution. &nbsp; <sup>&dagger;</sup>Equal advising.</p> -->
 
-        <div class="links">
-          <a class="btn" href="#">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-            Paper
-          </a>
-          <a class="btn" href="#">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-            Code
-          </a>
-          <a class="btn" href="#bibtex">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            BibTeX
-          </a>
+        <div class="hero__abstract">
+          <p class="eyebrow hero__abstract-label">Abstract</p>
+          <div class="prose">
+            <p>When learning a new task on a robot, it is common to rehearse past experiences to prevent catastrophic forgetting of past skills. This approach works very well across architectures, task sets, and on real robots too. But why does it work so well? Our work shows that <b>a small set of these experiences contributes greatly to anchoring past performance</b>. Without even a small fraction of them, catastrophic forgetting increases significantly.</p>
+            <p>Our insight: new, unseen tasks already interact with existing knowledge within the policy. If a new task has high representation overlap with past tasks, learning the task can cause forgetting if the new task requires different actions. A simple example is learning how to manipulate a familiar object in a new way. The policy is most sensitive to the past task data sampled within this conflict region. We call these experiences, <b>Memory Anchors</b>. </p>
+            <p>We present a simple way finding Memory Anchors for any new task by using the current policy's latent structure and action predictions. Excluding only 10% Memory Anchors before sampling the buffer leads to more than a 4.5x increase in catastrophic forgetting on the LIBERO benchmark suites. Conversely, enriching the replay buffer with Memory Anchors can decrease high-conflict task forgetting by 63% We show that these trends also hold on VLA models and on two real-world task suites.</p>
+          </div>
+          <details class="disclosure">
+            <summary class="disclosure__summary">Watch Overview Video</summary>
+            <div class="disclosure__body">
+              <!-- TODO: swap VIDEO_ID below for the YouTube video id - the part
+                   after "watch?v=" or after "youtu.be/". Nothing else to change. -->
+              <div class="videoembed">
+                <iframe src="https://www.youtube.com/embed/6HsdWOMSl8c"
+                        title="Memory Anchors overview video" loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
     </header>
 
-    <section id="about" class="section">
-      <div class="wrap wrap--mid reveal">
-        <p class="eyebrow">01 &middot; About</p>
-        <h2 class="sec__title">About</h2>
-        <div class="prose">
-          <p>When learning a new task on a robot, it is common to rehearse past experiences to prevent catastrophic forgetting of past skills. This approach works very well across architectures, task sets, and on real robots too. But why does it work so well? Our work shows that a small set of these experiences contributes greatly to anchoring past performance. Without even a small fraction of them, catastrophic forgetting increases significantly.</p>
-          <p>Our insight: new, unseen tasks already interact with existing knowledge within the policy. If a new task has high representation overlap with past tasks, learning the task can cause forgetting if the new task requires different actions. A simple example is learning how to manipulate a familiar object in a new way. The policy is most sensitive to the past task data sampled from this region. We call these experiences, <b>Memory Anchors</b>. </p>
-          <p>We present a simple way of querying a policy to extract Memory Anchors by using the policy's own latent structure and action predictions. Removing access to 10% of these Memory Anchors in the replay buffer leads to more than a 4.5x increase in catastrophic forgetting on the LIBERO benchmark suites. Under a limited memory budget, enriching the replay buffer with Memory Anchors can decrease worst-case forgetting in LIBERO by 63%. Finally, we show that these trends hold on VLA models and on two real-world task suites.</p>
-        </div>
-        <details class="disclosure">
-          <summary class="disclosure__summary">Watch Overview Video</summary>
-          <div class="disclosure__body">
-            <!-- TODO: swap VIDEO_ID below for the YouTube video id - the part
-                 after "watch?v=" or after "youtu.be/". Nothing else to change. -->
-            <div class="videoembed">
-              <iframe src="https://www.youtube.com/embed/6HsdWOMSl8c"
-                      title="Memory Anchors overview video" loading="lazy"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-          </div>
-        </details>
-      </div>
-    </section>
-
     <section id="challenge" class="section">
       <div class="wrap wrap--wide reveal">
-        <p class="eyebrow">02 &middot; Continual Learning Challenge</p>
+        <p class="eyebrow">01 &middot; Continual Learning Challenge</p>
         <h2 class="sec__title">Data Sensitivity in Continual Robot Learning</h2>
         <p class="sec__sub sec__sub--full">To understand Memory Anchors, we first need to take a closer look at why robot policies forget old tasks when learning new ones.</p>
         <div class="sub" id="challenge-setup">
@@ -332,7 +312,7 @@
 
     <section id="finding" class="section">
       <div class="wrap wrap--wide reveal">
-        <p class="eyebrow">03 &middot; Finding Memory Anchors</p>
+        <p class="eyebrow">02 &middot; Finding Memory Anchors</p>
         <h2 class="sec__title">Finding Memory Anchors</h2>
         <div class="sub" id="finding-three-step-approach">
           <h3 class="sub__title">The Three Step Approach</h3>
@@ -544,7 +524,7 @@
 
       <section id="impact" class="section">
         <div class="wrap wrap--wide reveal">
-          <p class="eyebrow">04 &middot; Impact of Memory Anchors</p>
+          <p class="eyebrow">03 &middot; Impact of Memory Anchors</p>
           <h2 class="sec__title">Impact of Memory Anchors</h2>
           <p class="sec__sub sec__sub--full">In the experiments below, we test our claims about Memory Anchors on the LIBERO continual learning benchmark and real-world robot tasks.</p>
 
@@ -785,7 +765,7 @@
           </div>
           <div class="sub" id="impact-vla">
             <h3 class="sub__title">On VLA models</h3>
-            <p class="sub__lede">All the results so far have been reported on a diffusion policy trained from scratch. We verify that Memory Anchors still impact larger, pretrained models like the &pi;<sub>0.5</sub> VLA. Complementary to the findings in <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">this paper</a>, we did observe that VLAs have near perfect task retention with sufficient memory budgets. However, at the low ER buffer sizes and full finetuning used in our experiments, the &pi;<sub>0.5</sub> VLA actually performed <i>worse</i> than from-scratch diffusion policy. Under these conditions, adding more Memory Anchors was beneficial. Removing Memory Anchors also further degraded performance. </p>
+            <p class="sub__lede">All the results so far have been reported on a diffusion policy trained from scratch. We verify that Memory Anchors still impact larger, pretrained models like the &pi;<sub>0.5</sub> VLA. Complementary to the findings in <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">this paper</a>, we did observe that VLAs have near perfect task retention with sufficient memory budgets. However, at the proportionally-smaller ER buffer sizes used in our experiments, the &pi;<sub>0.5</sub> VLA actually performed <i>worse</i> than from-scratch diffusion policy. Under these conditions, adding more Memory Anchors was beneficial. Removing Memory Anchors also further degraded performance. </p>
             <div class="stagesplit stagesplit--gap vla-explorer" data-vla-viewer>
               <div class="vla-explorer__header">
                 <p class="vla-explorer__title">VLA Continual Learning Results</p>
@@ -1074,7 +1054,7 @@
 
       <section id="conclusion" class="section">
         <div class="wrap wrap--mid reveal">
-          <p class="eyebrow">05 &middot; Conclusion</p>
+          <p class="eyebrow">04 &middot; Conclusion</p>
           <h2 class="sec__title">Conclusion, Limitations and FAQ</h2>
           <div class="prose">
             <p>We introduced the idea of <b>Memory Anchors</b>, a small subset of past task data critical for maintaining performance during sequential training with Experience Replay (ER). We proposed a method for identifying Memory Anchors and enriching the ER buffer with them. Through a series of studies in simulation and on a real robot, we demonstrated the importance of Memory Anchors in continual learning for overall task performance, high-conflict tasks, and on large pretrained models. </p>
@@ -1122,7 +1102,7 @@
 
     <section id="bibtex" class="section">
       <div class="wrap wrap--mid reveal">
-        <p class="eyebrow">06 &middot; BibTeX</p>
+        <p class="eyebrow">05 &middot; BibTeX</p>
         <h2 class="sec__title">BibTeX</h2>
         <div class="bib">
           <button class="bib__copy" type="button" id="bib-copy">Copy</button>
