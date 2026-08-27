@@ -83,7 +83,7 @@
       <a data-level="2" data-part="challenge" href="#challenge-representation-overlap">Initial Representation Overlap</a>
       <a data-level="2" data-part="challenge" href="#challenge-conflicting-actions">Conflicting Actions</a> -->
       <a data-level="1" href="#finding">Finding Memory Anchors</a>
-      <a data-level="2" data-part="finding" href="#finding-three-step-approach">The Three Step Approach</a>
+      <a data-level="2" data-part="finding" href="#finding-three-step-approach">The Three-Step Approach</a>
       <a data-level="2" data-part="finding" href="#finding-state-overlap">1) State Overlap</a>
       <a data-level="2" data-part="finding" href="#finding-action-disagreement">2) Action Disagreement</a>
       <a data-level="2" data-part="finding" href="#finding-anchor-selection">3) Anchor Selection</a>
@@ -106,7 +106,7 @@
         <p class="eyebrow">Preprint &middot; 2026</p>
         <h1 class="hero__title">Memory <span class="mark">Anchors</span> for Continual Robot Learning</h1>
         <p class="authors">
-          Maximilian Du<sup>1</sup><span class="sep">, </span>Zhanyi Sun<sup>1</sup><span class="sep">, </span>Chen Xu<sup>2</sup><span class="sep">, </span>Paarth Shah<sup>2</sup><span class="sep">, </span>Masha Itkina<sup>,2</sup><span class="sep">, </span></span>Shuran Song<sup>1</sup>
+          Maximilian Du<sup>1</sup><span class="sep">, </span>Zhanyi Sun<sup>1</sup><span class="sep">, </span>Chen Xu<sup>2</sup><span class="sep">, </span>Paarth Shah<sup>2</sup><span class="sep">, </span>Masha Itkina<sup>2</sup><span class="sep">, </span>Shuran Song<sup>1</sup>
         </p>
         <div class="affils">
           <span><sup>1</sup>Stanford University</span>
@@ -118,9 +118,9 @@
         <div class="hero__abstract">
           <p class="eyebrow hero__abstract-label">Abstract</p>
           <div class="prose">
-            <p>When learning a new task on a robot, it is common to rehearse past experiences to prevent catastrophic forgetting of past skills. This approach works very well across architectures, task sets, and on real robots too. But why does it work so well? Our work shows that <b>a small set of these experiences contributes greatly to anchoring past performance</b>. Without even a small fraction of them, catastrophic forgetting increases significantly.</p>
-            <p>Our insight: new, unseen tasks already interact with existing knowledge within the policy. If a new task has high representation overlap with past tasks, learning the task can cause forgetting if the new task requires different actions. A simple example is learning how to manipulate a familiar object in a new way. The policy is most sensitive to the past task data sampled within this conflict region. We call these experiences, <b>Memory Anchors</b>. </p>
-            <p>We present a simple way finding Memory Anchors for any new task by using the current policy's latent structure and action predictions. Excluding only 10% Memory Anchors before sampling the buffer leads to more than a 4.5x increase in catastrophic forgetting on the LIBERO benchmark suites. Conversely, enriching the replay buffer with Memory Anchors can decrease high-conflict task forgetting by 63% We show that these trends also hold on VLA models and on two real-world task suites.</p>
+            <p>When learning a new task on a robot, it is common to rehearse past experiences to prevent catastrophic forgetting of past skills. This approach works very well across architectures and task sets, and on real robots too. But why does it work so well? Our work shows that <b>a small set of these experiences contributes greatly to anchoring past performance</b>. Withholding even a small fraction of them increases catastrophic forgetting significantly.</p>
+            <p>Our insight: new, unseen tasks already interact with existing knowledge within the policy. If a new task has high representation overlap with past tasks, learning the task can cause forgetting when the new task requires different actions. A simple example is learning how to manipulate a familiar object in a new way. The policy is most sensitive to the past task data sampled within this conflict region. We call these experiences <b>Memory Anchors</b>. </p>
+            <p>We present a simple way to find Memory Anchors for any new task by using the current policy's latent structure and action predictions. Excluding only 10% of Memory Anchors before sampling the buffer leads to more than a 4.5x increase in catastrophic forgetting on the LIBERO benchmark suites. Conversely, enriching the replay buffer with Memory Anchors can decrease high-conflict task forgetting by 63%. We show that these trends also hold on VLA models and on two real-world task suites.</p>
           </div>
           <details class="disclosure">
             <summary class="disclosure__summary">Watch Overview Video</summary>
@@ -146,7 +146,7 @@
         <p class="sec__sub sec__sub--full">To understand Memory Anchors, we first need to take a closer look at why robot policies forget old tasks when learning new ones.</p>
         <div class="sub" id="challenge-setup">
           <h3 class="sub__title">Sequential Task Learning</h3>
-          <p class="sub__lede">We explore the problem setting of imitation learning on tasks in sequence. Drag the slider to step through ten tasks. The horizontal axis is the learning progress, and the vertical axis are the evaluated tasks. The lighter the off-diagonal elements, the worse the forgetting.</p>
+          <p class="sub__lede">We explore the problem setting of imitation learning on tasks in sequence. Drag the slider to step through ten tasks. The horizontal axis is the learning progress, and the vertical axis is the evaluated tasks. The lighter the off-diagonal elements, the worse the forgetting.</p>
 
           <div class="stagepanel">
             <div class="stagepanel__row">
@@ -201,7 +201,7 @@
 
           <div class="sub" id="challenge-why-hard">
           <h3 class="sub__title">New Task Interactions with Existing Tasks</h3>
-          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <em>how it arises.</em> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders. Look at how this task's performance (task 6) changes as the model learns task 8 (orange region).</p>
+          <p class="sub__lede">Most robot continual learning works look at this NBT metric, but not many look at <em>how it arises.</em> Does a policy forget past tasks slowly, or all at once? Below, we plot a single task's performance across different learning orders. Look at how this task's performance (task 6, red line) changes as the model learns task 8 (orange region).</p>
 
           <div class="orderings">
             <div class="orderings__track" tabindex="0" aria-label="Performance on 'put the cream cheese in the bowl' across different learning-order positions, scrollable">
@@ -249,7 +249,7 @@
               <p>Diffusion U-Net policy trained on the first few supplied LIBERO task training orderings where task 8 comes after task 6. Using a 1% buffer size.</p>
             </div>
           </details>
-          <p class="sub__lede sub__lede--gap"><b><u>What we found:</u></b> forgetting a task does not occur gradually. When some tasks are learned, other tasks experience a steep decline in performance. To understand why this happens, let's look at our conflicting task pairs, 6 and 8. The target objects in the tasks are next to each other, which makes the observations in the two tasks similar at the start.</p>
+          <p class="sub__lede sub__lede--gap"><b><u>What we found:</u></b> forgetting a task does not occur gradually. When some tasks are learned, other tasks experience a steep decline in performance. To understand why this happens, let's look at our conflicting task pair, 6 and 8. The target objects in the tasks are next to each other, which makes the observations in the two tasks similar at the start.</p>
 
           <div class="videocompare" data-video-sync>
             <div class="videocompare__media">
@@ -301,7 +301,7 @@
 
           <div class="sub" id="challenge-conflicting-actions">
           <h3 class="sub__title">Conflicting Actions</h3>
-          <p class="sub__lede">Collapsing new tasks into existing representation spaces can create conflict if the required actions are different. We plot the state novelty of the new <code>Bowl to Plate</code> task to all previous tasks by finding nearest neighbor distance in the policy's latent space. On the same graph, we plot action disagreement by comparing the predicted actions of the policy with the ground truth actions.</p>
+          <p class="sub__lede">Collapsing new tasks into existing representation spaces can create conflict if the required actions are different. We plot the state novelty of the new <code>Bowl to Plate</code> task relative to all previous tasks by finding the nearest neighbor distance in the policy's latent space. On the same graph, we plot action disagreement by comparing the predicted actions of the policy with the ground truth actions.</p>
           <div class="videocompare videocompare--wide" data-video-sync>
             <!-- --clip-ar is each clip's intrinsic aspect ratio; .videocompare__item
                  sizes its column by it so both videos render at the same height -->
@@ -346,12 +346,12 @@
         <p class="eyebrow">02 &middot; Finding Memory Anchors</p>
         <h2 class="sec__title">Finding Memory Anchors</h2>
         <div class="sub" id="finding-three-step-approach">
-          <h3 class="sub__title">The Three Step Approach</h3>
+          <h3 class="sub__title">The Three-Step Approach</h3>
           <p class="sub__lede">To test our claim, we must extract the Memory Anchors. We present a three-step filter approach that uses the current policy, old task data, and the new task data.</p>
           <ol class="sub__lede sub__lede--gap sec__sub--list">
               <li><b>State Representation Overlap.</b> Using the latent space of the current policy, find the transitions in the <span class="hl-new">new</span> data that overlap with the <span class="hl-old">old</span> task data.</li>
               <li><b>Action Prediction Disagreement.</b> Within this state overlap of the <span class="hl-new">new</span> task data, identify transitions where the current policy predicts something significantly different from the action labels.</li>
-              <li><b>Anchor Selection.</b> Using the current policy's latent space again, select the nearest <span class="hl-old">old</span> task data that are closest to the <span class="hl-new">new</span> task data isolated from the previous action disagreement step.</li>
+              <li><b>Anchor Selection.</b> Using the current policy's latent space again, select the <span class="hl-old">old</span> task data that are closest to the <span class="hl-new">new</span> task data isolated in the previous action disagreement step.</li>
             </ol>
             <p class="sub__lede sub__lede--gap">The figure below illustrates the whole process, which is described in detail with interactive visualizations in the sections below.</p>
 
@@ -365,7 +365,7 @@
 
           <div class="sub" id="finding-state-overlap">
             <h3 class="sub__title">1) State Representation Overlap</h3>
-            <p class="sub__lede">Old and new task data are both placed into the current policy's representation space. Latent distances between new and old data naturally segment the new task data into two groups: inside the representation overlap, and outside the overlap. Using clustering, we isolate the new task data within this overlap. Look at how this approach segments the <code>Bowl to Plate</code> task:</p>
+            <p class="sub__lede">Old and new task data are both placed into the current policy's representation space. Latent distances between new and old data naturally segment the new task data into two groups: inside the representation overlap and outside the overlap. Using clustering, we isolate the new task data within this overlap. Look at how this approach segments the <code>Bowl to Plate</code> task:</p>
 
             <div class="stagepanel overlappanel" id="overlap-demo-state-overlap" data-overlap-demo>
               <div class="overlappanel__media">
@@ -396,13 +396,13 @@
             <details class="disclosure">
               <summary class="disclosure__summary">FAQ &middot; Why not segment by timestep?</summary>
               <div class="disclosure__body">
-                <p>While it is true that LIBERO typically starts in state overlap and then diverges, it requires tuning the timestep threshold. This heuristic is also not generally true. In our real robot experiment, state overlap is interleaved throughout a new task trajectory.</p>
+                <p>While it is true that LIBERO typically starts in state overlap and then diverges, doing so requires tuning the timestep threshold. This heuristic is also not generally true. In our real robot experiment, state overlap is interleaved throughout a new task trajectory.</p>
               </div>
             </details>
               <details class="disclosure">
               <summary class="disclosure__summary">FAQ &middot; What if the new task is very different?</summary>
               <div class="disclosure__body">
-                <p>If the new task is in an entirely different environment (like it happens in LIBERO-Long), clustering still separates closer from further states, as an ordering still exists in latent space. We find that Memory Anchors still impacts highly heterogeneous task sequences (see results), though the selection process becomes less interpretable. </p>
+                <p>If the new task is in an entirely different environment (as happens in LIBERO-Long), clustering still separates closer from further states, as an ordering still exists in latent space. We find that Memory Anchors still impact highly heterogeneous task sequences (see results), though the selection process becomes less interpretable. </p>
               </div>
             </details>
           </div>
@@ -443,14 +443,14 @@
             <details class="disclosure">
               <summary class="disclosure__summary">FAQ &middot; Why not just run inference on the data and compare to action labels?</summary>
               <div class="disclosure__body">
-                <p>This approach also works, but it can produce false positives for multimodal data with multiple correct actions. By adding noise, we preserve enough action structure to preserve the chosen modality if the policy agrees with the action.</p>
+                <p>This approach also works, but it can produce false positives for multimodal data with multiple correct actions. By adding noise, we retain enough action structure to preserve the chosen modality if the policy agrees with the action.</p>
               </div>
             </details>
           </div>
          
           <div class="sub" id="finding-anchor-selection">
-            <h3 class="sub__title">Anchor Selection</h3>
-            <p class="sub__lede">That action disagreement subset of the new task data is most likely to cause catastrophic forgetting during training. The old data most similar to this subset therefore plays a critical role in anchoring past performance, which we call the <b>Memory Anchors.</b> Below are examples of Memory Anchors extracted for the <code>Bowl to Plate</code> task. Hover over the images to see the tasks they come from. Notice how they focus on critical decision areas, including the bowl grasp and the initial object reaching.</p>
+            <h3 class="sub__title">3) Anchor Selection</h3>
+            <p class="sub__lede">That action disagreement subset of the new task data is most likely to cause catastrophic forgetting during training. The old data most similar to this subset therefore plays a critical role in anchoring past performance; we call this data the <b>Memory Anchors.</b> Below are examples of Memory Anchors extracted for the <code>Bowl to Plate</code> task. Hover over the images to see the tasks they come from. Notice how they focus on critical decision areas, including the bowl grasp and the initial object reaching.</p>
 
             <div class="framestrip">
               <div class="framestrip__track" data-autoscroll tabindex="0" aria-label="Sampled training frames across demos, scrollable">
@@ -547,7 +547,7 @@
               <details class="disclosure">
               <summary class="disclosure__summary">FAQ &middot; Is the whole process resource intensive?</summary>
               <div class="disclosure__body">
-                <p>The whole extraction process takes up a very small percentage of the training run (~3%) and unlike other enhanced ER methods, does not require any per-step costs or gradient computations. Extracting Memory Anchors does scale with the size of the past task dataset. If the dataset becomes unwieldy, it can be subsampled and/or the selection processes can be approximated to bound the compute.</p>
+                <p>The whole extraction process takes up a very small percentage of the training run (~3%) and, unlike other enhanced ER methods, does not require any per-step costs or gradient computations. Extracting Memory Anchors does scale with the size of the past task dataset. If the dataset becomes unwieldy, it can be subsampled and/or the selection processes can be approximated to bound the compute.</p>
               </div>
             </details>
           </div>
@@ -563,7 +563,7 @@
           <div class="sub" id="impact-taking-away">
             <h3 class="sub__title">Taking Memory Anchors Away</h3>
             <p class="sub__lede">Memory Anchors are naturally present in a randomly selected ER buffer (<code>RandER</code>). To test their importance, we conduct a simple experiment. We remove some Memory Anchors (top 1%, 5%, 10%) from the sampling process and measure catastrophic forgetting.</p>
-            <p class="sub__lede sub__lede--gap"><b><u>What we found</u></b>: the fewer Memory Anchors available, the worse the forgetting, even as the total number of memories in the ER buffer stay the same.</p>
+            <p class="sub__lede sub__lede--gap"><b><u>What we found</u></b>: the fewer Memory Anchors available, the worse the forgetting, even as the total number of memories in the ER buffer stays the same.</p>
             <figure class="barchart">
               <div class="barchart__frame">
                 <div class="zoomfig">
@@ -683,13 +683,13 @@
             <details class="disclosure">
               <summary class="disclosure__summary">Show Experiment Details</summary>
               <div class="disclosure__body">
-                <p>Using an ER buffer size of 1000 (total, not per task) across all trials. The only difference between all experimental conditions is the past task dataset. In the RandER condition, all of the dataset is equally likely to be chosen. In the RandER w/o X% condition, the X% best Memory Anchors are removed from the datasets before running RandER sampling. The reported values are average NBT (Negative Backward Transfer), error bars across one SEM. </p>
+                <p>Using an ER buffer size of 1000 (total, not per task) across all trials. The only difference between all experimental conditions is the past task dataset. In the RandER condition, all of the data is equally likely to be chosen. In the RandER w/o X% condition, the X% best Memory Anchors are removed from the datasets before running RandER sampling. The reported values are average NBT (Negative Backward Transfer), error bars show &plusmn;1 SEM. </p>
               </div>
             </details>
           </div>
           <div class="sub" id="impact-adding-more">
             <h3 class="sub__title">Adding More Memory Anchors</h3>
-            <p class="sub__lede">If taking away Memory Anchors worsened forgetting, adding more Memory Anchors should reduce forgetting. We test this by adding Memory Anchors into the ER buffer (10% / 20%) and then filling the rest randomly (<code>AnchorER</code>). Below, we graph the worst-case NBT, computed from the six most conflicting task-task pairs identified from <code>RandER</code> baseline runs.</p>
+            <p class="sub__lede">If taking away Memory Anchors worsened forgetting, then adding more Memory Anchors should reduce it. We test this by adding Memory Anchors into the ER buffer (10% / 20%) and then filling the rest randomly (<code>AnchorER</code>). Below, we graph the worst-case NBT, computed from the six most conflicting task-task pairs identified from <code>RandER</code> baseline runs.</p>
             <p class="sub__lede sub__lede--gap"><b><u>What we found</u></b>: by enriching the buffer with more Memory Anchor samples, catastrophic forgetting is reduced significantly on the worst task-task interactions.</p>
             <figure class="barchart">
               <div class="barchart__frame">
@@ -791,7 +791,7 @@
             <details class="disclosure">
               <summary class="disclosure__summary">Show Experiment Details</summary>
               <div class="disclosure__body">
-                <p>Using an ER buffer size of 1% of the past data size. The randomly selected Memory Anchors can be enough to support many task-task pairings, which is why we chose to focus on the worst case interaction subset for this experiment. This subset was found by looking at all of the task-task interactions on a set of RandER runs and picking the 6 interactions with the highest average forgetting across training orders. We report the average forgetting on these interactions for AnchorER and RandER.</p>
+                <p>Using an ER buffer size of 1% of the past data size. The randomly selected Memory Anchors can be enough to support many task-task pairings, which is why we chose to focus on the worst-case interaction subset for this experiment. This subset was found by looking at all of the task-task interactions on a set of RandER runs and picking the 6 interactions with the highest average forgetting across training orders. We report the average forgetting on these interactions for AnchorER and RandER.</p>
               </div>
             </details>
              <details class="disclosure">
@@ -803,7 +803,7 @@
           </div>
           <div class="sub" id="impact-vla">
             <h3 class="sub__title">On VLA models</h3>
-            <p class="sub__lede">All the results so far have been reported on a diffusion policy trained from scratch. We verify that Memory Anchors still impact larger, pretrained models like the &pi;<sub>0.5</sub> VLA. Complementary to the findings in <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">this paper</a>, we did observe that VLAs have near perfect task retention with sufficient memory budgets. However, at the proportionally-smaller ER buffer sizes used in our experiments, the &pi;<sub>0.5</sub> VLA actually performed <i>worse</i> than from-scratch diffusion policy. Under these conditions, adding more Memory Anchors was beneficial. Removing Memory Anchors also further degraded performance. </p>
+            <p class="sub__lede">All the results so far have been reported on a diffusion policy trained from scratch. We verify that Memory Anchors still impact larger, pretrained models like the &pi;<sub>0.5</sub> VLA. Complementary to the findings in <a href="https://continual-vlas.github.io/forget-me-not/" target="_blank" rel="noopener noreferrer">this paper</a>, we did observe that VLAs have near-perfect task retention with sufficient memory budgets. However, at the proportionally smaller ER buffer sizes used in our experiments, the &pi;<sub>0.5</sub> VLA actually performed <i>worse</i> than the from-scratch diffusion policy. Under these conditions, adding more Memory Anchors was beneficial. Removing Memory Anchors also further degraded performance. </p>
             <div class="stagesplit stagesplit--gap vla-explorer" data-vla-viewer>
               <div class="vla-explorer__header">
                 <p class="vla-explorer__title">VLA Continual Learning Results</p>
@@ -813,12 +813,12 @@
                 <div class="stageplayer">
                   <div class="viewer-toggle-groups">
                     <div class="viewer-toggle" role="group" aria-label="Success matrix selection" data-toggle-group="enriching">
-                      <button type="button" class="viewer-toggle__btn" data-image="rander" data-caption="RandER: keeping behind 1% of past data in the ER buffer leads to low task retention." aria-pressed="true">RandER 1%</button>
+                      <button type="button" class="viewer-toggle__btn" data-image="rander" data-caption="RandER: keeping only 1% of past data in the ER buffer leads to low task retention." aria-pressed="true">RandER 1%</button>
                       <button type="button" class="viewer-toggle__btn" data-image="anchors" data-caption="AnchorER: enriching the buffer with Memory Anchors raises overall task retention (darker colors in the off-diagonals)." aria-pressed="false">AnchorER 1%</button>
                     </div>
                     <div class="viewer-toggle" role="group" aria-label="Success matrix selection" data-toggle-group="reducing" hidden>
-                      <button type="button" class="viewer-toggle__btn" data-image="base_1000" data-caption="RandER: Keeping a buffer of 1000 total memories leads to high past task retention." aria-pressed="true">RandER 1000 Memories</button>
-                      <button type="button" class="viewer-toggle__btn" data-image="invert_10" data-caption="RandER w/o 10% Memory Anchors: Reducing access to Memory Anchors in the ER buffer sampling process significantly increases forgetting." aria-pressed="false">&minus;10% Anchors</button>
+                      <button type="button" class="viewer-toggle__btn" data-image="base_1000" data-caption="RandER: keeping a buffer of 1000 total memories leads to high past task retention." aria-pressed="true">RandER 1000 Memories</button>
+                      <button type="button" class="viewer-toggle__btn" data-image="invert_10" data-caption="RandER w/o 10% Memory Anchors: reducing access to Memory Anchors in the ER buffer sampling process significantly increases forgetting." aria-pressed="false">&minus;10% Anchors</button>
                     </div>
                   </div>
                   <div class="stageplayer__frame">
@@ -877,13 +877,13 @@
             <details class="disclosure">
               <summary class="disclosure__summary">FAQ &middot; Why are the RandER numbers different in the two experiments?</summary>
               <div class="disclosure__body">
-                <p>Consistent with our experiment setup on diffusion policy, we use a 1% buffer size for the addition experiment and a 1000 total buffer for the subtraction experiment. We use the larger, fixed-size buffer for the subtraction experiment because RandER does better, showing us that memory anchors are still important even at a larger budget. Likewise, we use a smaller buffer on the addition experiment to show that Memory Anchors can improve performance even with limited data. This finding is consistent between VLAs and diffusion policies.</p>
+                <p>Consistent with our experiment setup on diffusion policy, we use a 1% buffer size for the addition experiment and a 1000-memory total buffer for the subtraction experiment. We use the larger, fixed-size buffer for the subtraction experiment because RandER does better, showing us that Memory Anchors are still important even at a larger budget. Likewise, we use a smaller buffer on the addition experiment to show that Memory Anchors can improve performance even with limited data. This finding is consistent between VLAs and diffusion policies.</p>
               </div>
             </details>
           </div>
           <div class="sub" id="impact-jar-opening">
             <h3 class="sub__title">Real World: Jar Opening Task</h3>
-            <p class="sub__lede">The simulated LIBERO benchmark shows that Memory Anchors are effective in long sequences of tasks, but do these findings transfer to a real robot? To investigate, we make a diagnostic task suite on a real robot, OpenJar. It consists of three visually similar jars that require different strategies: <code>Counterclockwise</code>, <code>Clockwise</code>, and <code>Lift</code>. Unlike the LIBERO benchmark that has only a few decision points per task, OpenJar requires the robot to make a decision every time the gripper is moving towards the jar. For the screw-type jars, this happens many times during the task. </p>
+            <p class="sub__lede">The simulated LIBERO benchmark shows that Memory Anchors are effective in long sequences of tasks, but do these findings transfer to a real robot? To investigate, we make a diagnostic task suite on a real robot, OpenJar. It consists of three visually similar jars that require different strategies: <code>Counterclockwise</code>, <code>Clockwise</code>, and <code>Lift</code>. Unlike the LIBERO benchmark, which has only a few decision points per task, OpenJar requires the robot to make a decision every time the gripper is moving towards the jar. For the screw-type jars, this happens many times during the task. </p>
             <div class="jargrid">
               <div class="jarcard">
                 <video class="jarcard__video" src="assets/results/task1.mp4" autoplay muted loop playsinline></video>
@@ -917,16 +917,16 @@
                   <video class="taskgrid__video" src="assets/results/fp_ours_2_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="2" data-rate="16/20 (80%)" data-note="As expected, the current policy is able to learn the new task well."></video>
                 </div>
                 <div class="taskgrid__cell" style="grid-column:4; grid-row:2;">
-                  <video class="taskgrid__video" src="assets/results/fp_ours_2_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="3" data-rate="13/20 (65%)" data-note="Anchor Memories ensure that the previous skill is retained even as a conflicting task is learned. The failure modes include lifting the Clockwise jar (catastrophic forgetting)."></video>
+                  <video class="taskgrid__video" src="assets/results/fp_ours_2_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="3" data-rate="13/20 (65%)" data-note="Memory Anchors ensure that the previous skill is retained even as a conflicting task is learned. The failure modes include lifting the Clockwise jar (catastrophic forgetting)."></video>
                 </div>
                 <div class="taskgrid__cell" style="grid-column:2; grid-row:3;">
                   <video class="taskgrid__video" src="assets/results/fp_ours_1_1.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="1" data-rate="20/20 (100%)" data-note="As expected, the current policy is able to learn the new task well."></video>
                 </div>
                 <div class="taskgrid__cell" style="grid-column:3; grid-row:3;">
-                  <video class="taskgrid__video" src="assets/results/fp_ours_1_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="2" data-rate="15/20 (75%)" data-note="Anchor Memories ensure that the previous skill is retained even as a conflicting task is learned. The failure modes include trying to rotate the Counterclockwise jar the wrong way (catastrophic forgetting)"></video>
+                  <video class="taskgrid__video" src="assets/results/fp_ours_1_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="2" data-rate="15/20 (75%)" data-note="Memory Anchors ensure that the previous skill is retained even as a conflicting task is learned. The failure modes include trying to rotate the Counterclockwise jar the wrong way (catastrophic forgetting)."></video>
                 </div>
                 <div class="taskgrid__cell" style="grid-column:4; grid-row:3;">
-                  <video class="taskgrid__video" src="assets/results/fp_ours_1_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="3" data-rate="8/20 (40%)" data-note="Anchor Memories ensure that the previous skill is retained even as a conflicting task is learned. Due to the highly conflicting Lift task, catastrophic forgetting still occurs even with Anchor Memories. The failure modes include lifting the Counterclockwise jar. "></video>
+                  <video class="taskgrid__video" src="assets/results/fp_ours_1_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="3" data-rate="8/20 (40%)" data-note="Memory Anchors ensure that the previous skill is retained even as a conflicting task is learned. Due to the highly conflicting Lift task, catastrophic forgetting still occurs even with Memory Anchors. The failure modes include lifting the Counterclockwise jar."></video>
                 </div>
                 <span class="taskgrid__collabel" style="grid-column:2; grid-row:4;">Train Task 1</span>
                 <span class="taskgrid__collabel" style="grid-column:3; grid-row:4;">Train Task 2</span>
@@ -943,10 +943,10 @@
                   <video class="taskgrid__video" src="assets/results/fp_base_3_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="3" data-train="3" data-rate="18/20 (90%)" data-note="As expected, the current policy is able to learn the new task well."></video>
                 </div>
                 <div class="taskgrid__cell" style="grid-column:3; grid-row:2;">
-                  <video class="taskgrid__video" src="assets/results/fp_base_2_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="2" data-rate="5/20 (25%)" data-note="Surprisingly, RandER struggles to learn a second task and instead generalizes backward to the first task. We also observe this phenomenon on the second task suite (see next section). We don't have detailed analysis of this phenomenon as it doesn't exist in simulation, but this might be due to the RandER buffer being too large and not targeted, making the overall regularization too strong."></video>
+                  <video class="taskgrid__video" src="assets/results/fp_base_2_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="2" data-rate="5/20 (25%)" data-note="Surprisingly, RandER struggles to learn a second task and instead generalizes backward to the first task. We also observe this phenomenon on the second task suite (see next section). We don't have a detailed analysis of this phenomenon as it doesn't exist in simulation, but this might be due to the RandER buffer being too large and not targeted, making the overall regularization too strong."></video>
                 </div>
                 <div class="taskgrid__cell" style="grid-column:4; grid-row:2;">
-                  <video class="taskgrid__video" src="assets/results/fp_base_2_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="3" data-rate="2/20 (10%)" data-note="Without Anchor Memories, the model fails to retain the second Clockwise task after training on Lift and instead tries to lift all jars."></video>
+                  <video class="taskgrid__video" src="assets/results/fp_base_2_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="2" data-train="3" data-rate="2/20 (10%)" data-note="Without Memory Anchors, the model fails to retain the second Clockwise task after training on Lift and instead tries to lift all jars."></video>
                 </div>
                 <div class="taskgrid__cell" style="grid-column:2; grid-row:3;">
                   <video class="taskgrid__video" src="assets/results/fp_base_1_1.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="1" data-rate="20/20 (100%)" data-note="As expected, the current policy is able to learn the new task well."></video>
@@ -955,7 +955,7 @@
                   <video class="taskgrid__video" src="assets/results/fp_base_1_2.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="2" data-rate="16/20 (80%)" data-note="Consistent with the overregularization hypothesis (see: Train 2, Eval 2), RandER is able to preserve the first task at the cost of not learning the second task."></video>
                 </div>
                 <div class="taskgrid__cell" style="grid-column:4; grid-row:3;">
-                  <video class="taskgrid__video" src="assets/results/fp_base_1_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="3" data-rate="3/20 (15%)" data-note="Without Anchor Memories, the model fails to retain the first Counterclockwise task after training on Lift and instead tries to lift all jars."></video>
+                  <video class="taskgrid__video" src="assets/results/fp_base_1_3.mp4" autoplay muted loop playsinline data-method="RandER (Baseline)" data-eval="1" data-train="3" data-rate="3/20 (15%)" data-note="Without Memory Anchors, the model fails to retain the first Counterclockwise task after training on Lift and instead tries to lift all jars."></video>
                 </div>
                 <span class="taskgrid__collabel" style="grid-column:2; grid-row:4;">Train Task 1</span>
                 <span class="taskgrid__collabel" style="grid-column:3; grid-row:4;">Train Task 2</span>
@@ -968,7 +968,7 @@
                 <p class="framestrip__detail-text" data-taskgrid-detail-text>Hover/tap over a clip for more details.</p>
               </div>
             </div>
-            <p class="sub__lede sub__lede--gap"><b><u>What we found:</u></b> Memory Anchors impact real robot performance, both reducing forgetting and improving the learning of new tasks compared to <code>RandER</code>. Interestingly, the targeted coverage of <code>AnchorER</code> mitigates an overregularization effect caused by the large ER buffer on the second task. The final success rate of <code>AnchorER</code> on the three tasks is 1.7x higher than RandER. Further results and visualizations are shown in the summary figure below.</p>
+            <p class="sub__lede sub__lede--gap"><b><u>What we found:</u></b> Memory Anchors impact real robot performance, both reducing forgetting and improving the learning of new tasks compared to <code>RandER</code>. Interestingly, the targeted coverage of <code>AnchorER</code> mitigates an overregularization effect caused by the large ER buffer on the second task. The final success rate of <code>AnchorER</code> on the three tasks is 1.7x higher than RandER's. Further results and visualizations are shown in the summary figure below.</p>
             <div class="realrobot__frame zoomfig">
               <img class="realrobot__img" src="assets/results/realrobot.png" alt="Real-robot setup for the OpenJar continual learning task.">
             </div>
@@ -982,7 +982,7 @@
             <details class="disclosure">
               <summary class="disclosure__summary">Show Memory Anchor Examples</summary>
               <div class="disclosure__body">
-                <p>Below are the top 100 Memory Anchors extracted from the first task when we are starting to train the second task. Notice how they all focus on the moment when the robot is about to move forward and contact the jar. This is the exact moment that differentiates counterclockwise and clockwise jar rotations.</p>
+                <p>Below are the top 100 Memory Anchors extracted from the first task when we start training the second task. Notice how they all focus on the moment when the robot is about to move forward and contact the jar. This is the exact moment that differentiates counterclockwise and clockwise jar rotations.</p>
                 <!-- lazy: a closed <details> is display:none, so this 3.9 MB sheet
                      isn't fetched until someone actually opens the dropdown -->
                 <div class="zoomfig">
@@ -1010,7 +1010,7 @@
               <div class="jarcard">
                 <video class="jarcard__video" src="assets/results/sweater_task3.mp4" autoplay muted loop playsinline></video>
                 <p class="jarcard__title">Task 3: Fold Up </p>
-                <p class="jarcard__text">Both arms grab the bottom of the sweater and folds it upwards.</p>
+                <p class="jarcard__text">Both arms grab the bottom of the sweater and fold it upwards.</p>
               </div>
             </div>
             <p class="sub__lede sub__lede--gap">As before, we train a diffusion policy with <code>AnchorER</code> and <code>RandER</code>. The videos below show a representative rollout from each of the evaluated tasks in the training order. Hover/tap over a clip to see additional details.</p>
@@ -1029,16 +1029,16 @@
                       <video class="taskgrid__video" src="assets/results/sweater_ours_2_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="2" data-rate="20/20 (100%)" data-note="As expected, the current policy is able to learn the new task."></video>
                     </div>
                     <div class="taskgrid__cell" style="grid-column:4; grid-row:2;">
-                      <video class="taskgrid__video" src="assets/results/sweater_ours_2_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="3" data-rate="10/20 (50%)" data-note="Anchor Memories ensure that the previous skill is retained even as a conflicting task is learned. The main failure modes are executing the wrong behavior (Fold Up)"></video>
+                      <video class="taskgrid__video" src="assets/results/sweater_ours_2_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="2" data-train="3" data-rate="10/20 (50%)" data-note="Memory Anchors ensure that the previous skill is retained even as a conflicting task is learned. The main failure modes are executing the wrong behavior (Fold Up)."></video>
                     </div>
                     <div class="taskgrid__cell" style="grid-column:2; grid-row:3;">
                       <video class="taskgrid__video" src="assets/results/sweater_ours_1_1.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="1" data-rate="20/20 (100%)" data-note="As expected, the current policy is able to learn the new task."></video>
                     </div>
                     <div class="taskgrid__cell" style="grid-column:3; grid-row:3;">
-                      <video class="taskgrid__video" src="assets/results/sweater_ours_1_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="2" data-rate="19/20 (95%)" data-note="Anchor Memories ensure that the previous skill is retained even as a conflicting task is learned. It is worth noting that the policy now moves both arms forward but still only executes the left fold. This is shared between AnchorER and RandER runs."></video>
+                      <video class="taskgrid__video" src="assets/results/sweater_ours_1_2.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="2" data-rate="19/20 (95%)" data-note="Memory Anchors ensure that the previous skill is retained even as a conflicting task is learned. It is worth noting that the policy now moves both arms forward but still only executes the left fold. This is shared between AnchorER and RandER runs."></video>
                     </div>
                     <div class="taskgrid__cell" style="grid-column:4; grid-row:3;">
-                      <video class="taskgrid__video" src="assets/results/sweater_ours_1_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="3" data-rate="15/20 (75%)" data-note="Anchor Memories ensure that the previous skill is retained even as a conflicting task is learned. The main failure modes are executing the wrong behavior (Fold Up)"></video>
+                      <video class="taskgrid__video" src="assets/results/sweater_ours_1_3.mp4" autoplay muted loop playsinline data-method="AnchorER (Ours)" data-eval="1" data-train="3" data-rate="15/20 (75%)" data-note="Memory Anchors ensure that the previous skill is retained even as a conflicting task is learned. The main failure modes are executing the wrong behavior (Fold Up)."></video>
                     </div>
                     <span class="taskgrid__collabel" style="grid-column:2; grid-row:4;">Train Task 1</span>
                     <span class="taskgrid__collabel" style="grid-column:3; grid-row:4;">Train Task 2</span>
@@ -1098,44 +1098,44 @@
       <section id="conclusion" class="section">
         <div class="wrap wrap--mid reveal">
           <p class="eyebrow">04 &middot; Conclusion</p>
-          <h2 class="sec__title">Conclusion, Limitations and FAQ</h2>
+          <h2 class="sec__title">Conclusion, Limitations, and FAQ</h2>
           <div class="prose">
             <p>We introduced the idea of <b>Memory Anchors</b>, a small subset of past task data critical for maintaining performance during sequential training with Experience Replay (ER). We proposed a method for identifying Memory Anchors and enriching the ER buffer with them. Through a series of studies in simulation and on a real robot, we demonstrated the importance of Memory Anchors in continual learning for overall task performance, high-conflict tasks, and on large pretrained models. </p>
           </div>
         <div class="sub" id="conclusion-limitations">
           <h3 class="sub__title">Limitations</h3>
           <ol class="sub__lede sec__sub--list">
-            <li><b> Data and model access:</b> Finding Memory Anchors requries access to past training data and the model's representation space. For proprietary models, this may not be feasible. A workaround is to extract Memory Anchors from an alternate, open-access dataset and use that dataset for the ER buffer. We leave this for future work. </li>
-            <li><b> Can compute many representations:</b> Identifying Memory Anchors requires distances in latent space, which means computing representations for many data points. For large past datasets, this can be bounded by subsampling the sets.</li>
-            <li><b> Not the only factor:</b> As seen with the AnchorER enrichment, we can't fill an ER buffer with only Memory Anchors, as the diversity suffers and subsequently the performance. Beyond Memory Anchors, diversity and other data qualities also influence continual learning.</li>
+            <li><b> Data and model access:</b> Finding Memory Anchors requires access to past training data and the model's representation space. For proprietary models, this may not be feasible. A workaround is to extract Memory Anchors from an alternate, open-access dataset and use that dataset for the ER buffer. We leave this for future work. </li>
+            <li><b> Must compute many representations:</b> Identifying Memory Anchors requires distances in latent space, which means computing representations for many data points. For large past datasets, this can be bounded by subsampling the sets.</li>
+            <li><b> Not the only factor:</b> As seen with the AnchorER enrichment, we can't fill an ER buffer with only Memory Anchors, as the diversity suffers and, subsequently, so does the performance. Beyond Memory Anchors, diversity and other data qualities also influence continual learning.</li>
           </ol>
         </div>
 
         <div class="sub" id="faq">
           <h3 class="sub__title">FAQs</h3>
-          <p class="sub__lede">We have addressed specific FAQ's / experiment details in their relevant sections, and here we address general FAQs about Memory Anchors and Continual Learning.</p>
+          <p class="sub__lede">We have addressed specific FAQs / experiment details in their relevant sections, and here we address general FAQs about Memory Anchors and Continual Learning.</p>
           <details class="disclosure">
             <summary class="disclosure__summary">FAQ &middot; Why do we care about forgetting past tasks?</summary>
             <div class="disclosure__body">
-              <p>In some adaptation frameworks, we only care about positive transfer: the ability to leverage past tasks to learn a new one. But if finetuning a model a new task causes the past tasks to degrade, we are no longer making a generalist policy. And as we saw with our real world results, dealing with catastrophic forgetting means dealing with the relationships between tasks, which also help with forward transfer.</p>
+              <p>In some adaptation frameworks, we only care about positive transfer: the ability to leverage past tasks to learn a new one. But if finetuning a model on a new task causes the past tasks to degrade, we are no longer making a generalist policy. And as we saw with our real world results, dealing with catastrophic forgetting means dealing with the relationships between tasks, which also help with forward transfer.</p>
             </div>
           </details>
           <details class="disclosure">
             <summary class="disclosure__summary">FAQ &middot; Do large pretrained models solve catastrophic forgetting?</summary>
             <div class="disclosure__body">
-              <p>With a large enough buffer, large pretrained models indeed have great sequential learning performance. We encourage you to check out <a href="https://arxiv.org/abs/2603.03818" target="_blank" rel="noopener noreferrer">this paper</a>. However, at the low ER buffer sizes in our experiments (around 20x smaller than past works on VLA), pretrained models still struggle. In fact, they perform worse than a from-scratch diffusion policy but they also respond stronger to Memory Anchor enrichment.</p>
+              <p>With a large enough buffer, large pretrained models indeed have great sequential learning performance. We encourage you to check out <a href="https://arxiv.org/abs/2603.03818" target="_blank" rel="noopener noreferrer">this paper</a>. However, at the low ER buffer sizes in our experiments (around 20x smaller than past works on VLA), pretrained models still struggle. In fact, they perform worse than a from-scratch diffusion policy, but they also respond more strongly to Memory Anchor enrichment.</p>
             </div>
           </details>
           <details class="disclosure">
             <summary class="disclosure__summary">FAQ &middot; Why do you care about small ER buffer sizes?</summary>
             <div class="disclosure__body">
-              <p>Having access to a large ER buffer during training can become resource intensive. We experiment with ER buffer sizes that are small <i>relative to the past task experience size</i>, which represents a practical setup for continual learning in the real world with longer task sequences. These frugal buffers also  highlights the importance of data and Memory Anchors.</p>
+              <p>Having access to a large ER buffer during training can become resource intensive. We experiment with ER buffer sizes that are small <i>relative to the past task experience size</i>, which represents a practical setup for continual learning in the real world with longer task sequences. These frugal buffers also highlight the importance of data and Memory Anchors.</p>
             </div>
           </details>
           <details class="disclosure">
             <summary class="disclosure__summary">FAQ &middot; I'm trying to do robot continual learning. What are your recommendations?</summary>
             <div class="disclosure__body">
-              <p>A randomly selected ER buffer already contains Memory Anchors, so it is always good to start with a random buffer. Random ER may be sufficient if you are using a large buffer (>5% of the total dataset) and training on tasks that are very different from one-another (e.g. tasks in completely different environments with different objects). But if you are encountering catastrophic forgetting, consider computing Memory Anchors using our method and seeing if enriching your ER buffer provides some improvement.</p>
+              <p>A randomly selected ER buffer already contains Memory Anchors, so it is always good to start with a random buffer. Random ER may be sufficient if you are using a large buffer (>5% of the total dataset) and training on tasks that are very different from one another (e.g. tasks in completely different environments with different objects). But if you are encountering catastrophic forgetting, consider computing Memory Anchors using our method and seeing if enriching your ER buffer provides some improvement.</p>
             </div>
           </details>
         </div>
