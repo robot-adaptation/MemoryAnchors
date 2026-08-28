@@ -187,6 +187,14 @@ section[id], .hero[id] { scroll-margin-top: 80px; }
 }
 .navbtn:hover { color: var(--fg); background: var(--surface-2); }
 .navbtn svg { width: 14px; height: 14px; flex: none; }
+/* the "Code" nav item is a <button> (it opens a note rather than navigating),
+   so strip the UA button chrome to keep it identical to its <a> siblings */
+/* no font-size here on purpose: .navbtn's own 14.5px already beats the UA
+   button default, and re-declaring it would fork the two from each other */
+button.navbtn {
+  border: 0; background: none; cursor: pointer;
+  font-family: inherit; font-weight: inherit; line-height: inherit;
+}
 @media (min-width: 1024px) {
   .nav__title { display: block; flex: 1 1 auto; min-width: 0; }
 }
@@ -1142,3 +1150,31 @@ section[id], .hero[id] { scroll-margin-top: 80px; }
   }
   .vla-explorer > * { min-width: 0; }
 }
+
+/* ==========================================================================
+   notice dialog: a short note for a nav item that has nowhere to point yet
+   ========================================================================== */
+.notice {
+  width: min(340px, calc(100vw - 2 * var(--pad)));
+  padding: clamp(18px, 2.4vw, 24px);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius);
+  background: var(--bg-raise);
+  color: var(--fg);
+  font-family: var(--ff-body);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .28);
+}
+.notice::backdrop { background: rgba(6, 12, 18, .5); }
+.notice__label { margin-bottom: 10px; }
+.notice__text {
+  margin: 0 0 18px; font-size: 15px; line-height: 1.6; color: var(--fg-muted);
+}
+.notice__close {
+  display: inline-flex; align-items: center; cursor: pointer;
+  padding: 7px 15px; font: inherit; font-size: 13.5px;
+  border: 1px solid var(--border); border-radius: var(--radius-pill);
+  background: var(--surface); color: var(--fg);
+  transition: background .18s var(--ease), border-color .18s var(--ease);
+}
+.notice__close:hover { background: var(--surface-2); border-color: var(--primary); }

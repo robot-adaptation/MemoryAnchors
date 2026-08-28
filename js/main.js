@@ -640,6 +640,36 @@
     sections.forEach(function (s) { io.observe(s); });
   }
 
+  /* Nav items with no destination yet ([data-notice-open]) open a small
+     <dialog> instead of a dead link. showModal() supplies the backdrop, the
+     focus trap, and Esc-to-close; the fallback just reveals the note inline
+     for the rare engine without <dialog>. */
+  function initNoticeDialogs() {
+    document.querySelectorAll('[data-notice-open]').forEach(function (trigger) {
+      var dlg = document.getElementById(trigger.getAttribute('data-notice-open'));
+      if (!dlg) return;
+
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (typeof dlg.showModal === 'function') dlg.showModal();
+        else dlg.setAttribute('open', '');
+      });
+
+      dlg.querySelectorAll('[data-notice-close]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (typeof dlg.close === 'function') dlg.close();
+          else dlg.removeAttribute('open');
+        });
+      });
+
+      /* the dialog itself is the click target only for presses that land on
+         the backdrop, so this closes on outside-click without a wrapper div */
+      dlg.addEventListener('click', function (e) {
+        if (e.target === dlg && typeof dlg.close === 'function') dlg.close();
+      });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initTheme();
     initReveal();
@@ -653,5 +683,6 @@
     initAutoScrollTracks();
     initFramestripDetail();
     initRailSpy();
+    initNoticeDialogs();
   });
 })();
