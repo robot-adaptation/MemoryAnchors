@@ -145,6 +145,9 @@ section[id], .hero[id] { scroll-margin-top: 80px; }
   font-size: var(--fs-meta); letter-spacing: var(--ls-meta); text-transform: uppercase;
   color: var(--fg-faint); margin-bottom: 16px;
 }
+/* for eyebrows whose text carries meaningful capitalization (e.g. "CoRL"),
+   which the blanket uppercase above would flatten */
+.eyebrow--exact { text-transform: none; }
 
 /* ==========================================================================
    nav

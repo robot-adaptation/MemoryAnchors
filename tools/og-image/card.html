@@ -1,0 +1,71 @@
+<!doctype html>
+<!--
+  Source for assets/og-image-vN.png — the 1200x630 social preview card.
+
+  Rendered to PNG by ./build.sh (headless Chrome screenshot). Nothing links to
+  this file from the site; it exists so the card can be regenerated instead of
+  re-drawn by hand.
+
+  The numbers below are not arbitrary: they were fitted so the rendered PNG
+  matches the original hand-made card to within a few pixels on every text
+  block. Colors are the day-theme tokens from css/style.css resolved to
+  literals (a screenshot cannot read CSS variables from another file):
+
+    #e9f5f7           --bg            page ground
+    #0b2027           --fg            title ink
+    #4b7466           --primary       accent: "Anchors", anchor glyph, base bar
+    rgba(11,32,39,.78) --fg-muted     authors
+    rgba(11,32,39,.60) --fg-dim       affiliations
+    rgba(11,32,39,.42) --fg-faint     eyebrow
+
+  If the site's palette changes, update these to match.
+
+  The eyebrow is IBM Plex Serif like .eyebrow on the page, but at 22px/.05em
+  rather than the page's 11px/.08em, and without text-transform: uppercase so
+  "CoRL" keeps its capitalization (the page does the same via .eyebrow--exact).
+
+  The anchor glyph is inlined rather than pulled from assets/anchor.svg so it
+  can take a fill color; index.html inlines the same path for the nav brand.
+-->
+<html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- display=block, not swap: a swap would let the screenshot fire while the
+     fallback face is still showing and silently produce a wrong card -->
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;}
+  body{width:1200px;height:630px;background:#e9f5f7;color:#0b2027;
+       font-family:"IBM Plex Sans",sans-serif;-webkit-font-smoothing:antialiased;
+       position:relative;overflow:hidden;}
+  /* everything is absolutely positioned off a 92px left margin: the tops are
+     fitted values, so normal flow would drift them as soon as a font metric
+     changed */
+  .pad{position:absolute;left:92px;top:0;right:92px;}
+  .eyebrow{display:flex;align-items:center;gap:14px;position:absolute;top:142px;
+           font-family:"IBM Plex Serif",serif;font-size:22px;font-weight:400;
+           letter-spacing:.05em;color:rgba(11,32,39,.42);}
+  .eyebrow svg{width:30px;height:auto;fill:#4b7466;flex:none;}
+  /* nowrap: the title breaks where the <br> says it does, never where the
+     1016px content box happens to run out */
+  h1{white-space:nowrap;position:absolute;top:213px;margin:0;font-size:75px;font-weight:700;
+     line-height:81px;letter-spacing:-.02em;}
+  .mark{color:#4b7466;}
+  .authors{position:absolute;top:410px;margin:0;font-size:26px;font-weight:400;
+           color:rgba(11,32,39,.78);}
+  .affils{position:absolute;top:459px;margin:0;font-size:22px;font-weight:400;
+          color:rgba(11,32,39,.60);}
+  .bar{position:absolute;left:0;right:0;bottom:0;height:10px;background:#4b7466;}
+</style></head>
+<body>
+<div class="pad">
+  <div class="eyebrow">
+    <svg viewBox="0 0 6.16 7.1" aria-hidden="true"><path d="M3.45,2.14c.32,0,.64,0,.96,0,.2,0,.21.02.21.22,0,.1,0,.2,0,.31,0,.13-.05.19-.18.18-.29,0-.57,0-.86,0-.05,0-.09,0-.14,0v3.03c.65-.04,1.45-.62,1.6-1.38-.06,0-.11,0-.16,0-.12,0-.17-.1-.1-.19.19-.24.39-.47.59-.7.06-.07.13-.07.19,0,.19.23.39.46.58.69.08.09.02.19-.1.2-.23.02-.23.02-.3.25-.3.98-.99,1.54-1.95,1.8-.11.03-.22.04-.34.07.05.22-.13.32-.26.44-.03.03-.13.05-.16.02-.14-.12-.33-.21-.29-.45-.21-.05-.42-.09-.61-.16-.89-.33-1.5-.93-1.71-1.88-.02-.08-.05-.09-.12-.1-.09,0-.22-.01-.26-.07-.07-.1.06-.18.11-.25.14-.18.29-.35.43-.52.11-.13.16-.13.28,0,.17.2.34.4.5.61.03.04.07.13.05.17-.02.04-.1.05-.16.07-.03,0-.07,0-.11,0,.12.68.86,1.31,1.59,1.38v-3.05c-.06,0-.11,0-.16,0-.28,0-.57,0-.85,0-.13,0-.18-.05-.17-.18,0-.11,0-.22,0-.33,0-.17.03-.2.19-.2.28,0,.57,0,.85,0,.05,0,.09,0,.15,0,0-.06,0-.11,0-.16.01-.1-.02-.15-.12-.2-.38-.21-.56-.66-.45-1.07C2.29.28,2.67,0,3.11,0c.4,0,.77.29.88.68.12.39-.03.84-.38,1.04-.18.1-.2.22-.16.41ZM3.43.95c0-.2-.15-.36-.35-.36-.19,0-.35.15-.36.35,0,.2.16.37.35.37.19,0,.35-.16.35-.36Z"/></svg>
+    <span>CoRL 2026</span>
+  </div>
+  <h1>Memory <span class="mark">Anchors</span> for<br>Continual Robot Learning</h1>
+  <p class="authors">Maximilian Du, Zhanyi Sun, Chen Xu, Paarth Shah, Masha Itkina, Shuran Song</p>
+  <p class="affils">Stanford University&nbsp; &middot;&nbsp; Toyota Research Institute</p>
+</div>
+<div class="bar"></div>
+</body></html>
