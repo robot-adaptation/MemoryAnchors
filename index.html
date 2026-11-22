@@ -61,8 +61,8 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
           <span class="navbtn__label">Paper</span>
         </a>
-        <!-- no repo to link to yet, so this opens #code-notice instead of a
-             dead href; it is a <button> because it does not navigate -->
+        <!-- opens #code-notice (VLA repo link + diffusion policy status) rather
+             than navigating; it is a <button> because it does not navigate -->
         <button class="navbtn" type="button" data-notice-open="code-notice" aria-haspopup="dialog" aria-label="Code">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
           <span class="navbtn__label">Code</span>
@@ -1151,14 +1151,12 @@
         <h2 class="sec__title">BibTeX</h2>
         <div class="bib">
           <button class="bib__copy" type="button" id="bib-copy">Copy</button>
-          <pre id="bib-text">@misc{du2026memoryanchorscontinualrobot,
-      title={Memory Anchors for Continual Robot Learning}, 
+          <pre id="bib-text">@inproceedings{du2026memoryanchorscontinualrobot,
+      title={Memory Anchors for Continual Robot Learning},
       author={Maximilian Du and Zhanyi Sun and Chen Xu and Paarth Shah and Masha Itkina and Shuran Song},
+      booktitle={Conference on Robot Learning (CoRL)},
       year={2026},
-      eprint={2608.26545},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO},
-      url={https://arxiv.org/abs/2608.26545}, 
+      url={https://arxiv.org/abs/2608.26545},
 }</pre>
         </div>
       </div>
@@ -1173,8 +1171,15 @@
 
   <dialog class="notice" id="code-notice" aria-labelledby="code-notice-title">
     <p class="eyebrow notice__label" id="code-notice-title">Code</p>
-    <p class="notice__text">Code coming soon! Estimated date: mid-September. Reach out to the corresponding author (maxjdu@stanford.edu) if you want an earlier version.</p>
-    <button class="notice__close" type="button" data-notice-close>Got it</button>
+    <p class="notice__text">The diffusion policy code is still in development, but the VLA codebase is ready here.</p>
+    <p class="notice__text">Reach out to the corresponding author (maxjdu@stanford.edu) for the diffusion policy code or to give feedback on any inconsistencies.</p>
+    <div class="notice__actions">
+      <a class="notice__link" href="https://github.com/MaxDu17/MemoryAnchors_VLA" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        VLA code on GitHub
+      </a>
+      <button class="notice__close" type="button" data-notice-close>Close</button>
+    </div>
   </dialog>
 
   <script src="js/main.js"></script>

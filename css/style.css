@@ -1155,7 +1155,7 @@ button.navbtn {
 }
 
 /* ==========================================================================
-   notice dialog: a short note for a nav item that has nowhere to point yet
+   notice dialog: a short note behind a nav item, with optional link-out
    ========================================================================== */
 .notice {
   width: min(340px, calc(100vw - 2 * var(--pad)));
@@ -1181,3 +1181,13 @@ button.navbtn {
   transition: background .18s var(--ease), border-color .18s var(--ease);
 }
 .notice__close:hover { background: var(--surface-2); border-color: var(--primary); }
+.notice__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
+.notice__link {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 15px; font-size: 13.5px; text-decoration: none;
+  border: 1px solid var(--primary); border-radius: var(--radius-pill);
+  background: var(--primary); color: var(--bg);
+  transition: filter .18s var(--ease);
+}
+.notice__link:hover { filter: brightness(1.08); }
+.notice__link svg { width: 13px; height: 13px; flex: none; }
