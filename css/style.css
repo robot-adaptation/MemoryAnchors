@@ -1191,3 +1191,5 @@ button.navbtn {
 }
 .notice__link:hover { filter: brightness(1.08); }
 .notice__link svg { width: 13px; height: 13px; flex: none; }
+.notice__links { margin-bottom: 18px; }
+.notice__text--fine { font-size: 13.5px; line-height: 1.55; }

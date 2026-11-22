@@ -61,7 +61,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
           <span class="navbtn__label">Paper</span>
         </a>
-        <!-- opens #code-notice (VLA repo link + diffusion policy status) rather
+        <!-- opens #code-notice (links to both repos + a short disclaimer) rather
              than navigating; it is a <button> because it does not navigate -->
         <button class="navbtn" type="button" data-notice-open="code-notice" aria-haspopup="dialog" aria-label="Code">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
@@ -1171,15 +1171,19 @@
 
   <dialog class="notice" id="code-notice" aria-labelledby="code-notice-title">
     <p class="eyebrow notice__label" id="code-notice-title">Code</p>
-    <p class="notice__text">The diffusion policy code is still in development, but the VLA codebase is ready here.</p>
-    <p class="notice__text">Reach out to the corresponding author (maxjdu@stanford.edu) for the diffusion policy code or to give feedback on any inconsistencies.</p>
-    <div class="notice__actions">
+    <p class="notice__text">Code for the diffusion policy (main paper results) and the VLA experiments is available on GitHub.</p>
+    <div class="notice__actions notice__links">
+      <a class="notice__link" href="https://github.com/MaxDu17/MemoryAnchors" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        Diffusion policy code (main results)
+      </a>
       <a class="notice__link" href="https://github.com/MaxDu17/MemoryAnchors_VLA" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-        VLA code on GitHub
+        VLA code
       </a>
-      <button class="notice__close" type="button" data-notice-close>Close</button>
     </div>
+    <p class="notice__text notice__text--fine">Both code releases were made with the help of a coding agent. They have been tested, but please email the corresponding author (maxjdu@stanford.edu) if you encounter any problems or inconsistencies.</p>
+    <button class="notice__close" type="button" data-notice-close>Close</button>
   </dialog>
 
   <script src="js/main.js"></script>
